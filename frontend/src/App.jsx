@@ -1,18 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router";
+import { Hello } from "./Hello.jsx";
 
 function App() {
-
   return (
     <>
-      <div>
-        frontend
-      </div>
-
+      <BrowserRouter>
+        <Routes>
+          <Route path="hello" element={<Hello />} />
+        </Routes>
+      </BrowserRouter>
+      hello react
     </>
-  )
+  );
 }
 
-export default App
+export default App;
