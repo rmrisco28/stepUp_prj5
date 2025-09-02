@@ -1,12 +1,12 @@
 import { BrowserRouter, Route, Routes } from "react-router";
-import { Hello } from "./Hello.jsx";
-import { AppNavbar } from "./AppNavbar.jsx";
-import { Login } from "./Login.jsx";
-import { Extra_curricular } from "./Extra_curricular.jsx";
-import { Competency } from "./Competency.jsx";
-import { Career } from "./Career.jsx";
-import { Mileage } from "./Mileage.jsx";
-import { Counseling } from "./Counseling.jsx";
+import { Hello } from "./common/Hello.jsx";
+import { AppNavbar } from "./common/AppNavbar.jsx";
+import { Login } from "./feature/member/Login.jsx";
+import { Extra_curricular } from "./feature/extra_curricular/Extra_curricular.jsx";
+import { Competency } from "./feature/competency/Competency.jsx";
+import { Career } from "./feature/career/Career.jsx";
+import { Mileage } from "./feature/mileage/Mileage.jsx";
+import { Counseling } from "./feature/counseling/Counseling.jsx";
 
 function App() {
   return (
