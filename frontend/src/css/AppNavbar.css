@@ -1,0 +1,6 @@
+.custom-navbar {
+    min-height: 1180px; /* 3배 높이 확보 */
+    padding-top: 2rem; /* 안쪽 여백 늘리기 */
+    padding-bottom: 2rem;
+    font-size: 1.5rem; /* 글자 크기도 키움 */
+}
