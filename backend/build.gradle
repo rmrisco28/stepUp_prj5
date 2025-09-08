@@ -37,6 +37,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation "software.amazon.awssdk:s3:2.32.2"
+    implementation 'com.opencsv:opencsv:5.8'
 }
 
 tasks.named('test') {
