@@ -22,8 +22,10 @@ CREATE TABLE student
     birth_date     DATE        NOT NULL,
     major          VARCHAR(30) NOT NULL,
     admission_year INT         NOT NULL,
-    phone          VARCHAR(20) NOT NULL,
-    email          VARCHAR(50) NOT NULL
+    phone          VARCHAR(20) NULL,
+    email          VARCHAR(50) NULL
     # member_seq INT
     # use_yn CHAR
 );
+# phone, email null -> not null 로 바꾸기, 지금은 확인용으로 가져와보자
+DROP TABLE student;
