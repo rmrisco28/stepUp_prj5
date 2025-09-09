@@ -1,6 +1,6 @@
 import { Button, Col, Row } from "react-bootstrap";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+// import ReactQuill from "react-quill";
+// import "react-quill/dist/quill.snow.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
