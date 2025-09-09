@@ -23,35 +23,39 @@ public class BatchController implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        log.info("=== Backend Application Started ===");
-        log.info("Available commands:");
-        log.info("  'batch' - Run student import batch");
-        log.info("  'exit' - Shutdown application");
-        log.info("=====================================");
+        boolean stu_batch_yn = false;
 
-        Scanner scanner = new Scanner(System.in);
+        if (stu_batch_yn) {
+            log.info("=== Backend Application Started ===");
+            log.info("Available commands:");
+            log.info("  'batch' - Run student import batch");
+            log.info("  'exit' - Shutdown application");
+            log.info("=====================================");
 
-        while (true) {
-            System.out.print("Enter command > ");
-            String command = scanner.nextLine().trim().toLowerCase();
+            Scanner scanner = new Scanner(System.in);
 
-            switch (command) {
-                case "batch":
-                    runStudentImportBatch();
-                    break;
+            while (true) {
+                System.out.print("Enter command > ");
+                String command = scanner.nextLine().trim().toLowerCase();
 
-                case "exit":
-                    log.info("Shutting down application...");
-                    System.exit(0);
-                    break;
+                switch (command) {
+                    case "batch":
+                        runStudentImportBatch();
+                        break;
 
-                case "help":
-                    printHelp();
-                    break;
+                    case "exit":
+                        log.info("Shutting down application...");
+                        System.exit(0);
+                        break;
 
-                default:
-                    log.warn("Unknown command: '{}'. Type 'help' for available commands.", command);
-                    break;
+                    case "help":
+                        printHelp();
+                        break;
+
+                    default:
+                        log.warn("Unknown command: '{}'. Type 'help' for available commands.", command);
+                        break;
+                }
             }
         }
     }
