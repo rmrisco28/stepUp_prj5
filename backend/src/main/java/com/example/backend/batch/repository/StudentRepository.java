@@ -12,4 +12,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     @Query("SELECT COUNT(s) FROM Student s WHERE s.admissionYear = :admissionYear AND s.major = :mj_department")
     int countByAdmissionYearAndDepartment(@Param("admissionYear") Integer admissionYear,
                                           @Param("department") String mj_department);
+
+    // 중복 체크 메서드 : 모두 다른 batch로 인식되므로, 같은 값이 들어있으면 넘어가게 함.
+    boolean existsByStudentNo(String studentNo);
 }

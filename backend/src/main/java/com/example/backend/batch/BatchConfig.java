@@ -25,6 +25,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.FileReader;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Configuration
 @RequiredArgsConstructor
@@ -95,8 +96,21 @@ public class BatchConfig {
             @Override
             public void write(Chunk<? extends List<Student>> chunk) throws Exception {
                 for (List<Student> studentList : chunk.getItems()) {
-                    studentRepository.saveAll(studentList);
-                    log.info("Saved {} students to database", studentList.size());
+
+                    // 중복 체크 후 저장
+                    List<Student> newStudents = studentList.stream()
+                            .filter(student -> {
+                                if (!studentRepository.existsByStudentNo(student.getStudentNo())) {
+                                    return true; // 저장할 학생
+                                } else {
+                                    log.info("Student already exists, skipping: {}", student.getStudentNo());
+                                    return false; // 스킵할 학생
+                                }
+                            })
+                            .collect(Collectors.toList());
+
+                    studentRepository.saveAll(newStudents);
+                    log.info("Saved {} new students to database", newStudents.size());
                 }
             }
         };

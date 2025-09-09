@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -61,6 +62,8 @@ public class BatchController implements CommandLineRunner {
 
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("startTime", System.currentTimeMillis())
+                    // 중복 batch 인식 방지를 위해 UUID 추가 : 같은 csv 파일이라도 실행될 때마다 새로운 batch로 인식하게 함.
+                    .addString("uniqueId", UUID.randomUUID().toString())
                     .toJobParameters();
 
             var jobExecution = jobLauncher.run(studentImportJob, jobParameters);
