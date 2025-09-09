@@ -45,3 +45,4 @@ create table prj5.mjdepartment
         primary key,
     mj_name varchar(20) not null
 );
+DROP TABLE student;
