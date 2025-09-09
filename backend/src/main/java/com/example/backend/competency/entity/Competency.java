@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -22,13 +23,8 @@ public class Competency {
     @Column(name = "competency_expln", length = 500)
     private String competencyExpln;
 
-    @Column(name = "competency_img1")
-    private byte[] competencyImg1;
-
-    @Column(name = "competency_img2")
-    private byte[] competencyImg2;
-
-    @Column(name = "competency_img3")
-    private byte[] competencyImg3;
+    @ColumnDefault("1")
+    @Column(name = "use_yn", nullable = false)
+    private Boolean useYn = true;
 
 }
