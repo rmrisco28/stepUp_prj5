@@ -29,3 +29,19 @@ CREATE TABLE student
 );
 # phone, email null -> not null 로 바꾸기, 지금은 확인용으로 가져와보자
 DROP TABLE student;
+ALTER TABLE prj5.mjdepartment
+    CHANGE COLUMN C1 mj_code INT;
+ALTER TABLE prj5.mjdepartment
+    CHANGE COLUMN C2 mj_name VARCHAR(20);
+ALTER TABLE prj5.mjdepartment
+    ADD PRIMARY KEY (mj_code);
+ALTER TABLE prj5.mjdepartment
+    MODIFY COLUMN mj_name VARCHAR(20) NOT NULL;
+ALTER TABLE prj5.mjdepartment
+    MODIFY COLUMN mj_code VARCHAR(5);
+create table prj5.mjdepartment
+(
+    mj_code varchar(5)  not null
+        primary key,
+    mj_name varchar(20) not null
+);
