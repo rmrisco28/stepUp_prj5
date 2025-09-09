@@ -1,13 +1,13 @@
 package com.example.backend.batch.repository;
 
-import com.example.backend.batch.entity.Mjdepartment;
+import com.example.backend.batch.entity.MjDepartment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface MjdepartmentRepository extends JpaRepository<Mjdepartment, String> {
+public interface MjDepartmentRepository extends JpaRepository<MjDepartment, String> {
 
-    Optional<Mjdepartment> findByMjName(String MjName);
+    Optional<MjDepartment> findByMjName(String MjName);
 }

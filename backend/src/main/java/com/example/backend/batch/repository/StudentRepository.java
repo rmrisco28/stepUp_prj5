@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Long> {
 
+    // FIXME 유민 : 이걸 쓰게 될지 모르겠네
     @Query("SELECT COUNT(s) FROM Student s WHERE s.admissionYear = :admissionYear AND s.major = :mj_department")
     int countByAdmissionYearAndDepartment(@Param("admissionYear") Integer admissionYear,
                                           @Param("department") String mj_department);

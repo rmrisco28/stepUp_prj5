@@ -44,7 +44,6 @@ public class StudentItemProcessor implements ItemProcessor<List<StudentCsvDto>, 
     private void validateCsvData(List<StudentCsvDto> csvDataList) {
         for (int i = 0; i < csvDataList.size(); i++) {
             StudentCsvDto dto = csvDataList.get(i);
-//            int lineNumber = i + 2; // CSV 파일의 실제 라인 번호 (헤더 고려)
             int lineNumber = i + 1; // CSV 파일의 실제 라인 번호 (헤더 고려)
 
             if (dto.getName() == null || dto.getName().trim().isEmpty()) {

@@ -46,3 +46,4 @@ create table prj5.mjdepartment
     mj_name varchar(20) not null
 );
 DROP TABLE student;
+RENAME TABLE mjdepartment TO mj_department;

@@ -1,14 +1,13 @@
 package com.example.backend.batch.service;
 
 import com.example.backend.batch.dto.StudentCsvDto;
-import com.example.backend.batch.entity.Mjdepartment;
+import com.example.backend.batch.entity.MjDepartment;
 import com.example.backend.batch.entity.Student;
-import com.example.backend.batch.repository.MjdepartmentRepository;
+import com.example.backend.batch.repository.MjDepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StudentNumberGenerator {
 
-    private final MjdepartmentRepository mjDepartmentRepository;
+    private final MjDepartmentRepository mjDepartmentRepository;
 
     // CSV 데이터를 Student 엔티티 리스트로 변환하며 학번 생성
     public List<Student> generateStudentNumbers(List<StudentCsvDto> csvDataList) {
@@ -75,7 +74,7 @@ public class StudentNumberGenerator {
 
     // 학과명으로 학과코드 조회
     private String getDepartmentCode(String mjName) {
-        Mjdepartment department = mjDepartmentRepository.findByMjName(mjName)
+        MjDepartment department = mjDepartmentRepository.findByMjName(mjName)
                 .orElseThrow(() -> new IllegalArgumentException(
                         "존재하지 않는 학과입니다: " + mjName));
         return department.getMjCode();

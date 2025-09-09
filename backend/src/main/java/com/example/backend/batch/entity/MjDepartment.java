@@ -10,10 +10,10 @@ import lombok.*;
 @Setter
 @ToString
 @Entity
-@Table(name = "mjdepartment", schema = "prj5")
+@Table(name = "mj_department", schema = "prj5")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Mjdepartment {
+public class MjDepartment {
     @Id
     @Column(name = "mj_code", nullable = false, length = 5)
     private String mjCode;
