@@ -14,9 +14,10 @@ CREATE TABLE `competency`
     `competency_seq`   INT AUTO_INCREMENT NOT NULL,
     `competency_name`  VARCHAR(50)        NOT NULL,
     `competency_expln` VARCHAR(500)       NULL,
-    `competency_img1`  BLOB               NULL,
-    `competency_img2`  BLOB               NULL,
-    `competency_img3`  BLOB               NULL,
+    use_yn             BOOLEAN            NOT NULL DEFAULT TRUE,
+#     `competency_img`   BLOB               NULL,
+#     `competency_img2`  BLOB               NULL,
+#     `competency_img3`  BLOB               NULL,
     CONSTRAINT pk_competency PRIMARY KEY (competency_seq)
 );
 
