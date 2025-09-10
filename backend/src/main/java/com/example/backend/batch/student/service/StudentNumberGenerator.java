@@ -1,9 +1,9 @@
-package com.example.backend.batch.service;
+package com.example.backend.batch.student.service;
 
-import com.example.backend.batch.dto.StudentCsvDto;
-import com.example.backend.batch.entity.MjDepartment;
-import com.example.backend.batch.entity.Student;
-import com.example.backend.batch.repository.MjDepartmentRepository;
+import com.example.backend.batch.student.dto.StudentCsvDto;
+import com.example.backend.batch.student.entity.MjDepartment;
+import com.example.backend.batch.student.entity.Student;
+import com.example.backend.batch.student.repository.MjDepartmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

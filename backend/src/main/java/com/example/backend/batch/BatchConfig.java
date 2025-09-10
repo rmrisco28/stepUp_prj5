@@ -1,9 +1,9 @@
 package com.example.backend.batch;
 
-import com.example.backend.batch.dto.StudentCsvDto;
-import com.example.backend.batch.entity.Student;
-import com.example.backend.batch.processor.StudentItemProcessor;
-import com.example.backend.batch.repository.StudentRepository;
+import com.example.backend.batch.student.dto.StudentCsvDto;
+import com.example.backend.batch.student.entity.Student;
+import com.example.backend.batch.student.processor.StudentItemProcessor;
+import com.example.backend.batch.student.repository.StudentRepository;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,6 @@ import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
-import org.springframework.batch.item.data.RepositoryItemWriter;
-import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
