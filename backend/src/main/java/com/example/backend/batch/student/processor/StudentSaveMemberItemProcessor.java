@@ -2,6 +2,7 @@ package com.example.backend.batch.student.processor;
 
 import com.example.backend.member.dto.MemberSaveDto;
 import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -16,23 +17,27 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class StudentSaveMemberItemProcessor implements ItemProcessor<MemberSaveDto, Member> {
 
+    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+
 
     @Override
     public Member process(MemberSaveDto item) throws Exception {
         log.debug("Processing student for member creation with loginId: {}", item.getLoginId());
 
-        // Assuming birth_date is read as a String in MemberSaveDto's rawPassword field
-        String birthDateStr = item.getRawPassword();
+        // 1. 중복 체크: 이미 존재하는 회원이면 null을 반환하여 writer로 넘어가지 않도록 함
+        if (memberRepository.existsByLoginId(item.getLoginId())) {
+            log.warn("Member with loginId {} already exists, skipping.", item.getLoginId());
+            return null;
+        }
 
-        // 1. Convert YYYY-MM-DD string to YYMMDD format
+        // 2. 비밀번호 가공: rawPassword를 YYMMDD로 변환 후 BCrypt로 암호화
+        String birthDateStr = item.getRawPassword();
         LocalDate birthDate = LocalDate.parse(birthDateStr, DateTimeFormatter.ISO_LOCAL_DATE);
         String rawPassword = birthDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
-
-        // 2. Encrypt the password using BCrypt
         String encryptedPassword = passwordEncoder.encode(rawPassword);
 
-        // 3. Create the final Member entity
+        // 3. Member 엔티티 생성
         Member member = new Member();
         member.setLoginId(item.getLoginId());
         member.setPassword(encryptedPassword);
