@@ -1,14 +1,31 @@
-import { Button, Col, Form, Row } from "react-bootstrap";
+import {
+  Badge,
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Row,
+} from "react-bootstrap";
 
 export function Extra_curricular() {
   return (
-    <Row className="justify-content-center w-100">
-      <Col xs={12} md={10} lg={9}>
-        <h3 className="mb-4">비교과 프로그램</h3>
+    <Container className="my-5">
+      <div className="mx-auto" style={{ maxWidth: "1000px" }}>
+        {/* 헤더 */}
+        <Row className="justify-content-between align-items-center mb-4">
+          <Col>
+            <h3 className="text-primary fw-bold">비교과 프로그램</h3>
+          </Col>
+          <Col xs="auto">
+            <Badge bg="secondary">총 0개 프로그램</Badge>
+          </Col>
+        </Row>
 
-        <section className="bg-light border rounded-4 p-4">
+        {/* 검색 필터 */}
+        <section className="bg-light border rounded-4 p-4 mb-5">
           <Form>
-            {/* 1행: 모집시작일 / 모집종료일 */}
+            {/* 1행: 모집/활동 날짜 */}
             <Row className="mb-3">
               <Col md={3}>
                 <Form.Label>모집시작일</Form.Label>
@@ -28,7 +45,7 @@ export function Extra_curricular() {
               </Col>
             </Row>
 
-            {/* 2행: 활동시작일 / 활동종료일 */}
+            {/* 2행: 운영년도/학기/대학/부서 */}
             <Row className="mb-3">
               <Col md={3}>
                 <Form.Label>운영년도</Form.Label>
@@ -55,8 +72,8 @@ export function Extra_curricular() {
                 <Form.Label>참여대학/학과</Form.Label>
                 <Form.Select>
                   <option>전체</option>
-                  <option>공과대학</option>
-                  <option>인문대학</option>
+                  <option>전자공학과</option>
+                  <option>컴퓨터공학과</option>
                 </Form.Select>
               </Col>
               <Col md={3}>
@@ -69,16 +86,16 @@ export function Extra_curricular() {
               </Col>
             </Row>
 
-            {/* 3행: 프로그램명 검색 */}
+            {/* 3행: 프로그램명 */}
             <Row className="mb-3">
-              <Col md={11}>
+              <Col md={10}>
                 <Form.Label>프로그램명</Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="프로그램명을 입력하세요."
                 />
               </Col>
-              <Col md={1} className="d-flex align-items-end">
+              <Col md={2} className="d-flex align-items-end">
                 <Button variant="primary" className="w-100">
                   검색
                 </Button>
@@ -86,7 +103,203 @@ export function Extra_curricular() {
             </Row>
           </Form>
         </section>
-      </Col>
-    </Row>
+
+        {/* 프로그램 카드 미리보기 */}
+        <Row className="g-4">
+          <Col md={6} lg={4}>
+            <Card className="h-100 shadow-sm border-0">
+              {/* 카드 헤더 (색 배경) */}
+              <div
+                style={{
+                  height: "150px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  color: "white",
+                }}
+              >
+                <h6 className="fw-bold">분야명</h6>
+              </div>
+
+              <Card.Body>
+                {/* 제목 + 상태 */}
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <Card.Title className="fw-bold flex-grow-1 me-2">
+                    프로그램명
+                  </Card.Title>
+                  <Badge bg="secondary">상태</Badge>
+                </div>
+
+                {/* 설명 */}
+                <Card.Text className="text-muted small mb-3">
+                  프로그램 설명
+                </Card.Text>
+
+                {/* 태그 */}
+                <div className="mb-3">
+                  <Badge bg="light" text="dark" className="me-1">
+                    태그1
+                  </Badge>
+                  <Badge bg="light" text="dark" className="me-1">
+                    태그2
+                  </Badge>
+                </div>
+
+                {/* 정보 */}
+                <div className="text-muted small mb-3">
+                  <div className="d-flex align-items-center mb-1">
+                    운영부서:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    모집기간:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    활동기간:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    모집인원:
+                  </div>
+                </div>
+
+                {/* 버튼 */}
+                <Button variant="primary" className="w-100 rounded-pill">
+                  신청하기
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={6} lg={4}>
+            <Card className="h-100 shadow-sm border-0">
+              {/* 카드 헤더 (색 배경) */}
+              <div
+                style={{
+                  height: "150px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  color: "white",
+                }}
+              >
+                <h6 className="fw-bold">분야명</h6>
+              </div>
+
+              <Card.Body>
+                {/* 제목 + 상태 */}
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <Card.Title className="fw-bold flex-grow-1 me-2">
+                    프로그램명
+                  </Card.Title>
+                  <Badge bg="secondary">상태</Badge>
+                </div>
+
+                {/* 설명 */}
+                <Card.Text className="text-muted small mb-3">
+                  프로그램 설명
+                </Card.Text>
+
+                {/* 태그 */}
+                <div className="mb-3">
+                  <Badge bg="light" text="dark" className="me-1">
+                    태그1
+                  </Badge>
+                  <Badge bg="light" text="dark" className="me-1">
+                    태그2
+                  </Badge>
+                </div>
+
+                {/* 정보 */}
+                <div className="text-muted small mb-3">
+                  <div className="d-flex align-items-center mb-1">
+                    운영부서:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    모집기간:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    활동기간:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    모집인원:
+                  </div>
+                </div>
+
+                {/* 버튼 */}
+                <Button variant="primary" className="w-100 rounded-pill">
+                  신청하기
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={6} lg={4}>
+            <Card className="h-100 shadow-sm border-0">
+              {/* 카드 헤더 (색 배경) */}
+              <div
+                style={{
+                  height: "150px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  color: "white",
+                }}
+              >
+                <h6 className="fw-bold">분야명</h6>
+              </div>
+
+              <Card.Body>
+                {/* 제목 + 상태 */}
+                <div className="d-flex justify-content-between align-items-start mb-3">
+                  <Card.Title className="fw-bold flex-grow-1 me-2">
+                    프로그램명
+                  </Card.Title>
+                  <Badge bg="secondary">상태</Badge>
+                </div>
+
+                {/* 설명 */}
+                <Card.Text className="text-muted small mb-3">
+                  프로그램 설명
+                </Card.Text>
+
+                {/* 태그 */}
+                <div className="mb-3">
+                  <Badge bg="light" text="dark" className="me-1">
+                    태그1
+                  </Badge>
+                  <Badge bg="light" text="dark" className="me-1">
+                    태그2
+                  </Badge>
+                </div>
+
+                {/* 정보 */}
+                <div className="text-muted small mb-3">
+                  <div className="d-flex align-items-center mb-1">
+                    운영부서:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    모집기간:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    활동기간:
+                  </div>
+                  <div className="d-flex align-items-center mb-1">
+                    모집인원:
+                  </div>
+                </div>
+
+                {/* 버튼 */}
+                <Button variant="primary" className="w-100 rounded-pill">
+                  신청하기
+                </Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </Container>
   );
 }
