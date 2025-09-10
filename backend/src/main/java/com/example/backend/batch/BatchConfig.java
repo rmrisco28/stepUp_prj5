@@ -3,8 +3,12 @@ package com.example.backend.batch;
 import com.example.backend.batch.student.dto.StudentCsvDto;
 import com.example.backend.batch.student.entity.Student;
 import com.example.backend.batch.student.processor.StudentItemProcessor;
+import com.example.backend.batch.student.processor.StudentSaveMemberItemProcessor;
 import com.example.backend.batch.student.repository.StudentRepository;
+import com.example.backend.member.dto.MemberSaveDto;
+import com.example.backend.member.entity.Member;
 import com.opencsv.bean.CsvToBeanBuilder;
+import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -16,11 +20,17 @@ import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.JdbcCursorItemReader;
+import org.springframework.batch.item.database.JpaItemWriter;
+import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import javax.sql.DataSource;
 import java.io.FileReader;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,13 +42,19 @@ public class BatchConfig {
 
     private final JobRepository jobRepository;
     private final PlatformTransactionManager transactionManager;
+    private final DataSource dataSource; // jdbc로 db 접속하기 때문에 db 연결정보를 위해 필요함
     private final StudentRepository studentRepository;
     private final StudentItemProcessor studentItemProcessor;
+    private final StudentSaveMemberItemProcessor studentSaveMemberItemProcessor;
+
+    @Autowired
+    private final EntityManagerFactory entityManagerFactory;
 
     @Bean
     public Job studentImportJob() {
         return new JobBuilder("studentImportJob", jobRepository)
                 .start(studentImportStep()) // Step 1 : csv -> student (csv 파일 읽어서 학번 생성 후 student table에 저장)
+                .next(studentSaveMemberStep()) // Step 2 : student -> member (student table의 학번과 생년월일(초기 비밀번호) 읽어서 가공 후 member table에 저장)
                 .build();
     }
 
@@ -51,6 +67,18 @@ public class BatchConfig {
                 .writer(studentListWriter())
                 .build();
     }
+
+    @Bean
+    public Step studentSaveMemberStep() {
+        return new StepBuilder("studentSaveMemberStep", jobRepository)
+                .<MemberSaveDto, Member>chunk(10, transactionManager)
+                .reader(studentDbReader())
+                .processor(studentSaveMemberProcessor())
+                .writer(studentMemberDbWriter())
+                .build();
+    }
+
+    // Step 1 reader - processor - writer
 
     @Bean
     public ItemReader<List<StudentCsvDto>> studentCsvReader() {
@@ -117,4 +145,32 @@ public class BatchConfig {
             }
         };
     }
+
+    // Step 2 Reader - processor - writer
+
+    @Bean
+    public JdbcCursorItemReader<MemberSaveDto> studentDbReader() {
+        return new JdbcCursorItemReaderBuilder<MemberSaveDto>()
+                .name("studentDbReader")
+                .dataSource(dataSource)
+                .sql("SELECT student_no as loginId, birth_date as rawPassword FROM student ORDER BY student_seq")
+                .rowMapper(new BeanPropertyRowMapper<>(MemberSaveDto.class))
+                .build();
+    }
+
+    @Bean
+    public ItemProcessor<MemberSaveDto, Member> studentSaveMemberProcessor() {
+        // ItemProcessor<Input, Output>
+        // 데이터 가공 (상세 과정은 studentSaveMemberItemProcessor -> StudentNumberGenerator)
+        return studentSaveMemberItemProcessor::process;
+    }
+
+    @Bean
+    public JpaItemWriter<Member> studentMemberDbWriter() {
+        // JpaItemWriter는 데이터를 JPA를 통해 DB에 저장하는 Writer
+        JpaItemWriter<Member> writer = new JpaItemWriter<>();
+        writer.setEntityManagerFactory(entityManagerFactory);
+        return writer;
+    }
+
 }

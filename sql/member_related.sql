@@ -3,13 +3,15 @@ use prj5;
 # member
 CREATE TABLE member
 (
-    member_seq      INT AUTO_INCREMENT PRIMARY KEY,
-    login_id        VARCHAR(20) NOT NULL UNIQUE,
-    password        VARCHAR(255),
-    faild_login_cnt INT DEFAULT 0,
-    last_login_at   DATETIME
+    member_seq INT AUTO_INCREMENT PRIMARY KEY,
+    login_id   VARCHAR(20) NOT NULL UNIQUE,
+    password   VARCHAR(255)
+#     faild_login_cnt INT DEFAULT 0,
+#     last_login_at   DATETIME,
     # user_yn CHAR(1)
 );
+DROP TABLE member;
+
 # auth
 
 # student
