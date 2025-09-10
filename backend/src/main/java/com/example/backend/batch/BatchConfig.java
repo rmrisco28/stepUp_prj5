@@ -38,14 +38,14 @@ public class BatchConfig {
     @Bean
     public Job studentImportJob() {
         return new JobBuilder("studentImportJob", jobRepository)
-                .start(studentImportStep())
+                .start(studentImportStep()) // Step 1 : csv -> student (csv 파일 읽어서 학번 생성 후 student table에 저장)
                 .build();
     }
 
     @Bean
     public Step studentImportStep() {
         return new StepBuilder("studentImportStep", jobRepository)
-                .<List<StudentCsvDto>, List<Student>>chunk(10, transactionManager)
+                .<List<StudentCsvDto>, List<Student>>chunk(1, transactionManager) // 학번 생성은 로직이 복잡해서 전체 데이터 읽어서 한번에 가져옴
                 .reader(studentCsvReader())
                 .processor(studentListProcessor())
                 .writer(studentListWriter())
@@ -67,24 +67,28 @@ public class BatchConfig {
 
                     log.info("Reading CSV file: {}", resource.getFilename());
 
+                    // CSVToBeanBuilder를 사용해 CSV 파일을 DTO 리스트로 파싱
                     List<StudentCsvDto> students = new CsvToBeanBuilder<StudentCsvDto>(
                             new FileReader(resource.getFile()))
                             .withType(StudentCsvDto.class)
                             .withIgnoreLeadingWhiteSpace(true)
-                            .withSkipLines(1) // 헤더 스킵
+                            .withSkipLines(1) // 헤더 스킵(첫줄 스킵)
                             .build()
                             .parse();
 
                     log.info("Total students read from CSV: {}", students.size());
                     return students;
                 }
-                return null; // 한 번만 읽음
+                return null; // 한 번만 읽음 -> 청크에서 1 해서 어차피 한번만 읽긴 함.
             }
         };
     }
 
     @Bean
     public ItemProcessor<List<StudentCsvDto>, List<Student>> studentListProcessor() {
+        // ItemProcessor<Input, Output>
+        // 데이터 가공 (상세 과정은 stdentItemProcessor -> StudentNumberGenerator)
+        // ItemReader에서 읽은 List<StudentCsvDto>를 비즈니스 로직을 통해 List<Student>로 변환
         return studentItemProcessor::process;
     }
 
@@ -93,23 +97,23 @@ public class BatchConfig {
         return new ItemWriter<List<Student>>() {
             @Override
             public void write(Chunk<? extends List<Student>> chunk) throws Exception {
-                for (List<Student> studentList : chunk.getItems()) {
+                // chunk.getItems()는 List<List<Student>> 형태이지만, 현재 ItemReader가 한 번에 전체 리스트를 반환하므로, 리스트는 단 하나의 아이템(전체 학생 목록)만 가짐
+                List<Student> studentList = chunk.getItems().get(0);
 
-                    // 중복 체크 후 저장
-                    List<Student> newStudents = studentList.stream()
-                            .filter(student -> {
-                                if (!studentRepository.existsByStudentNo(student.getStudentNo())) {
-                                    return true; // 저장할 학생
-                                } else {
-                                    log.info("Student already exists, skipping: {}", student.getStudentNo());
-                                    return false; // 스킵할 학생
-                                }
-                            })
-                            .collect(Collectors.toList());
+                // 중복 학번 체크 후 새로운 학생만 저장
+                List<Student> newStudents = studentList.stream()
+                        .filter(student -> {
+                            if (!studentRepository.existsByStudentNo(student.getStudentNo())) {
+                                return true; // 저장할 학생
+                            } else {
+                                log.info("Student already exists, skipping: {}", student.getStudentNo());
+                                return false; // 스킵할 학생
+                            }
+                        })
+                        .collect(Collectors.toList());
 
-                    studentRepository.saveAll(newStudents);
-                    log.info("Saved {} new students to database", newStudents.size());
-                }
+                studentRepository.saveAll(newStudents);
+                log.info("Saved {} new students to database", newStudents.size());
             }
         };
     }

@@ -40,7 +40,7 @@ public class StudentNumberGenerator {
                     students.sort(getStudentComparator());
 
                     // 3. 순번을 매기면서 Student 엔티티 생성
-                    AtomicInteger sequence = new AtomicInteger(1);
+                    AtomicInteger sequence = new AtomicInteger(1); // 원자적으로 처리해서 순번 중복 증가 방지
 
                     return students.stream().map(dto -> {
                         String departmentCode = getDepartmentCode(dto.getMajor());
