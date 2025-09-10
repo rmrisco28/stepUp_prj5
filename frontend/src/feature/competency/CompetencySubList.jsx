@@ -1,13 +1,16 @@
-import { Col, Row, Table } from "react-bootstrap";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Button, Col, Row, Table } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
-export function CompetencyList() {
+export function CompetencySubList() {
   const [competency, setCompetency] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("/api/competency/list")
+      .get("/api/competency/subList")
       .then((res) => {
         console.log("yes");
         setCompetency(res.data);
@@ -23,7 +26,7 @@ export function CompetencyList() {
 
   function handleUseYnChange(seq, currentUseYn) {
     axios
-      .put(`/api/competency/update/${seq}`, {
+      .put(`/api/competency/subUpdate/${seq}`, {
         useYn: !currentUseYn,
       })
       .then((res) => {
@@ -49,7 +52,7 @@ export function CompetencyList() {
   // 데이터를 다시 불러오는 함수
   const fetchCompetencies = () => {
     axios
-      .get("/api/competency/list")
+      .get("/api/competency/subList")
       .then((res) => {
         setCompetency(res.data); // 데이터 새로 설정
       })
@@ -63,13 +66,14 @@ export function CompetencyList() {
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
           <div className="mb-3"></div>
-          <h2 className="mb-3">핵심 역량 목록 </h2>
+          <h2 className="mb-3">하위 역량 목록 </h2>
           <Table>
             <thead>
               <tr>
                 <th>번호</th>
                 <th>핵심역량</th>
-                <th>핵심역량 설명</th>
+                <th>하위역량</th>
+                <th>하위역량설</th>
                 <th>사용여부</th>
               </tr>
             </thead>
@@ -78,8 +82,9 @@ export function CompetencyList() {
                 competency.map((data) => (
                   <tr key={data.seq}>
                     <td>{data.seq}</td>
-                    <td>{data.competencyName}</td>
-                    <td>{data.competencyExpln}</td>
+                    <td>{data.competencySeqCompetencyName}</td>
+                    <td>{data.subCompetencyName}</td>
+                    <td>{data.subCompetencyExpln}</td>
                     <td>
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
                       <input
@@ -97,6 +102,12 @@ export function CompetencyList() {
               )}
             </tbody>
           </Table>
+          <Button
+            className="me-3"
+            onClick={() => navigate("/competency/subAdd")}
+          >
+            하위 역량 추가
+          </Button>
         </Col>
       </Row>
     </>

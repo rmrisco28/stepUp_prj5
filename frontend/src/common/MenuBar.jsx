@@ -23,8 +23,7 @@ export function MenuBar() {
         { name: "역량 소개", path: "/competency" },
         { name: "진단 검사", path: "/competency/test" },
         { name: "관리자 핵심역량 추가", path: "/competency/add" },
-        { name: "관리자 역량 변경", path: "/competency/editor" },
-        { name: "관리자 하위 역량 변경", path: "/competency/subEditor" },
+        { name: "관리자 하위역량 추가", path: "/competency/subAdd" },
       ],
     },
     {

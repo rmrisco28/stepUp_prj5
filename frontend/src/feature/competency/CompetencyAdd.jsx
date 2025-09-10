@@ -24,10 +24,11 @@ export function CompetencyAdd() {
       .post("/api/competency/add", {
         competencyName: name,
         competencyExpln: expln,
-        competencyImg: file,
       })
       .then((res) => {
         console.log("ok");
+        alert(res.data.message);
+        navigate("/competency/list");
       })
       .catch((err) => {
         console.log("error");
