@@ -127,7 +127,7 @@ public class BatchConfig {
             public void write(Chunk<? extends List<Student>> chunk) throws Exception {
                 // chunk.getItems()는 List<List<Student>> 형태이지만, 현재 ItemReader가 한 번에 전체 리스트를 반환하므로, 리스트는 단 하나의 아이템(전체 학생 목록)만 가짐
                 List<Student> studentList = chunk.getItems().get(0);
-
+                // TODO 유민 : 중복 체크 processor 에서 처리되도록 하기
                 // 중복 학번 체크 후 새로운 학생만 저장
                 List<Student> newStudents = studentList.stream()
                         .filter(student -> {
