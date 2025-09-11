@@ -16,7 +16,7 @@ export function AppNavbar() {
           <Nav className="d-flex justify-content-center gap-4 ms-5 flex-grow-1">
             <Nav.Link
               as={Link}
-              to="/extra_curricular"
+              to="/extracurricular"
               style={{ fontSize: "1.2rem" }}
             >
               비교과 프로그램
