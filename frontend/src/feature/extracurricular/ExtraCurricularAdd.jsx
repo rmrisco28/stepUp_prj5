@@ -137,12 +137,6 @@ export function ExtraCurricularAdd() {
               <FormControl type="text" name="manager_phone" />
             </FormGroup>
 
-            {/* 신청자 */}
-            <FormGroup className="mb-3">
-              <FormLabel>신청부서(학과)</FormLabel>
-              <FormControl type="text" />
-            </FormGroup>
-
             {/* 마일리지 점수 */}
             <FormGroup className="mb-3">
               <FormLabel>마일리지 점수</FormLabel>
