@@ -20,26 +20,19 @@ export function ExtraCurricularAdd() {
         <Col xs={12} md={8} lg={6}>
           <h2 className="mb-4 text-center">비교과 프로그램 등록</h2>
           <Form>
+            {/* 프로그램 제목 */}
             <FormGroup className="mb-3">
               <FormLabel>제목</FormLabel>
               <FormControl type="text" name="title" required />
             </FormGroup>
 
+            {/* 프로그램 내용 */}
             <FormGroup className="mb-3">
               <FormLabel>내용</FormLabel>
               <FormControl as="textarea" rows={4} name="content" />
             </FormGroup>
 
-            <FormGroup className="mb-3">
-              <FormLabel>카테고리</FormLabel>
-              <FormSelect name="category">
-                <option>선택하세요</option>
-                <option>특강</option>
-                <option>봉사</option>
-                <option>경진대회</option>
-              </FormSelect>
-            </FormGroup>
-
+            {/* 운영기간 */}
             <Row>
               <Col>
                 <FormGroup className="mb-3">
@@ -55,6 +48,7 @@ export function ExtraCurricularAdd() {
               </Col>
             </Row>
 
+            {/* 신청기간 */}
             <Row>
               <Col>
                 <FormGroup className="mb-3">
@@ -70,11 +64,19 @@ export function ExtraCurricularAdd() {
               </Col>
             </Row>
 
+            {/* 역량 */}
+            <FormGroup className="mb-3">
+              <FormLabel>역량</FormLabel>
+              <FormControl type="text" name="competency" />
+            </FormGroup>
+
+            {/* 장소 */}
             <FormGroup className="mb-3">
               <FormLabel>장소</FormLabel>
               <FormControl type="text" name="location" />
             </FormGroup>
 
+            {/* 운영방식 */}
             <FormGroup className="mb-3">
               <FormLabel>운영방식</FormLabel>
               <div>
@@ -102,8 +104,9 @@ export function ExtraCurricularAdd() {
               </div>
             </FormGroup>
 
+            {/*신청 대상 학년*/}
             <FormGroup className="mb-3">
-              <FormLabel>신청 가능 학년</FormLabel>
+              <FormLabel>신청 대상 학년</FormLabel>
               <div>
                 {[1, 2, 3, 4].map((grade) => (
                   <FormCheck
@@ -117,41 +120,42 @@ export function ExtraCurricularAdd() {
               </div>
             </FormGroup>
 
+            {/* 모집정원 */}
             <FormGroup className="mb-3">
-              <FormLabel>정원</FormLabel>
+              <FormLabel>모집 정원</FormLabel>
               <FormControl type="number" name="capacity" />
             </FormGroup>
 
+            {/* 담당자 */}
             <FormGroup className="mb-3">
-              <FormLabel>담당자</FormLabel>
+              <FormLabel>담당자 (담당부서,학과)</FormLabel>
               <FormControl type="text" />
             </FormGroup>
-
+            {/* 담당자 연락처 */}
             <FormGroup className="mb-3">
               <FormLabel>담당자 전화번호</FormLabel>
               <FormControl type="text" name="manager_phone" />
             </FormGroup>
 
+            {/* 신청자 */}
             <FormGroup className="mb-3">
-              <FormLabel>마일리지</FormLabel>
+              <FormLabel>신청부서(학과)</FormLabel>
+              <FormControl type="text" />
+            </FormGroup>
+
+            {/* 마일리지 점수 */}
+            <FormGroup className="mb-3">
+              <FormLabel>마일리지 점수</FormLabel>
               <FormControl type="number" name="mileage_points" />
             </FormGroup>
 
-            {/* 썸네일 */}
+            {/* 작성자 */}
             <FormGroup className="mb-3">
-              <FormLabel>썸네일 이미지</FormLabel>
-              <FormControl type="file" accept="image/*" />
+              <FormLabel>작성자</FormLabel>
+              <FormControl type="text" />
             </FormGroup>
 
-            {/* 본문 이미지 */}
-            <FormGroup className="mb-3">
-              <FormLabel>본문 이미지</FormLabel>
-              <FormControl type="file" multiple accept="image/*" />
-              <FormText className="text-muted">
-                여러 장 선택 가능 (Ctrl/Shift로 선택)
-              </FormText>
-            </FormGroup>
-
+            {/* 등록, 취소 버튼*/}
             <div className="text-center">
               <Button type="submit" variant="primary" className="me-2">
                 등록
