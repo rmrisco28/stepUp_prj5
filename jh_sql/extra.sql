@@ -5,7 +5,6 @@ CREATE TABLE `extra_curricular_program`
     program_seq      INT AUTO_INCREMENT PRIMARY KEY       NOT NULL,
     title            VARCHAR(100)                         NOT NULL,
     content          VARCHAR(4000)                        NOT NULL,
-    category         VARCHAR(100)                         NOT NULL,
     author           INT                                  NOT NULL,
     operate_start_dt DATETIME                             NOT NULL,
     operate_end_dt   DATETIME                             NOT NULL,
@@ -21,8 +20,8 @@ CREATE TABLE `extra_curricular_program`
     status           VARCHAR(100)                         NOT NULL,
     manager          VARCHAR(100)                         NULL,
     manager_phone    VARCHAR(100)                         NULL,
-    view             INT                                  NULL     DEFAULT 0,
     mileage_points   INT                                  NULL     DEFAULT 0,
+    view             INT                                  NULL     DEFAULT 0,
     created_at       TIMESTAMP                            NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       TIMESTAMP                            NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
