@@ -1,142 +1,87 @@
-import {
-  Button,
-  Col,
-  FormControl,
-  FormGroup,
-  FormLabel,
-  Row,
-} from "react-bootstrap";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { Button, Col, Modal, Row } from "react-bootstrap";
+import React, { useState } from "react";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import { useNavigate } from "react-router";
 
 export function CompetencyEditor() {
-  const MAX_COMPETENCIES = 5;
-  const [competencies, setCompetencies] = useState([]);
+  const [editorValue, setEditorValue] = useState("");
+  const [modalShow, setModalShow] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get("/competency")
-      .then((res) => {
-        console.log("ok");
-        setCompetencies(res.data);
-      })
-      .catch((err) => {
-        console.log("error");
-      })
-      .finally(() => {
-        console.log("finally");
-      });
-  }, []);
+  const navigate = useNavigate();
 
-  // 역량과 내용 상태 배열로 관리
-  const [competency, setCompetency] = useState([
-    { name: "", expln: "", file: "" },
-  ]);
-
-  // 역량 추가 핸들러
-  const handleAddCompetency = () => {
-    if (competency.length >= MAX_COMPETENCIES) {
-      alert(`최대 ${MAX_COMPETENCIES}개의 역량만 추가할 수 있습니다.`);
-      return; // 최대 개수 초과 시 추가하지 않음
-    }
-
-    const newCompetency = { name: "", expln: "" };
-    setCompetency([...competency, newCompetency]);
-  };
-
-  // 각 역량에 대한 값 변경 핸들러
-  const handleCompetencyChange = (index, field, value) => {
-    const newCompetency = [...competency];
-    newCompetency[index] = { ...newCompetency[index], [field]: value };
-    setCompetency(newCompetency);
-  };
-
-  // `Create` (새 항목 추가)와 `Update` (수정된 항목 저장)를 동시에 처리하는 함수
-  const handleSaveCompetencies = () => {
-    const newCompetenciesToCreate = competency.filter(
-      (competency) => !competency.id,
-    ); // `id`가 없는 새로운 항목
-    const updatedCompetencies = competency.filter(
-      (competency) => competency.id,
-    ); // `id`가 있는 수정된 항목들
-
-    // 1. 새 항목 추가 (`POST` 요청)
-    const createPromises = newCompetenciesToCreate.map(
-      (competency) => axios.post("/api/competencies", competency), // 서버에 새로운 역량 추가
-    );
-
-    // 2. 기존 항목 수정 (`PUT` 요청)
-    const updatePromises = updatedCompetencies.map(
-      (competency) =>
-        axios.put(`/api/competencies/${competency.id}`, competency), // 서버에 수정된 역량 업데이트
-    );
-
-    // `POST`와 `PUT` 요청들을 병렬로 처리
-    Promise.all([...createPromises, ...updatePromises])
-      .then((responses) => {
-        console.log("All competencies saved:", responses);
-      })
-      .catch((error) => console.error("Error saving competencies:", error));
+  const handleEditorChange = (value) => {
+    setEditorValue(value);
   };
 
   return (
     <>
       <Row className="justify-content-center">
-        <Col xs={10} md={8} lg={4}>
-          <h2 className="mb-3">역량 변경</h2>
-          {/* 역량 */}
-          {competency.map((competency, index) => (
-            <div key={index}>
-              <FormGroup className="mb-3" controlId={`title${index}`}>
-                <FormLabel style={{ fontSize: "1.5rem" }}>
-                  {index + 1} 역량
-                </FormLabel>
-                <FormControl
-                  value={competency.name}
-                  onChange={(e) => {
-                    handleCompetencyChange(index, "name", e.target.value);
-                  }}
-                />
-              </FormGroup>
-
-              {/* 역량 내용 */}
-              <FormGroup className="mb-3" controlId={`expln${index}`}>
-                <FormLabel>{index + 1} 역량내용</FormLabel>
-                <FormControl
-                  as="textarea"
-                  rows={3}
-                  value={competency.expln}
-                  onChange={(e) => {
-                    handleCompetencyChange(index, "expln", e.target.value);
-                  }}
-                />
-              </FormGroup>
-
-              {/* 역량 이미지 */}
-              <FormGroup className="mb-3" controlId={`file${index}`}>
-                <FormLabel>{index + 1} 역량 설명 이미지(최대 3개)</FormLabel>
-                <FormControl
-                  type="file"
-                  value={competency.file}
-                  onChange={(e) => {
-                    handleCompetencyChange(index, "file", e.target.value);
-                  }}
-                />
-              </FormGroup>
-              <hr />
-            </div>
-          ))}
-          {/* 역량 추가 버튼 */}
+        <Col xs={10} md={8} lg={6}>
+          <h2>React Quill Editor</h2>
+          <ReactQuill
+            value={editorValue}
+            onChange={handleEditorChange}
+            modules={{
+              toolbar: [
+                [{ header: "1" }, { header: "2" }, { font: [] }],
+                [{ list: "ordered" }, { list: "bullet" }],
+                [{ align: [] }],
+                ["bold", "italic", "underline"],
+                ["image"],
+                ["blockquote"],
+                ["code-block"],
+              ],
+            }}
+            formats={[
+              "header",
+              "font",
+              "list",
+              "align",
+              "bold",
+              "italic",
+              "underline",
+              "image",
+              "blockquote",
+              "code-block",
+            ]}
+          />
+          <div style={{ marginTop: "20px" }}>
+            <h3>Editor Output:</h3>
+            <div>{editorValue}</div>
+          </div>
           <div className="d-flex justify-content-end">
-            <div className="me-2">
-              <Button onClick={handleAddCompetency}>역량 추가</Button>
-            </div>
-            <div>
-              <Button onClick={handleSaveCompetencies}>저장</Button>
-            </div>
-            {/* Create & Update 동시에 처리 */}
+            <Button
+              variant="outline-danger"
+              className="me-3"
+              onClick={() => setModalShow(true)}
+            >
+              뒤로
+            </Button>
+            <Button variant="outline-primary">저장</Button>
           </div>
         </Col>
+
+        {/* 취소 모달*/}
+        <Modal show={modalShow} onHide={() => setModalShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>저장 여부 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>저장하지않고 이동하시겠습니까?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+              뒤로
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => {
+                navigate("/competency");
+              }}
+            >
+              목록으로
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Row>
     </>
   );
