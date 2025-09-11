@@ -8,7 +8,7 @@ import {
   Row,
 } from "react-bootstrap";
 
-export function ExtraCurricularList() {
+export function ExtraCurricular() {
   return (
     <Container className="my-5">
       <div className="mx-auto" style={{ maxWidth: "1000px" }}>

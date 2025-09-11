@@ -10,10 +10,11 @@ export function MenuBar() {
   const menus = [
     {
       name: "비교과 프로그램",
-      path: "/extra_curricular",
+      path: "/extracurricular",
       subItems: [
-        { name: "프로그램 신청", path: "/extra_curricular/apply" },
-        { name: "프로그램 현황", path: "/extra_curricular/status" },
+        { name: "프로그램 신청", path: "/extracurricular/apply" },
+        { name: "프로그램 현황", path: "/extracurricular/status" },
+        { name: "프로그램 관리", path: "/extracurricular/manage" },
       ],
     },
     {
