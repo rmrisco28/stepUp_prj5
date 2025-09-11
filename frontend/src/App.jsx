@@ -31,7 +31,6 @@ function App() {
           <Route path="extracurricular" element={<ExtraCurricularList />} />
           <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
           {/*비교과*/}
-          <Route path="extra_curricular" element={<Extra_curricular />} />
           {/*핵심 역량*/}
           <Route path="competency" element={<Competency />} />
           <Route path="competency/add" element={<CompetencyAdd />} />
