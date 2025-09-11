@@ -1,4 +1,4 @@
-package com.example.backend.batch.controller;
+package com.example.backend.batch.student.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
