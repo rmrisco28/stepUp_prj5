@@ -1,88 +1,61 @@
+import { useState } from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
-import React, { useState } from "react";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import { useNavigate } from "react-router";
+import "../../css/competencyEditor.css";
+
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  backgroundColor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  maxHeight: "80vh",
+  overflowY: "scroll",
+};
 
 export function CompetencyEditor() {
-  const [editorValue, setEditorValue] = useState("");
-  const [modalShow, setModalShow] = useState(false);
+  const [sendData, setSendData] = useState();
 
-  const navigate = useNavigate();
+  const [open2, setOpen2] = useState(false);
+  const handleOpen2 = () => {
+    const mailBody = document
+      .getElementById("iframeContainer_iframe")
+      .contentWindow.submitPost();
 
-  const handleEditorChange = (value) => {
-    setEditorValue(value);
+    setSendData(mailBody);
+
+    setOpen2(true);
   };
+  const handleClose2 = () => setOpen2(false);
 
   return (
     <>
-      <Row className="justify-content-center">
-        <Col xs={10} md={8} lg={6}>
-          <h2>React Quill Editor</h2>
-          <ReactQuill
-            value={editorValue}
-            onChange={handleEditorChange}
-            modules={{
-              toolbar: [
-                [{ header: "1" }, { header: "2" }, { font: [] }],
-                [{ list: "ordered" }, { list: "bullet" }],
-                [{ align: [] }],
-                ["bold", "italic", "underline"],
-                ["image"],
-                ["blockquote"],
-                ["code-block"],
-              ],
-            }}
-            formats={[
-              "header",
-              "font",
-              "list",
-              "align",
-              "bold",
-              "italic",
-              "underline",
-              "image",
-              "blockquote",
-              "code-block",
-            ]}
-          />
-          <div style={{ marginTop: "20px" }}>
-            <h3>Editor Output:</h3>
-            <div>{editorValue}</div>
-          </div>
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="outline-danger"
-              className="me-3"
-              onClick={() => setModalShow(true)}
-            >
-              뒤로
-            </Button>
-            <Button variant="outline-primary">저장</Button>
-          </div>
-        </Col>
-
-        {/* 취소 모달*/}
-        <Modal show={modalShow} onHide={() => setModalShow(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>저장 여부 확인</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>저장하지않고 이동하시겠습니까?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-              뒤로
-            </Button>
-            <Button
-              variant="danger"
-              onClick={() => {
-                navigate("/competency");
-              }}
-            >
-              목록으로
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </Row>
+      <div className="iframeWrapper">
+        <div id="container" className="iframeContainer">
+          <iframe
+            id="iframeContainer_iframe"
+            allowFullScreen={true}
+            name="myframe"
+            frameBorder={"0"}
+            src="/../public/smarteditor/write.html"
+          ></iframe>
+          <Button variant="outlined" onClick={handleOpen2}>
+            미리보기
+          </Button>
+          <Modal
+            open={open2}
+            onClose={handleClose2}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <div sx={style}>
+              <div dangerouslySetInnerHTML={{ __html: sendData }}></div>
+            </div>
+          </Modal>
+        </div>
+      </div>
     </>
   );
 }
