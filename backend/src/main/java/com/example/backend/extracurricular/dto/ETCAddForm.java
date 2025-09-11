@@ -19,7 +19,7 @@ public class ETCAddForm {
     private LocalDateTime applyEndDt;
     private String competency;
     private String location;
-    private OperationType operationType;
+    private String operationType;
     private String grades;
     private Integer capacity;
     private String manager;

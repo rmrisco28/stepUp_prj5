@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartEditor</title>
+</head>
+
+<body>
+<div>
+  <textarea name="editorTxt" id="editorTxt"></textarea>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="./js/service/HuskyEZCreator.js" charset="utf-8"></script>
+<script>
+  let oEditors = [];
+  var checkedValues = [];
+  smartEditor = function () {
+    nhn.husky.EZCreator.createInIFrame({
+      oAppRef: oEditors,
+      elPlaceHolder: "editorTxt",
+      sSkinURI: "./SmartEditor2Skin.html",
+      fCreator: "createSEditor2"
+    })
+  }
+
+  function submitPost() {
+    oEditors.getById["editorTxt"].exec("UPDATE_CONTENTS_FIELD", [])
+    let content = document.getElementById("editorTxt").value
+
+    if (content == '' || content == '<p><br></p>') {
+      alert("내용을 입력해주세요.")
+      oEditors.getById["editorTxt"].exec("FOCUS");
+      return
+    } else {
+      console.log(content)
+      return content;
+    }
+  }
+
+  window.onload = function () {
+    smartEditor();
+  }
+</script>
+</body>
+
+</html>

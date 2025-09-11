@@ -28,3 +28,10 @@ CREATE TABLE `extra_curricular_program`
 );
 
 DROP TABLE extra_curricular_program;
+
+ALTER TABLE extra_curricular_program
+    ALTER COLUMN status SET DEFAULT 'DRAFT';
+
+ALTER TABLE extra_curricular_program
+    MODIFY COLUMN author VARCHAR(100) NOT NULL;
+

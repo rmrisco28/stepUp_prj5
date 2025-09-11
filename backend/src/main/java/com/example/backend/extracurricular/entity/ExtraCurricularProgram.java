@@ -28,7 +28,7 @@ public class ExtraCurricularProgram {
     private String content;
 
     @Column(name = "author", nullable = false)
-    private Integer author;
+    private String author;
 
     @Column(name = "operate_start_dt", nullable = false)
     private LocalDateTime operateStartDt;
@@ -50,7 +50,7 @@ public class ExtraCurricularProgram {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "operation_type", nullable = false, length = 100)
-    private OperationType operationType;
+    private OperationType operationType = OperationType.OFFLINE;
 
     @Column(name = "grades", length = 100)
     private String grades;
@@ -61,14 +61,14 @@ public class ExtraCurricularProgram {
 
     @ColumnDefault("0")
     @Column(name = "applicants", nullable = false)
-    private Integer applicants;
+    private Integer applicants = 0;
 
     @ColumnDefault("0")
     @Column(name = "waiting", nullable = false)
-    private Integer waiting;
+    private Integer waiting = 0;
 
     @Column(name = "status", nullable = false, length = 100)
-    private String status;
+    private String status = "DRAFT";
 
     @Column(name = "manager", length = 100)
     private String manager;
@@ -94,6 +94,6 @@ public class ExtraCurricularProgram {
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = false;
+    private Boolean useYn = true;
 
 }
