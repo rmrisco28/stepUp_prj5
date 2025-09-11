@@ -55,8 +55,9 @@ export function MenuBar() {
       name: "로그인",
       path: "/login",
       subItems: [
-        { name: "로그인", path: "/login" },
-        { name: "회원가입", path: "/signup" },
+        // 쓸 일 없을 것 같지만 일단 남겨두기
+        // { name: "로그인", path: "/login" },
+        //   { name: "회원가입", path: "/signup" },
       ],
     },
   ];
@@ -90,23 +91,25 @@ export function MenuBar() {
                   {menu.name}
                 </Nav.Link>
 
-                {/* 하위 메뉴 */}
-                <div
-                  className={`dropdown-menu border-0 border-top rounded-0 shadow-sm ${
-                    activeMenu === idx ? "show" : ""
-                  }`}
-                  style={{ left: 10, top: "100%" }} // 바로 아래
-                >
-                  {menu.subItems.map((sub) => (
-                    <Link
-                      key={sub.path}
-                      to={sub.path}
-                      className="dropdown-item py-2"
-                    >
-                      {sub.name}
-                    </Link>
-                  ))}
-                </div>
+                {/* 하위 메뉴 - 없는건 렌더링 안 되도록 */}
+                {menu.subItems.length > 0 && (
+                  <div
+                    className={`dropdown-menu border-0 border-top rounded-0 shadow-sm ${
+                      activeMenu === idx ? "show" : ""
+                    }`}
+                    style={{ left: 10, top: "100%" }} // 바로 아래
+                  >
+                    {menu.subItems.map((sub) => (
+                      <Link
+                        key={sub.path}
+                        to={sub.path}
+                        className="dropdown-item py-2"
+                      >
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </Nav>

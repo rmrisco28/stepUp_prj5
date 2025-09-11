@@ -7,7 +7,6 @@ import { Mileage } from "./feature/mileage/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularAdd } from "./feature/extracurricular/ExtraCurricularAdd.jsx";
 import { MenuBar } from "./common/MenuBar.jsx";
-import { SignUp } from "./feature/member/SignUp.jsx";
 import { CompetencyTest } from "./feature/competency/CompetencyTest.jsx";
 import { CompetencyAdd } from "./feature/competency/CompetencyAdd.jsx";
 import { CompetencyList } from "./feature/competency/CompetencyList.jsx";
@@ -29,6 +28,7 @@ function App() {
 
         {/*페이지 라우팅*/}
         <Routes>
+          {/*gggggg*/}
           {/*비교과*/}
           <Route path="extracurricular" element={<ExtraCurricular />} />
           <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
@@ -61,7 +61,6 @@ function App() {
           <Route path="counseling" element={<Counseling />} />
           {/*회원*/}
           <Route path="login" element={<Login />} />
-          <Route path="signUp" element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </>
