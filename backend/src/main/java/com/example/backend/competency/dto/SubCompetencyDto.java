@@ -7,13 +7,14 @@ import lombok.Value;
 import java.io.Serializable;
 
 /**
- * DTO for {@link com.example.backend.competency.entity.Competency}
+ * DTO for {@link com.example.backend.competency.entity.SubCompetency}
  */
 @Data
 @AllArgsConstructor
-public class CompetencyDto implements Serializable {
+public class SubCompetencyDto implements Serializable {
     Integer seq;
-    String competencyName;
-    String competencyExpln;
+    Integer competencySeqId;
+    String subCompetencyName;
+    String subCompetencyExpln;
     Boolean useYn;
 }

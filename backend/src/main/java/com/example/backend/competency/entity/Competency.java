@@ -15,7 +15,7 @@ public class Competency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "competency_seq", nullable = false)
-    private Integer id;
+    private Integer seq;
 
     @Column(name = "competency_name", nullable = false, length = 50)
     private String competencyName;

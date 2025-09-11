@@ -6,12 +6,14 @@ import { Career } from "./feature/career/Career.jsx";
 import { Mileage } from "./feature/mileage/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { MenuBar } from "./common/MenuBar.jsx";
-import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
 import { SignUp } from "./feature/member/SignUp.jsx";
 import { CompetencyTest } from "./feature/competency/CompetencyTest.jsx";
-import { CompetencySub } from "./feature/competency/CompetencySub.jsx";
 import { CompetencyAdd } from "./feature/competency/CompetencyAdd.jsx";
 import { CompetencyList } from "./feature/competency/CompetencyList.jsx";
+import { CompetencySubAdd } from "./feature/competency/CompetencySubAdd.jsx";
+import { CompetencySubList } from "./feature/competency/CompetencySubList.jsx";
+import { CompetencyPostEditor } from "./feature/competency/CompetencyPostEditor.jsx";
+import { CompetencyPostPage } from "./feature/competency/CompetencyPostPage.jsx";
 
 function App() {
   return (
@@ -26,26 +28,26 @@ function App() {
         <Routes>
           {/*비교과*/}
           <Route path="extra_curricular" element={<Extra_curricular />} />
-
           {/*핵심 역량*/}
           <Route path="competency" element={<Competency />} />
-          <Route path="competency/test" element={<CompetencyTest />} />
           <Route path="competency/add" element={<CompetencyAdd />} />
           <Route path="competency/list" element={<CompetencyList />} />
-
+          <Route path="competency/subAdd" element={<CompetencySubAdd />} />
+          <Route path="competency/subList" element={<CompetencySubList />} />
+          {/* 핵심역량 소개 */}
+          <Route
+            path="competency/postEditor"
+            element={<CompetencyPostEditor />}
+          />
+          <Route path="competency/postPage" element={<CompetencyPostPage />} />
           {/*핵심역량 5개 추가로 생성*/}
-          <Route path="competency/editor" element={<CompetencyEditor />} />
-          <Route path="competency/subEditor" element={<CompetencySub />} />
-
+          <Route path="competency/test" element={<CompetencyTest />} />
           {/*마일리지*/}
           <Route path="mileage" element={<Mileage />} />
-
           {/*진로 설계*/}
           <Route path="career" element={<Career />} />
-
           {/*통합 상담*/}
           <Route path="counseling" element={<Counseling />} />
-
           {/*회원*/}
           <Route path="login" element={<Login />} />
           <Route path="signUp" element={<SignUp />} />
