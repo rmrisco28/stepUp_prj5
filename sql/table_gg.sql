@@ -26,14 +26,21 @@ CREATE TABLE `sub_competency`
 
 );
 
-ALTER TABLE `subCompetency`
+ALTER TABLE `sub_competency`
     ADD CONSTRAINT `PK_SUBCOMPETENCY` PRIMARY KEY (
                                                    `sub_competency_seq`
         );
 
-SHOW CREATE TABLE prj5.subCompetency;
-SHOW CREATE TABLE subCompetency;
+SHOW VARIABLES LIKE 'character_set%';
+
+ALTER DATABASE prj5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
+
+ALTER TABLE sub_competency
+    CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
+ALTER TABLE sub_competency
+    MODIFY COLUMN sub_competency_expln VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
+SHOW FULL COLUMNS FROM sub_competency;

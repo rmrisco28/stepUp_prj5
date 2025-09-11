@@ -73,7 +73,7 @@ export function CompetencySubList() {
                 <th>번호</th>
                 <th>핵심역량</th>
                 <th>하위역량</th>
-                <th>하위역량설</th>
+                <th>하위역량설정</th>
                 <th>사용여부</th>
               </tr>
             </thead>
