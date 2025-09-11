@@ -37,13 +37,13 @@ export function ExtraCurricularAdd() {
               <Col>
                 <FormGroup className="mb-3">
                   <FormLabel>운영 시작일</FormLabel>
-                  <FormControl type="date" name="operate_start_dt" />
+                  <FormControl type="datetime-local" name="operate_start_dt" />
                 </FormGroup>
               </Col>
               <Col>
                 <FormGroup className="mb-3">
                   <FormLabel>운영 종료일</FormLabel>
-                  <FormControl type="date" name="operate_end_dt" />
+                  <FormControl type="datetime-local" name="operate_end_dt" />
                 </FormGroup>
               </Col>
             </Row>
@@ -53,13 +53,13 @@ export function ExtraCurricularAdd() {
               <Col>
                 <FormGroup className="mb-3">
                   <FormLabel>신청 시작일</FormLabel>
-                  <FormControl type="date" name="apply_start_dt" />
+                  <FormControl type="datetime-local" name="apply_start_dt" />
                 </FormGroup>
               </Col>
               <Col>
                 <FormGroup className="mb-3">
                   <FormLabel>신청 종료일</FormLabel>
-                  <FormControl type="date" name="apply_end_dt" />
+                  <FormControl type="datetime-local" name="apply_end_dt" />
                 </FormGroup>
               </Col>
             </Row>
