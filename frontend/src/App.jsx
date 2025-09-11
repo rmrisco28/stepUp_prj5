@@ -29,6 +29,7 @@ function App() {
 
         {/*페이지 라우팅*/}
         <Routes>
+          {/*gggggg*/}
           {/*비교과*/}
           <Route path="extracurricular" element={<ExtraCurricular />} />
           <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
