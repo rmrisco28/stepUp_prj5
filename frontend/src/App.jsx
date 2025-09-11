@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Login } from "./feature/member/Login.jsx";
-import { ExtraCurricularList } from "./feature/extracurricular/ExtraCurricularList.jsx";
+import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
 import { Competency } from "./feature/competency/Competency.jsx";
 import { Career } from "./feature/career/Career.jsx";
 import { Mileage } from "./feature/mileage/Mileage.jsx";
@@ -15,6 +15,7 @@ import { CompetencySubAdd } from "./feature/competency/CompetencySubAdd.jsx";
 import { CompetencySubList } from "./feature/competency/CompetencySubList.jsx";
 import { CompetencyPostEditor } from "./feature/competency/CompetencyPostEditor.jsx";
 import { CompetencyPostPage } from "./feature/competency/CompetencyPostPage.jsx";
+import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricularManage.jsx";
 
 function App() {
   return (
@@ -27,10 +28,13 @@ function App() {
 
         {/*페이지 라우팅*/}
         <Routes>
-          {/*임시 페이지*/}
-          <Route path="extracurricular" element={<ExtraCurricularList />} />
-          <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
           {/*비교과*/}
+          <Route path="extracurricular" element={<ExtraCurricular />} />
+          <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
+          <Route
+            path="extracurricular/manage"
+            element={<ExtraCurricularManage />}
+          />
           {/*핵심 역량*/}
           <Route path="competency" element={<Competency />} />
           <Route path="competency/add" element={<CompetencyAdd />} />
