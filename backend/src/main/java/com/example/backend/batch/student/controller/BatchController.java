@@ -1,4 +1,4 @@
-package com.example.backend.batch.controller;
+package com.example.backend.batch.student.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class BatchController implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        boolean stu_batch_yn = false;
+        boolean stu_batch_yn = true;
 
         if (stu_batch_yn) {
             log.info("=== Backend Application Started ===");

@@ -1,6 +1,6 @@
-package com.example.backend.batch.repository;
+package com.example.backend.batch.student.repository;
 
-import com.example.backend.batch.entity.Student;
+import com.example.backend.batch.student.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

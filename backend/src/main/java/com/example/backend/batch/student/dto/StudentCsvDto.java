@@ -1,4 +1,4 @@
-package com.example.backend.batch.dto;
+package com.example.backend.batch.student.dto;
 
 import com.opencsv.bean.CsvBindByPosition;
 import lombok.AllArgsConstructor;

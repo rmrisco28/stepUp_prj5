@@ -1,8 +1,8 @@
-package com.example.backend.batch.processor;
+package com.example.backend.batch.student.processor;
 
-import com.example.backend.batch.dto.StudentCsvDto;
-import com.example.backend.batch.entity.Student;
-import com.example.backend.batch.service.StudentNumberGenerator;
+import com.example.backend.batch.student.dto.StudentCsvDto;
+import com.example.backend.batch.student.entity.Student;
+import com.example.backend.batch.student.service.StudentNumberGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
