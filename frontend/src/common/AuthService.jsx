@@ -2,7 +2,7 @@ class AuthService {
   // 로그인
   async login(loginId, password) {
     try {
-      const response = await fetch(`/api/member/login`, {
+      const response = await fetch(`/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -22,7 +22,7 @@ class AuthService {
   // 로그아웃
   async logout() {
     try {
-      const response = await fetch(`/api/member/logout`, {
+      const response = await fetch(`/api/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -38,7 +38,7 @@ class AuthService {
   // 로그인 상태 확인
   async getAuthStatus() {
     try {
-      const response = await fetch(`/api/member/status`, {
+      const response = await fetch(`/api/auth/status`, {
         method: "GET",
         credentials: "include",
       });

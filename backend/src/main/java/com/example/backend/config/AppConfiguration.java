@@ -26,6 +26,7 @@ public class AppConfiguration {
         http.authorizeHttpRequests(auth -> auth
                 .requestMatchers(
                         "/api/member/**",
+                        "/api/auth/**",
                         "/api/competency/**"
                 ).permitAll()
                 .anyRequest().authenticated());
