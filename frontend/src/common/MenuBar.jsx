@@ -22,7 +22,7 @@ export function MenuBar() {
       ],
     },
     {
-      name: "핵심 역량",
+      name: "핵심역량",
       path: "/competency",
       subItems: [
         { name: "역량 소개", path: "/competency" },

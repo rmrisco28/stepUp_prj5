@@ -1,11 +1,9 @@
 import { Button, Col, Row, Table } from "react-bootstrap";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
 import axios from "axios";
 
 export function Competency() {
   const [competency, setCompetency] = useState([]);
-  let navigate = useNavigate();
 
   // 핵심역량 구분
   const groupedCompetency = {};
