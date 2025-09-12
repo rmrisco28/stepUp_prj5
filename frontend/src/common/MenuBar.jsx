@@ -56,6 +56,7 @@ export function MenuBar() {
       path: "/login",
       subItems: [
         // 쓸 일 없을 것 같지만 일단 남겨두기
+        // TODO 유민 : 로그인 하면 로그아웃 뜨도록 .. !!
         // { name: "로그인", path: "/login" },
         //   { name: "회원가입", path: "/signup" },
       ],

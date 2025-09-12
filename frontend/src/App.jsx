@@ -16,10 +16,12 @@ import { CompetencyPostEditor } from "./feature/competency/CompetencyPostEditor.
 import { CompetencyPostPage } from "./feature/competency/CompetencyPostPage.jsx";
 import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricularManage.jsx";
 import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { AuthProvider } from "./common/AuthContext.jsx";
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <BrowserRouter>
         {/*상단바*/}
         {/*<AppNavbar />*/}
@@ -28,7 +30,6 @@ function App() {
 
         {/*페이지 라우팅*/}
         <Routes>
-          {/*gggggg*/}
           {/*비교과*/}
           <Route path="extracurricular" element={<ExtraCurricular />} />
           <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
@@ -63,7 +64,7 @@ function App() {
           <Route path="login" element={<Login />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthProvider>
   );
 }
 
