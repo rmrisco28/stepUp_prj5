@@ -19,6 +19,11 @@ export function CompetencyAdd() {
   let navigate = useNavigate();
 
   function handleSavaButton() {
+    if (!name.trim() || !expln.trim() || isProcessing) {
+      alert("모든 필드를 입력해 주세요.");
+      return;
+    }
+
     setIsProcessing(true);
     axios
       .post("/api/competency/add", {

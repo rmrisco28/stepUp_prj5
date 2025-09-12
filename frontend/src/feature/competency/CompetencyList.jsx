@@ -1,9 +1,12 @@
-import { Col, Row, Table } from "react-bootstrap";
+import { Button, Col, Row, Table } from "react-bootstrap";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 export function CompetencyList() {
   const [competency, setCompetency] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -67,20 +70,56 @@ export function CompetencyList() {
           <Table>
             <thead>
               <tr>
-                <th>번호</th>
-                <th>핵심역량</th>
-                <th>핵심역량 설명</th>
-                <th>사용여부</th>
+                <th
+                  style={{
+                    width: "7%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  번호
+                </th>
+                <th
+                  style={{
+                    width: "25%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  핵심역량
+                </th>
+                <th
+                  style={{
+                    width: "200px",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  핵심역량 정의
+                </th>
+                <th
+                  style={{
+                    width: "10%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  사용여부
+                </th>
               </tr>
             </thead>
             <tbody>
               {competency && competency.length > 0 ? (
                 competency.map((data) => (
                   <tr key={data.seq}>
-                    <td>{data.seq}</td>
-                    <td>{data.competencyName}</td>
-                    <td>{data.competencyExpln}</td>
-                    <td>
+                    <td align="center" valign="middle">
+                      {data.seq}
+                    </td>
+                    <td align="center" valign="middle">
+                      {data.competencyName}
+                    </td>
+                    <td valign="middle">{data.competencyExpln}</td>
+                    <td align="center" valign="middle">
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
                       <input
                         type="checkbox"
@@ -97,6 +136,17 @@ export function CompetencyList() {
               )}
             </tbody>
           </Table>
+          <div
+            className="d-flex justify-content-end"
+            style={{ marginTop: "20px" }}
+          >
+            <Button
+              className="me-3 "
+              onClick={() => navigate("/competency/add")}
+            >
+              핵심역량 추가
+            </Button>
+          </div>
         </Col>
       </Row>
     </>

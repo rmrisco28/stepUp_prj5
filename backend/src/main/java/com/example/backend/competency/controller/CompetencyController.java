@@ -66,4 +66,12 @@ public class CompetencyController {
 
         return subCompetencyService.subUpdate(seq, subCompetencyListDto);
     }
+
+    // 핵심역량 소개
+    @GetMapping("")
+    public List<?> intro() {
+        return subCompetencyService.intro();
+    }
+
+
 }

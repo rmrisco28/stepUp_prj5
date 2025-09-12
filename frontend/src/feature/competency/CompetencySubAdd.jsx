@@ -28,7 +28,7 @@ export function CompetencySubAdd() {
   }, []);
 
   function handleSavaButton() {
-    if (!competency || !name.trim()) {
+    if (!competency || !name.trim() || !expln.trim() || isProcessing) {
       alert("모든 필드를 입력해 주세요.");
       return;
     }
@@ -104,9 +104,11 @@ export function CompetencySubAdd() {
             >
               역량 목록
             </Button>
-            <Button className="" onClick={handleSavaButton}>
-              저장
-            </Button>
+            <div className="d-flex justify-content-end">
+              <Button className="" onClick={handleSavaButton}>
+                저장
+              </Button>
+            </div>
           </div>
         </Col>
       </Row>
