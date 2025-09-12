@@ -18,6 +18,7 @@ import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricular
 import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { AuthProvider } from "./common/AuthContext.jsx";
+import { MainLayout } from "./common/MainLayout.jsx";
 
 function App() {
   return (
@@ -30,6 +31,8 @@ function App() {
 
         {/*페이지 라우팅*/}
         <Routes>
+          {/*메인 페이지*/}
+          <Route index element={<MainLayout />} />
           {/*비교과*/}
           <Route path="extracurricular" element={<ExtraCurricular />} />
           <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
