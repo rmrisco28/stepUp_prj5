@@ -15,18 +15,9 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private BCryptPasswordEncoder passwordEncoder;
 
-    // 로그인 검증
-    public Optional<Member> authenticateUser(String loginId, String password) {
-        Optional<Member> memberOpt = memberRepository.findByLoginId(loginId);
-
-        if (memberOpt.isPresent()) {
-            Member member = memberOpt.get();
-            if (passwordEncoder.matches(password, member.getPassword())) {
-                return Optional.of(member);
-            }
-        }
-        return Optional.empty();
+    // 회원을 찾아 반환하는 메서드만 남김
+    public Optional<Member> findByLoginId(String loginId) {
+        return memberRepository.findByLoginId(loginId);
     }
 }

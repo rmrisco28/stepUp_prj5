@@ -11,14 +11,12 @@ public class LoginResponse {
     private boolean success;
     private String message;
     private MemberInfo member;
-//    private Integer memberSeq;
-//    private String loginId;
 
-//    @Data
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class MemberInfo {
-//        private Integer memberSeq;
-//        private String loginId;
-//    }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MemberInfo {
+        private Integer memberSeq;
+        private String loginId;
+    }
 }
