@@ -34,7 +34,7 @@ public interface SubCompetencyRepository extends JpaRepository<SubCompetency, In
                 s.subCompetencyExpln,
                 s.useYn)
                 FROM SubCompetency s
-                WHERE s.useYn = true
+                WHERE s.useYn = true and s.competencySeq.useYn = true
                 Order By s.seq DESC
             """)
     List<SubCompetencyMainDto> findUseSubCompetencies();

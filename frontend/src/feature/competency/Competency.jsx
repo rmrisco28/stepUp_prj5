@@ -52,9 +52,9 @@ export function Competency() {
         <Col xs={12} md={8} lg={6}>
           <div className="mb-4"></div>
           <h2 className="text-center mb-5" style={{ fontWeight: "bold" }}>
-            핵심역량 소개
+            핵심역량 안내
           </h2>
-          <h4 style={{ fontWeight: "bold" }}> 핵심역량 정의</h4>
+          <h4 style={{ fontWeight: "bold" }}> 핵심역량</h4>
           {/* 핵심역량 이미지*/}
           <img
             className="img-fluid mb-3"
