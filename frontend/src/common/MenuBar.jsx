@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/menubar.css";
+import { AuthProvider } from "./AuthContext.jsx";
+import { useAuth } from "./AuthContext.jsx";
 
 export function MenuBar() {
   // const [showSubMenu, setShowSubMenu] = useState(false);
+  const { user, logout, isAuthenticated } = useAuth();
   const [activeMenu, setActiveMenu] = useState(null);
 
   const menus = [
@@ -50,15 +53,6 @@ export function MenuBar() {
       subItems: [
         { name: "상담 신청", path: "/counseling/apply" },
         { name: "상담 내역", path: "/counseling/history" },
-      ],
-    },
-    {
-      name: "로그인",
-      path: "/login",
-      subItems: [
-        // 쓸 일 없을 것 같지만 일단 남겨두기
-        // { name: "로그인", path: "/login" },
-        //   { name: "회원가입", path: "/signup" },
       ],
     },
   ];
@@ -117,6 +111,15 @@ export function MenuBar() {
                 )}
               </div>
             ))}
+            <Nav.Link
+              as={Link}
+              to={isAuthenticated ? "#" : "/login"} // Use '#' for logout since it doesn't navigate
+              onClick={isAuthenticated ? logout : null}
+              className="px-3"
+              style={{ fontSize: "1.2rem" }}
+            >
+              {isAuthenticated ? "로그아웃" : "로그인"}
+            </Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

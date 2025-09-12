@@ -10,4 +10,5 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
+    // 기본 crud만 작성
 }

@@ -55,6 +55,7 @@ public class BatchConfig {
         return new JobBuilder("studentImportJob", jobRepository)
                 .start(studentImportStep()) // Step 1 : csv -> student (csv 파일 읽어서 학번 생성 후 student table에 저장)
                 .next(studentSaveMemberStep()) // Step 2 : student -> member (student table의 학번과 생년월일(초기 비밀번호) 읽어서 가공 후 member table에 저장)
+//                .next(memberSeqSaveStudentStep()) // Step 3 :  member -> student (member의 member_seq를 student 의 member_seq 컬럼에 추가 : 학번 같은 거 확인하는 로직)
                 .build();
     }
 
@@ -77,6 +78,16 @@ public class BatchConfig {
                 .writer(studentMemberDbWriter())
                 .build();
     }
+
+//    @Bean
+//    public Step memberSeqSaveStudentStep() {
+//        return new StepBuilder("memberSeqSaveStudentStep", jobRepository)
+//                .chunk(10, transactionManager)
+//                .reader(memberDbReader())
+//                .processor(memberSeqSaveStudentProcessor())
+//                .writer(memberStudentDbWriter())
+//                .build();
+//    }
 
     // Step 1 reader - processor - writer
 
@@ -173,4 +184,12 @@ public class BatchConfig {
         return writer;
     }
 
+    // Step 3 Reader - processor - writer
+//    @Bean
+//    public JdbcCursorItemReader<Member> memberDbReader() {
+//        return new JdbcCursorItemReaderBuilder<Member>()
+//                .name("memberDbReader")
+//                .dataSource(dataSource)
+//                .sql("SELECT * FROM member ")
+//    }
 }

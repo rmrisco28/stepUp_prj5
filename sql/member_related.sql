@@ -26,10 +26,19 @@ CREATE TABLE student
     admission_year INT         NOT NULL,
     phone          VARCHAR(20) NULL,
     email          VARCHAR(50) NULL
-    # member_seq INT
+#     member_seq     INT NOT NULL,
+#     FOREIGN KEY (member_seq) REFERENCES member (member_seq)
     # use_yn CHAR
 );
 DROP TABLE student;
+# 외래키 제약사항 추가
+# -> student, member 만들 때 student에 추가해서 사용하면 됨(위에 주석처리 확인하기)
+# 지금은 배치 확인하려고 .. ?
+ALTER TABLE student
+    ADD member_seq INT,
+    ADD CONSTRAINT fk_student_member
+        FOREIGN KEY (member_seq)
+            REFERENCES member (member_seq);
 
 # phone, email null -> not null 로 바꾸기, 지금은 확인용으로 가져와보자
 # 테이블 가져와서 이름이랑 각 컬럼 상황에 맞게 바꿈
