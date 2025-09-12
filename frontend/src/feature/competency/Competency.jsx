@@ -95,41 +95,51 @@ export function Competency() {
             </thead>
             <tbody>
               {competency && competency.length > 0 ? (
-                competency.map((data, index) => (
-                  <tr key={data.seq}>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.competencySeqCompetencyName}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.competencySeqCompetencyExpln}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.subCompetencyName}
-                    </td>
-                    <td
-                      style={{
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.subCompetencyExpln}
-                    </td>
-                  </tr>
-                ))
+                competency.map((data, index) => {
+                  const isFirst =
+                    index === 0 ||
+                    competency[index - 1].competencySeqCompetencyName !==
+                      data.competencySeqCompetencyName;
+
+                  return (
+                    <tr key={data.seq}>
+                      {isFirst && (
+                        <>
+                          <td
+                            rowSpan={
+                              grouped[data.competencySeqCompetencyName].count
+                            }
+                            style={{
+                              textAlign: "center",
+                              verticalAlign: "middle",
+                            }}
+                          >
+                            {data.competencySeqCompetencyName}
+                          </td>
+                          <td
+                            rowSpan={
+                              grouped[data.competencySeqCompetencyName].count
+                            }
+                            style={{
+                              textAlign: "center",
+                              verticalAlign: "middle",
+                            }}
+                          >
+                            {data.competencySeqCompetencyExpln}
+                          </td>
+                        </>
+                      )}
+                      <td
+                        style={{ textAlign: "center", verticalAlign: "middle" }}
+                      >
+                        {data.subCompetencyName}
+                      </td>
+                      <td style={{ verticalAlign: "middle" }}>
+                        {data.subCompetencyExpln}
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="4">데이터가 없습니다.</td>
