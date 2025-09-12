@@ -15,7 +15,7 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_seq", nullable = false)
-    private Integer id;
+    private Integer memberSeq;
 
     @Column(name = "login_id", nullable = false, length = 20)
     private String loginId;

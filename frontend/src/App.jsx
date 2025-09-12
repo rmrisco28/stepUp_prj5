@@ -14,12 +14,14 @@ import { CompetencySubAdd } from "./feature/competency/CompetencySubAdd.jsx";
 import { CompetencySubList } from "./feature/competency/CompetencySubList.jsx";
 import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricularManage.jsx";
 import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
+import { AuthProvider } from "./common/AuthContext.jsx";
+import { MainPage } from "./common/MainPage.jsx";
 import { CompetencyTextEditor } from "./feature/competency/CompetencyTextEditor.jsx";
 import { CompetencyText } from "./feature/competency/CompetencyText.jsx";
 
 function App() {
   return (
-    <>
+    <AuthProvider>
       <BrowserRouter>
         {/*상단바*/}
         {/*<AppNavbar />*/}
@@ -28,7 +30,8 @@ function App() {
 
         {/*페이지 라우팅*/}
         <Routes>
-          {/*gggggg*/}
+          {/*메인 페이지*/}
+          <Route index element={<MainPage />} />
           {/*비교과*/}
           <Route path="extracurricular" element={<ExtraCurricular />} />
           <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
@@ -63,7 +66,7 @@ function App() {
           <Route path="login" element={<Login />} />
         </Routes>
       </BrowserRouter>
-    </>
+    </AuthProvider>
   );
 }
 
