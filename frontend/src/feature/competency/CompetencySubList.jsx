@@ -66,26 +66,97 @@ export function CompetencySubList() {
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
           <div className="mb-3"></div>
-          <h2 className="mb-3">하위 역량 목록 </h2>
+          <h2 className="mb-3">하위역량 목록 </h2>
           <Table>
             <thead>
               <tr>
-                <th>번호</th>
-                <th>핵심역량</th>
-                <th>하위역량</th>
-                <th>하위역량설정</th>
-                <th>사용여부</th>
+                <th
+                  style={{
+                    width: "6%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  번호
+                </th>
+                <th
+                  style={{
+                    width: "15%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  핵심역량
+                </th>
+                <th
+                  style={{
+                    width: "15%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  하위역량
+                </th>
+                <th
+                  style={{
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  하위역량 정의
+                </th>
+                <th
+                  style={{
+                    width: "10%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  사용여부
+                </th>
               </tr>
             </thead>
             <tbody>
               {competency && competency.length > 0 ? (
                 competency.map((data) => (
                   <tr key={data.seq}>
-                    <td>{data.seq}</td>
-                    <td>{data.competencySeqCompetencyName}</td>
-                    <td>{data.subCompetencyName}</td>
-                    <td>{data.subCompetencyExpln}</td>
-                    <td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {data.seq}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {data.competencySeqCompetencyName}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {data.subCompetencyName}
+                    </td>
+                    <td
+                      style={{
+                        verticalAlign: "middle",
+                      }}
+                    >
+                      {data.subCompetencyExpln}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                      }}
+                    >
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
                       <input
                         type="checkbox"
@@ -102,12 +173,17 @@ export function CompetencySubList() {
               )}
             </tbody>
           </Table>
-          <Button
-            className="me-3"
-            onClick={() => navigate("/competency/subAdd")}
+          <div
+            className="d-flex justify-content-end"
+            style={{ marginTop: "20px" }}
           >
-            하위 역량 추가
-          </Button>
+            <Button
+              className="me-3"
+              onClick={() => navigate("/competency/subAdd")}
+            >
+              하위역량 추가
+            </Button>
+          </div>
         </Col>
       </Row>
     </>

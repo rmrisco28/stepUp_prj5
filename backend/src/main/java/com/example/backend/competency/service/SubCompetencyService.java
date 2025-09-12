@@ -3,6 +3,7 @@ package com.example.backend.competency.service;
 import com.example.backend.competency.dto.CompetencyDto;
 import com.example.backend.competency.dto.SubCompetencyDto;
 import com.example.backend.competency.dto.SubCompetencyListDto;
+import com.example.backend.competency.dto.SubCompetencyMainDto;
 import com.example.backend.competency.entity.Competency;
 import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.CompetencyRepository;
@@ -57,5 +58,10 @@ public class SubCompetencyService {
         subCompetencyRepository.save(subCompetency);
 
         return ResponseEntity.ok().build();
+    }
+
+    public List<?> intro() {
+        List<SubCompetencyMainDto> subCompetencyMainDto = subCompetencyRepository.findUseSubCompetencies();
+        return subCompetencyMainDto;
     }
 }

@@ -32,15 +32,17 @@ export function CompetencyEditor() {
 
   return (
     <>
-      <div className="iframeWrapper">
-        <div id="container" className="iframeContainer">
-          <iframe
-            id="iframeContainer_iframe"
-            allowFullScreen={true}
-            name="myframe"
-            frameBorder={"0"}
-            src="/../public/smarteditor/write.html"
-          ></iframe>
+      <Row className="justify-content-center">
+        <Col xs={10} md={8} lg={4}>
+          <div id="container" className="iframeContainer">
+            <iframe
+              id="iframeContainer_iframe"
+              allowFullScreen={true}
+              name="myframe"
+              frameBorder={"0"}
+              src="/../public/smarteditor/write.html"
+            ></iframe>
+          </div>
           <Button variant="outlined" onClick={handleOpen2}>
             미리보기
           </Button>
@@ -54,8 +56,8 @@ export function CompetencyEditor() {
               <div dangerouslySetInnerHTML={{ __html: sendData }}></div>
             </div>
           </Modal>
-        </div>
-      </div>
+        </Col>
+      </Row>
     </>
   );
 }
