@@ -1,5 +1,6 @@
 package com.example.backend.member.service;
 
+import com.example.backend.batch.student.repository.StudentRepository;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
@@ -14,7 +15,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class AuthService {
-    private final MemberRepository memberRepository; // MemberService를 통하지 않고 직접 Repository 사용
+    private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final HttpSession httpSession;
 
@@ -28,6 +29,8 @@ public class AuthService {
                 // 로그인 성공 시 세션에 정보 저장
                 httpSession.setAttribute("memberSeq", member.getMemberSeq());
                 httpSession.setAttribute("loginId", member.getLoginId());
+                // TODO 유민 : member랑 student 랑 참조 맺어서 필요한 정보 가져오기
+//                httpSession.setAttribute("name", member.getMemberSeq().getName());
                 return Optional.of(member);
             }
         }
