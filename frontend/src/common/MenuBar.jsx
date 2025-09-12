@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "../css/menubar.css";
 
 export function MenuBar() {
   // const [showSubMenu, setShowSubMenu] = useState(false);
@@ -67,7 +68,11 @@ export function MenuBar() {
       <Container>
         {/* 로고 */}
         <Navbar.Brand as={Link} to="/">
-          임 시 로 고
+          <img
+            src="../image/stepUp_logo_수정.png"
+            alt="logo"
+            className="logo"
+          />
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="main-nav" />

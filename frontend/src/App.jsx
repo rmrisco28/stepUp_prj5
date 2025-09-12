@@ -15,6 +15,7 @@ import { CompetencySubList } from "./feature/competency/CompetencySubList.jsx";
 import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricularManage.jsx";
 import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
 import { CompetencyTextEditor } from "./feature/competency/CompetencyTextEditor.jsx";
+import { CompetencyText } from "./feature/competency/CompetencyText.jsx";
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
           {/* 핵심역량 소개 */}
 
           {/*핵심역량 5개 추가로 생성*/}
+          <Route path="competency/text" element={<CompetencyText />} />
           <Route path="competency/test" element={<CompetencyTest />} />
           <Route
             path="competency/textEditor"

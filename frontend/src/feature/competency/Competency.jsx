@@ -14,6 +14,11 @@ export function Competency() {
           <div className="mb-4"></div>
           <h2 className="text-center mb-5">핵심 역량 안내</h2>
           <h4>○○○대학교 핵심 역량 정의</h4>
+          <img
+            src="/image/핵심역량.png"
+            alt="핵심역량"
+            style={{ width: "100%" }}
+          />
           {/* 게시물 작성 editor 버튼*/}
           <Button onClick={() => navigate("/competency/editor")}>
             게시물 수정
