@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
 
-export function MainLayout() {
+export function MainPage() {
   const [loginStatus, setLoginStatus] =
     useState("로그인 상태를 확인해 주세요.");
 
