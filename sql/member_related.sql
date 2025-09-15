@@ -39,6 +39,16 @@ ALTER TABLE student
     ADD CONSTRAINT fk_student_member
         FOREIGN KEY (member_seq)
             REFERENCES member (member_seq);
+# 배치 안 쓰고 간단히 sql로 처리하기
+UPDATE student
+SET member_seq = (SELECT mb.member_seq
+                  FROM member mb
+                  WHERE mb.login_id = student.student_no)
+WHERE student_no IN (SELECT mb.login_id
+                     FROM member mb);
+# 연습용이라 초기화함
+UPDATE student
+SET member_seq = NULL;
 
 # phone, email null -> not null 로 바꾸기, 지금은 확인용으로 가져와보자
 # 테이블 가져와서 이름이랑 각 컬럼 상황에 맞게 바꿈
