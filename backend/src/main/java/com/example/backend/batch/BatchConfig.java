@@ -20,10 +20,11 @@ import org.springframework.batch.item.Chunk;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.database.BeanPropertyItemSqlParameterSourceProvider;
+import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.JdbcCursorItemReader;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JdbcCursorItemReaderBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -47,7 +48,6 @@ public class BatchConfig {
     private final StudentItemProcessor studentItemProcessor;
     private final StudentSaveMemberItemProcessor studentSaveMemberItemProcessor;
 
-    @Autowired
     private final EntityManagerFactory entityManagerFactory;
 
     @Bean
@@ -55,7 +55,7 @@ public class BatchConfig {
         return new JobBuilder("studentImportJob", jobRepository)
                 .start(studentImportStep()) // Step 1 : csv -> student (csv 파일 읽어서 학번 생성 후 student table에 저장)
                 .next(studentSaveMemberStep()) // Step 2 : student -> member (student table의 학번과 생년월일(초기 비밀번호) 읽어서 가공 후 member table에 저장)
-//                .next(memberSeqSaveStudentStep()) // Step 3 :  member -> student (member의 member_seq를 student 의 member_seq 컬럼에 추가 : 학번 같은 거 확인하는 로직)
+                .next(memberSeqSaveStudentStep()) // Step 3 :  member -> student (member의 member_seq를 student 의 member_seq 컬럼에 추가 : 학번 같은 거 확인하는 로직)
                 .build();
     }
 
@@ -79,15 +79,15 @@ public class BatchConfig {
                 .build();
     }
 
-//    @Bean
-//    public Step memberSeqSaveStudentStep() {
-//        return new StepBuilder("memberSeqSaveStudentStep", jobRepository)
-//                .chunk(10, transactionManager)
-//                .reader(memberDbReader())
-//                .processor(memberSeqSaveStudentProcessor())
-//                .writer(memberStudentDbWriter())
-//                .build();
-//    }
+    @Bean
+    public Step memberSeqSaveStudentStep() {
+        return new StepBuilder("memberSeqSaveStudentStep", jobRepository)
+                .<Student, Student>chunk(10, transactionManager) // chunk 단위 처리
+                .reader(memberSeqReader())
+                .writer(memberSeqWriter())
+                .build();
+    }
+
 
     // Step 1 reader - processor - writer
 
@@ -184,12 +184,40 @@ public class BatchConfig {
         return writer;
     }
 
-    // Step 3 Reader - processor - writer
-//    @Bean
-//    public JdbcCursorItemReader<Member> memberDbReader() {
-//        return new JdbcCursorItemReaderBuilder<Member>()
-//                .name("memberDbReader")
-//                .dataSource(dataSource)
-//                .sql("SELECT * FROM member ")
-//    }
+    // Step 3 Reader - (processor, 생략) - writer
+    @Bean
+    public JdbcCursorItemReader<Student> memberSeqReader() {
+        JdbcCursorItemReader<Student> reader = new JdbcCursorItemReader<>();
+        reader.setDataSource(dataSource);
+        reader.setRowMapper((rs, rowNum) -> {
+            Student student = new Student();
+            student.setId(rs.getInt("id")); // student PK
+            student.setStudentNo(rs.getString("student_no"));
+            student.setMemberSeq(rs.getInt("member_seq")); // member PK
+
+            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, student.getStudentNo(), student.getMemberSeq());
+
+            return student;
+        });
+
+        String sql = """
+                SELECT s.student_seq AS id, s.student_no, m.member_seq AS member_seq
+                FROM student s
+                JOIN member m ON s.student_no = m.login_id
+                WHERE s.member_seq IS NULL
+                """;
+
+        reader.setSql(sql);
+        return reader;
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<Student> memberSeqWriter() {
+        JdbcBatchItemWriter<Student> writer = new JdbcBatchItemWriter<>();
+        writer.setDataSource(dataSource);
+        writer.setSql("UPDATE student SET member_seq = :memberSeq WHERE student_seq = :id");
+        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+        return writer;
+    }
+
 }
