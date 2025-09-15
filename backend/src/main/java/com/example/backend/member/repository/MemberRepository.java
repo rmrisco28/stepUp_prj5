@@ -12,5 +12,5 @@ public interface MemberRepository extends Repository<Member, Integer> {
 
     Optional<Member> findByLoginId(String loginId);
 
-    Optional<Member> findByMemberSeq(Integer memberSeq);
+    Optional<Member> findById(Integer id);
 }

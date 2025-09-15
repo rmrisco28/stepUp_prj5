@@ -40,15 +40,15 @@ public class CompetencyController {
         return competencyService.update(seq, competencyDto);
     }
 
-    // 하위 역량 추가
+    // 하위역량 추가
     @PostMapping("subAdd")
     public ResponseEntity<?> subAdd(@RequestBody SubCompetencyDto dto) {
         System.out.println("dto = " + dto);
         subCompetencyService.subAdd(dto);
-        return ResponseEntity.ok().body(Map.of("message", "하위 역량이 추가되었습니다."));
+        return ResponseEntity.ok().body(Map.of("message", "하위역량이 추가되었습니다."));
     }
 
-    // 하위 역량, 핵심역량 선택지
+    // 하위역량, 핵심역량 선택지
     @GetMapping("subAddList")
     public List<?> subAddList() {
         return subCompetencyService.subAddList();
@@ -60,7 +60,7 @@ public class CompetencyController {
         return subCompetencyService.subList();
     }
 
-    // 하위 역량 사용여부 변경
+    // 하위역량 사용여부 변경
     @PutMapping("subUpdate/{seq}")
     public ResponseEntity<?> subUpdateCompetencyUseYn(@PathVariable int seq, @RequestBody SubCompetencyListDto subCompetencyListDto) {
 

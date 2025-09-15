@@ -52,7 +52,7 @@ export function CompetencyAdd() {
 
           {/*역량명*/}
           <FormGroup className="mb-3" controlId="name">
-            <FormLabel style={{ fontSize: "1.5rem" }}>핵심 역량</FormLabel>
+            <FormLabel style={{ fontSize: "1.5rem" }}>핵심역량</FormLabel>
             <FormControl
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -61,7 +61,7 @@ export function CompetencyAdd() {
 
           {/*역량 설명*/}
           <FormGroup className="mb-3" controlId="expln">
-            <FormLabel style={{ fontSize: "1.5rem" }}>핵심 역량 설명</FormLabel>
+            <FormLabel style={{ fontSize: "1.5rem" }}>핵심역량 설명</FormLabel>
             <FormControl
               as="textarea"
               rows={3}

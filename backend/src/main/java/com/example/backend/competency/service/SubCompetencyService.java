@@ -31,7 +31,7 @@ public class SubCompetencyService {
         if (competency == null) {
             throw new EntityNotFoundException("해당 ID의 핵심역량이 존재하지 않습니다.");
         }
-        // 하위 역량 정보 설정
+        // 하위역량 정보 설정
         subCompetency.setSubCompetencyName(dto.getSubCompetencyName());
         subCompetency.setSubCompetencyExpln(dto.getSubCompetencyExpln());
         subCompetency.setCompetencySeq(competency);
@@ -40,7 +40,7 @@ public class SubCompetencyService {
 
     }
 
-    // 하위 역량 추가 시, 핵심 역량 선택지
+    // 하위역량 추가 시, 핵심역량 선택지
     public List<?> subAddList() {
         List<CompetencyDto> competencyList = competencyRepository.findAllCompetenciesUse();
         return competencyList;

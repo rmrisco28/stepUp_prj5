@@ -66,7 +66,7 @@ export function CompetencyList() {
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
           <div className="mb-3"></div>
-          <h2 className="mb-3">핵심 역량 목록 </h2>
+          <h2 className="mb-3">핵심역량 목록 </h2>
           <Table>
             <thead>
               <tr>

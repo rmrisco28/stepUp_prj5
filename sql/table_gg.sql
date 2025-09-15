@@ -1,4 +1,4 @@
-# 역량 테이블
+# 핵심역량 테이블
 CREATE TABLE `competency`
 (
     `competency_seq`   INT AUTO_INCREMENT NOT NULL,
@@ -10,7 +10,7 @@ CREATE TABLE `competency`
 
 DROP TABLE IF EXISTS `competency`;
 
-# 하위 역량 테이블
+# 하위역량 테이블
 DROP TABLE IF EXISTS `subCompetency`;
 DROP TABLE IF EXISTS `sub_competency`;
 

@@ -44,7 +44,7 @@ function App() {
             path="extracurricular/detail/:seq"
             element={<ExtraCurricularDetail />}
           />
-          {/*핵심 역량*/}
+          {/*핵심역량*/}
           <Route path="competency" element={<Competency />} />
           <Route path="competency/add" element={<CompetencyAdd />} />
           <Route path="competency/list" element={<CompetencyList />} />

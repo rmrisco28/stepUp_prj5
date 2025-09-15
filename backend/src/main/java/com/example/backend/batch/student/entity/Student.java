@@ -43,4 +43,7 @@ public class Student {
     @Column(name = "email", length = 50)
     private String email;
 
+    // jdbc
+    @Column(name = "member_seq")
+    private Integer memberSeq;
 }

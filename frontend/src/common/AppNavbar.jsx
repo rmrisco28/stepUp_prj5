@@ -22,7 +22,7 @@ export function AppNavbar() {
               비교과 프로그램
             </Nav.Link>
             <Nav.Link as={Link} to="/competency" style={{ fontSize: "1.2rem" }}>
-              핵심 역량
+              핵심역량
             </Nav.Link>
             <Nav.Link as={Link} to="/mileage" style={{ fontSize: "1.2rem" }}>
               마일리지
