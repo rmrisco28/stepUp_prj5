@@ -102,7 +102,15 @@ export function ExtraCurricularManage() {
           <tbody>
             {programList.length > 0 ? (
               programList.map((program) => (
-                <tr key={program.seq}>
+                <tr
+                  key={program.seq}
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    navigate(
+                      `/extracurricular/detail?seq=${program.seq}&page=${searchParams.get("page") || "1"}`,
+                    )
+                  }
+                >
                   <td>{program.seq}</td>
                   <td>{program.title}</td>
                   <td>

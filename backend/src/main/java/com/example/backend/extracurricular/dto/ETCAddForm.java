@@ -1,6 +1,5 @@
 package com.example.backend.extracurricular.dto;
 
-import com.example.backend.extracurricular.enums.OperationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

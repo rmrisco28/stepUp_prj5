@@ -1,9 +1,7 @@
 package com.example.backend.extracurricular.service;
 
-import com.example.backend.competency.dto.CompetencyDto;
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCListDto;
-import com.example.backend.extracurricular.dto.ETCListForm;
 import com.example.backend.extracurricular.entity.ExtraCurricularProgram;
 import com.example.backend.extracurricular.enums.OperationType;
 import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
@@ -13,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 
 @Service
@@ -58,6 +55,7 @@ public class ExtraCurricularService {
         };
     }
 
+    // 프로그램 목록
     public Map<String, Object> list(Integer pageNumber, String keyword) {
 
         Page<ETCListDto> programPage = extraCurricularProgramRepository.findAllBy(

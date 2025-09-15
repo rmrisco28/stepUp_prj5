@@ -1,13 +1,11 @@
 package com.example.backend.extracurricular.controller;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
-import com.example.backend.extracurricular.dto.ETCListDto;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 @RestController
