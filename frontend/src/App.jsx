@@ -13,11 +13,8 @@ import { CompetencyList } from "./feature/competency/CompetencyList.jsx";
 import { CompetencySubAdd } from "./feature/competency/CompetencySubAdd.jsx";
 import { CompetencySubList } from "./feature/competency/CompetencySubList.jsx";
 import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricularManage.jsx";
-import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
 import { AuthProvider } from "./common/AuthContext.jsx";
 import { MainPage } from "./common/MainPage.jsx";
-import { CompetencyTextEditor } from "./feature/competency/CompetencyTextEditor.jsx";
-import { CompetencyText } from "./feature/competency/CompetencyText.jsx";
 
 function App() {
   return (
@@ -45,16 +42,9 @@ function App() {
           <Route path="competency/list" element={<CompetencyList />} />
           <Route path="competency/subAdd" element={<CompetencySubAdd />} />
           <Route path="competency/subList" element={<CompetencySubList />} />
-          {/* 핵심역량 소개 */}
 
           {/*핵심역량 5개 추가로 생성*/}
-          <Route path="competency/text" element={<CompetencyText />} />
           <Route path="competency/test" element={<CompetencyTest />} />
-          <Route
-            path="competency/textEditor"
-            element={<CompetencyTextEditor />}
-          />
-          <Route path="competency/editor" element={<CompetencyEditor />} />
 
           {/*마일리지*/}
           <Route path="mileage" element={<Mileage />} />

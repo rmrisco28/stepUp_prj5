@@ -2,6 +2,7 @@ package com.example.backend.competency.repository;
 
 import com.example.backend.competency.dto.SubCompetencyListDto;
 import com.example.backend.competency.dto.SubCompetencyMainDto;
+import com.example.backend.competency.entity.Competency;
 import com.example.backend.competency.entity.SubCompetency;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,4 +39,6 @@ public interface SubCompetencyRepository extends JpaRepository<SubCompetency, In
                 Order By s.seq DESC
             """)
     List<SubCompetencyMainDto> findUseSubCompetencies();
+
+    List<SubCompetency> findByCompetencySeq(Competency competency);
 }

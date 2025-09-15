@@ -27,7 +27,8 @@ public class AppConfiguration {
                 .requestMatchers(
                         "/api/member/**",
                         "/api/auth/**",
-                        "/api/competency/**"
+                        "/api/competency/**",
+                        "/api/subCompetency/**"
                 ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session

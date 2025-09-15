@@ -64,4 +64,9 @@ public class SubCompetencyService {
         List<SubCompetencyMainDto> subCompetencyMainDto = subCompetencyRepository.findUseSubCompetencies();
         return subCompetencyMainDto;
     }
+
+    public void delete(int seq) {
+        SubCompetency subCompetency = subCompetencyRepository.findBySeq(seq);
+        subCompetencyRepository.delete(subCompetency);
+    }
 }

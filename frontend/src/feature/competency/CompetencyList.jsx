@@ -1,10 +1,12 @@
-import { Button, Col, Row, Table } from "react-bootstrap";
+import { Button, Col, Modal, Row, Table } from "react-bootstrap";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
 export function CompetencyList() {
   const [competency, setCompetency] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedCompetency, setSelectedCompetency] = useState({}); // 선택된 항목의 정보
 
   const navigate = useNavigate();
 
@@ -61,6 +63,28 @@ export function CompetencyList() {
       });
   };
 
+  function handleDeleteButton(seq) {
+    axios
+      .delete(`/api/competency/delete/${seq}`)
+      .then((res) => {
+        console.log(res);
+        alert(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.response) {
+          alert(err.response.data.message);
+        } else {
+          alert("삭제에 실패했습니다.");
+        }
+      })
+      .finally(() => {
+        console.log("finally");
+        setModalShow(false);
+        fetchCompetencies();
+      });
+  }
+
   return (
     <>
       <Row className="justify-content-center">
@@ -106,6 +130,15 @@ export function CompetencyList() {
                 >
                   사용여부
                 </th>
+                <th
+                  style={{
+                    width: "10%",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  삭제
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -126,6 +159,20 @@ export function CompetencyList() {
                         checked={data.useYn} // useYn 값에 따라 체크 여부 결정
                         onChange={() => handleUseYnChange(data.seq, data.useYn)} // 체크박스 상태 변경 시 호출
                       />
+                    </td>
+                    <td align="center" valign="middle">
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => {
+                          setSelectedCompetency({
+                            seq: data.seq,
+                            competencyName: data.competencyName,
+                          });
+                          setModalShow(true);
+                        }}
+                      >
+                        삭제
+                      </Button>
                     </td>
                   </tr>
                 ))
@@ -148,6 +195,30 @@ export function CompetencyList() {
             </Button>
           </div>
         </Col>
+        <Modal show={modalShow} onHide={() => setModalShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>핵심역량 삭제 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            핵심역량 "{selectedCompetency.competencyName}" 을 삭제하시겠습니까?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+              취소
+            </Button>
+
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                if (selectedCompetency) {
+                  handleDeleteButton(selectedCompetency.seq); // 삭제 처리 함수 호출
+                }
+              }}
+            >
+              삭제
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Row>
     </>
   );
