@@ -27,7 +27,7 @@ public class AuthService {
             Member member = memberOpt.get();
             if (bCryptPasswordEncoder.matches(password, member.getPassword())) {
                 // 로그인 성공 시 세션에 정보 저장
-                httpSession.setAttribute("memberSeq", member.getMemberSeq());
+                httpSession.setAttribute("memberSeq", member.getId());
                 httpSession.setAttribute("loginId", member.getLoginId());
                 // TODO 유민 : member랑 student 랑 참조 맺어서 필요한 정보 가져오기
 //                httpSession.setAttribute("name", member.getMemberSeq().getName());

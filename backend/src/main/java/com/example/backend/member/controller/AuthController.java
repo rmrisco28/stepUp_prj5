@@ -26,7 +26,7 @@ public class AuthController {
         if (memberOpt.isPresent()) {
             Member member = memberOpt.get();
             LoginResponse.MemberInfo memberInfo = new LoginResponse.MemberInfo(
-                    member.getMemberSeq(),
+                    member.getId(),
                     member.getLoginId()
             );
             return ResponseEntity.ok(new LoginResponse(true, "로그인 성공", memberInfo));
@@ -47,7 +47,7 @@ public class AuthController {
         if (memberOpt.isPresent()) {
             Member member = memberOpt.get();
             LoginResponse.MemberInfo memberInfo = new LoginResponse.MemberInfo(
-                    member.getMemberSeq(),
+                    member.getId(),
                     member.getLoginId()
             );
             return ResponseEntity.ok(new LoginResponse(true, "로그인 상태", memberInfo));
