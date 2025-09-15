@@ -1,14 +1,13 @@
 package com.example.backend.extracurricular.controller;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCListDto;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -37,5 +36,11 @@ public class ExtraCurricularController {
         return ResponseEntity.ok().body(
                 Map.of("message",
                         Map.of("type", "success", "text", "프로그램 등록이 완료되었습니다.")));
+    }
+
+    // 프로그램 목록 보기(관리자)
+    @GetMapping("list")
+    public List<?> list() {
+        return extraCurricularService.list();
     }
 }

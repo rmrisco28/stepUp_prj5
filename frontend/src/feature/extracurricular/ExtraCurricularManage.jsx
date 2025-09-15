@@ -1,11 +1,28 @@
 import { Button, Col, Container, Row, Table } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 export function ExtraCurricularManage() {
   const [program, setProgram] = useState(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get("/api/extracurricular/list")
+      .then((res) => {
+        console.log("yes");
+        setProgram(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }, []);
 
   return (
     <Container className="my-5">
