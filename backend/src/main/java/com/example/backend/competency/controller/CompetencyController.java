@@ -16,7 +16,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/competency")
-@CrossOrigin(origins = "http://localhost:5173")
 public class CompetencyController {
     private final CompetencyService competencyService;
     private final SubCompetencyService subCompetencyService;
@@ -54,7 +53,7 @@ public class CompetencyController {
         return competencyService.delete(seq);
     }
 
-    
+
 
     /* ~~~~~~~~~~~~~~~~~~~~~~~~~~ 하위 역량 ~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 

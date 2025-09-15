@@ -28,7 +28,8 @@ public class AppConfiguration {
                         "/api/member/**",
                         "/api/auth/**",
                         "/api/competency/**",
-                        "/api/subCompetency/**"
+                        "/api/subCompetency/**",
+                        "/api/competency/assessment/"
                 ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session

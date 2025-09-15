@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import { Button, Col, Modal, Row, Table } from "react-bootstrap";
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 
-export function CompetencySubList() {
+export function CompetencyList() {
   const [competency, setCompetency] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [selectedCompetency, setSelectedCompetency] = useState({}); // 선택된 항목의 정보
@@ -12,7 +12,7 @@ export function CompetencySubList() {
 
   useEffect(() => {
     axios
-      .get("/api/competency/subList")
+      .get("/api/competency/list")
       .then((res) => {
         console.log("yes");
         setCompetency(res.data);
@@ -28,7 +28,7 @@ export function CompetencySubList() {
 
   function handleUseYnChange(seq, currentUseYn) {
     axios
-      .put(`/api/competency/subUpdate/${seq}`, {
+      .put(`/api/competency/update/${seq}`, {
         useYn: !currentUseYn,
       })
       .then((res) => {
@@ -54,7 +54,7 @@ export function CompetencySubList() {
   // 데이터를 다시 불러오는 함수
   const fetchCompetencies = () => {
     axios
-      .get("/api/competency/subList")
+      .get("/api/competency/list")
       .then((res) => {
         setCompetency(res.data); // 데이터 새로 설정
       })
@@ -65,13 +65,18 @@ export function CompetencySubList() {
 
   function handleDeleteButton(seq) {
     axios
-      .delete(`/api/competency/subDelete/${seq}`)
+      .delete(`/api/competency/delete/${seq}`)
       .then((res) => {
         console.log(res);
         alert(res.data.message);
       })
       .catch((err) => {
         console.log(err);
+        if (err.response) {
+          alert(err.response.data.message);
+        } else {
+          alert("삭제에 실패했습니다.");
+        }
       })
       .finally(() => {
         console.log("finally");
@@ -85,13 +90,13 @@ export function CompetencySubList() {
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
           <div className="mb-3"></div>
-          <h2 className="mb-3">하위역량 목록 </h2>
+          <h2 className="mb-3">핵심역량 목록 </h2>
           <Table>
             <thead>
               <tr>
                 <th
                   style={{
-                    width: "6%",
+                    width: "7%",
                     textAlign: "center",
                     verticalAlign: "middle",
                   }}
@@ -100,7 +105,7 @@ export function CompetencySubList() {
                 </th>
                 <th
                   style={{
-                    width: "15%",
+                    width: "25%",
                     textAlign: "center",
                     verticalAlign: "middle",
                   }}
@@ -109,28 +114,20 @@ export function CompetencySubList() {
                 </th>
                 <th
                   style={{
+                    width: "200px",
+                    textAlign: "center",
+                    verticalAlign: "middle",
+                  }}
+                >
+                  핵심역량 정의
+                </th>
+                <th
+                  style={{
                     width: "15%",
                     textAlign: "center",
                     verticalAlign: "middle",
                   }}
                 >
-                  하위역량
-                </th>
-                <th
-                  style={{
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  하위역량 정의
-                </th>
-                <th
-                  style={{
-                    width: "10%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
                   사용여부
                 </th>
                 <th
@@ -140,7 +137,7 @@ export function CompetencySubList() {
                     verticalAlign: "middle",
                   }}
                 >
-                  사용여부
+                  삭제
                 </th>
               </tr>
             </thead>
@@ -148,43 +145,14 @@ export function CompetencySubList() {
               {competency && competency.length > 0 ? (
                 competency.map((data) => (
                   <tr key={data.seq}>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
+                    <td align="center" valign="middle">
                       {data.seq}
                     </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.competencySeqCompetencyName}
+                    <td align="center" valign="middle">
+                      {data.competencyName}
                     </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.subCompetencyName}
-                    </td>
-                    <td
-                      style={{
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.subCompetencyExpln}
-                    </td>
-                    <td
-                      style={{
-                        textAlign: "center",
-                        verticalAlign: "middle",
-                      }}
-                    >
+                    <td valign="middle">{data.competencyExpln}</td>
+                    <td align="center" valign="middle">
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
                       <input
                         type="checkbox"
@@ -198,7 +166,7 @@ export function CompetencySubList() {
                         onClick={() => {
                           setSelectedCompetency({
                             seq: data.seq,
-                            subCompetencyName: data.subCompetencyName,
+                            competencyName: data.competencyName,
                           });
                           setModalShow(true);
                         }}
@@ -220,20 +188,21 @@ export function CompetencySubList() {
             style={{ marginTop: "20px" }}
           >
             <Button
-              className="me-3"
-              onClick={() => navigate("/competency/subAdd")}
+              className="me-3 "
+              onClick={() => navigate("/competency/add")}
             >
-              하위역량 추가
+              핵심역량 추가
             </Button>
           </div>
         </Col>
+
+        {/*모달*/}
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>하위역량 삭제 확인</Modal.Title>
+            <Modal.Title>핵심역량 삭제 확인</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            하위역량 "{selectedCompetency.subCompetencyName}" 을
-            삭제하시겠습니까?
+            핵심역량 "{selectedCompetency.competencyName}" 을 삭제하시겠습니까?
           </Modal.Body>
           <Modal.Footer>
             <Button variant="outline-dark" onClick={() => setModalShow(false)}>
