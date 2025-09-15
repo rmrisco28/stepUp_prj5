@@ -90,7 +90,9 @@ export function ExtraCurricularAdd() {
     <Container className="mt-5 my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4 text-center">비교과 프로그램 등록</h2>
+          <h2 className="mb-4 text-center text-primary fw-bold">
+            비교과 프로그램 등록
+          </h2>
           <Form onSubmit={handleSubmit}>
             {/* 프로그램 제목 */}
             <FormGroup className="mb-3">

@@ -107,7 +107,7 @@ export function ExtraCurricularManage() {
                   style={{ cursor: "pointer" }}
                   onClick={() =>
                     navigate(
-                      `/extracurricular/detail?seq=${program.seq}&page=${searchParams.get("page") || "1"}`,
+                      `/extracurricular/detail/${program.seq}?page=${searchParams.get("page") || "1"}`,
                     )
                   }
                 >
