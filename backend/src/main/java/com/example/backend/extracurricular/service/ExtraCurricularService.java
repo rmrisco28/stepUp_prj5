@@ -58,9 +58,29 @@ public class ExtraCurricularService {
         };
     }
 
-    public List<?> list() {
-        List<ETCListForm> etcList = extraCurricularProgramRepository.findAllBy();
-        return etcList;
-        // 프로그램 목록
+    public Map<String, Object> list(Integer pageNumber, String keyword) {
+
+        Page<ETCListDto> programPage = extraCurricularProgramRepository.findAllBy(
+                PageRequest.of(pageNumber - 1, 10),
+                keyword
+        );
+
+        int totalPages = programPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of(
+                "totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber
+        );
+
+        return Map.of(
+                "pageInfo", pageInfo,
+                "programList", programPage.getContent()
+        );
     }
 }

@@ -38,9 +38,12 @@ public class ExtraCurricularController {
                         Map.of("type", "success", "text", "프로그램 등록이 완료되었습니다.")));
     }
 
-    // 프로그램 목록 보기(관리자)
+    // 프로그램 목록 보기(관리자, 검색+페이지네이션)
     @GetMapping("list")
-    public List<?> list() {
-        return extraCurricularService.list();
+    public Map<String, Object> list(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
+            @RequestParam(value = "q", defaultValue = "") String keyword
+    ) {
+        return extraCurricularService.list(pageNumber, keyword);
     }
 }

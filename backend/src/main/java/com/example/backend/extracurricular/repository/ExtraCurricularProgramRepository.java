@@ -12,6 +12,16 @@ import org.springframework.data.repository.Repository;
 import java.util.List;
 
 public interface ExtraCurricularProgramRepository extends JpaRepository<ExtraCurricularProgram, Integer> {
-    List<ETCListForm> findAllBy();
+    @Query("""
+                SELECT new com.example.backend.extracurricular.dto.ETCListDto(
+                    e.seq,
+                    e.title,
+                    e.createdAt,
+                    e.status
+                )
+                FROM ExtraCurricularProgram e
+                WHERE (:keyword = '' OR e.title LIKE %:keyword%)
+            """)
+    Page<ETCListDto> findAllBy(PageRequest pageRequest, String keyword);
 
 }
