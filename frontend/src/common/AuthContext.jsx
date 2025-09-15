@@ -23,8 +23,13 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = async () => {
     try {
       const response = await authService.getAuthStatus();
-      if (response.success && response.member) {
-        setUser(response.member);
+      if (response.success) {
+        setUser({
+          // fetch로 요청해서 이미 json으로 받아왔기 때문에 response.data로 안 받고 바로 response로
+          memberSeq: response.memberSeq,
+          loginId: response.loginId,
+          name: response.name,
+        });
       }
     } catch (error) {
       console.error("Auth status check failed:", error);
@@ -34,16 +39,23 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (loginId, password) => {
+    setLoading(true);
     try {
       const response = await authService.login(loginId, password);
-      if (response.success && response.member) {
-        setUser(response.member);
+      if (response.success) {
+        setUser({
+          memberSeq: response.memberSeq,
+          loginId: response.loginId,
+          name: response.name,
+        });
         return { success: true, message: response.message };
       } else {
         return { success: false, message: response.message };
       }
     } catch (error) {
       return { success: false, message: "로그인 중 오류가 발생했습니다." };
+    } finally {
+      setLoading(false);
     }
   };
 

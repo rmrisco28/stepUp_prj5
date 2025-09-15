@@ -14,13 +14,12 @@ export function MainPage() {
       // 서버에서 보낸 JSON 응답 확인
       if (response.data.success) {
         // 로그인 성공 상태
-        const loginId = response.data.member.loginId;
         setLoginStatus(
-          `현재 로그인 상태: ${loginId} (${response.data.message})`,
+          `현재 로그인 상태: ${response.data.name} (${response.data.loginId})님 환영합니다.`,
         );
       } else {
         // 로그인 실패 상태
-        setLoginStatus(`로그인되지 않음: ${response.data.message}`);
+        setLoginStatus(`로그인 상태: ${response.data.message}`);
       }
     } catch (error) {
       // API 호출 실패(403 Forbidden 등) 처리
