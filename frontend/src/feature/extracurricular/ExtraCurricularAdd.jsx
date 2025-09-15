@@ -61,6 +61,7 @@ export function ExtraCurricularAdd() {
     try {
       await axios.post("/api/extracurricular/add", formData);
       alert("프로그램 등록이 완료되었습니다.");
+      navigate("/extracurricular/manage");
       // 필요시 초기화
       setFormData({
         title: "",

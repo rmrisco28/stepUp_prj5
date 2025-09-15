@@ -38,7 +38,7 @@ export function ExtraCurricularManage() {
       .finally(() => {});
   }, [searchParams]);
 
-  if (!programList || !pageInfo) return <Spinner animation="border" />;
+  if (!programList) return <Spinner animation="border" />;
 
   const pageNumbers = [];
   for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
@@ -62,7 +62,16 @@ export function ExtraCurricularManage() {
         {/* 헤더 + 검색 */}
         <Row className="justify-content-between align-items-center mb-4">
           <Col>
-            <h3 className="text-primary fw-bold">비교과 프로그램 관리</h3>
+            <h3
+              className="text-primary fw-bold"
+              style={{
+                cursor: "pointer",
+                width: "280px",
+              }}
+              onClick={() => navigate(`/extracurricular/manage`)}
+            >
+              비교과 프로그램 관리
+            </h3>
           </Col>
           <Col md="auto">
             <Form className="d-flex" onSubmit={handleSearchFormSubmit}>
@@ -96,7 +105,9 @@ export function ExtraCurricularManage() {
                 <tr key={program.seq}>
                   <td>{program.seq}</td>
                   <td>{program.title}</td>
-                  <td>{program.createdAt.replace("T", " ")}</td>
+                  <td>
+                    {program.createdAt.replace("T", " ").replace("Z", "")}
+                  </td>
                   <td>{program.status}</td>
                 </tr>
               ))
@@ -110,6 +121,7 @@ export function ExtraCurricularManage() {
 
         {/* 페이지네이션 */}
         <Row className="my-3" style={{ position: "relative" }}>
+          {/* 프로그램 등록버튼*/}
           <Button
             variant="outline-primary"
             onClick={() => navigate("/extracurricular/add")}
@@ -122,6 +134,7 @@ export function ExtraCurricularManage() {
           >
             프로그램 등록
           </Button>
+
           <Col className="d-flex justify-content-center">
             <Pagination className="mb-0">
               <Pagination.First
