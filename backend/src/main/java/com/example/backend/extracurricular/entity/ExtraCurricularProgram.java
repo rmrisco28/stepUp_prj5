@@ -19,7 +19,7 @@ public class ExtraCurricularProgram {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "program_seq", nullable = false)
-    private Integer id;
+    private Integer seq;
 
     @Column(name = "title", nullable = false, length = 100)
     private String title;
