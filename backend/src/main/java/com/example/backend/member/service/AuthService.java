@@ -44,7 +44,7 @@ public class AuthService {
     public Optional<Member> getCurrentUser() {
         Integer memberSeq = (Integer) httpSession.getAttribute("memberSeq");
         if (memberSeq != null) {
-            return memberRepository.findByMemberSeq(memberSeq); // 세션 정보로 DB에서 회원 조회
+            return memberRepository.findById(memberSeq); // 세션 정보로 DB에서 회원 조회
         }
         return Optional.empty();
     }
