@@ -10,7 +10,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ETCListDto {
-    private String seq;
+    private Integer seq;
     private String title;
     private Instant createdAt;
     private String status;
