@@ -11,9 +11,7 @@ CREATE TABLE member
     # user_yn CHAR(1)
 );
 DROP TABLE member;
-
-# auth
-
+# -----------------------------------------------------------
 # student
 CREATE TABLE student
 (
@@ -31,6 +29,7 @@ CREATE TABLE student
     # use_yn CHAR
 );
 DROP TABLE student;
+# -----------------------------------------------------------
 # 외래키 제약사항 추가
 # -> student, member 만들 때 student에 추가해서 사용하면 됨(위에 주석처리 확인하기)
 # 지금은 배치 확인하려고 .. ?
@@ -50,6 +49,7 @@ WHERE student_no IN (SELECT mb.login_id
 UPDATE student
 SET member_seq = NULL;
 
+# -----------------------------------------------------------
 # phone, email null -> not null 로 바꾸기, 지금은 확인용으로 가져와보자
 # 테이블 가져와서 이름이랑 각 컬럼 상황에 맞게 바꿈
 ALTER TABLE prj5.mj_department
@@ -74,3 +74,36 @@ RENAME TABLE mjdepartment TO mj_department;
 
 SHOW CREATE TABLE student;
 SHOW CREATE TABLE member;
+
+# -----------------------------------------------------------
+# employee
+CREATE TABLE employee
+(
+    employee_seq   INT AUTO_INCREMENT PRIMARY KEY,
+    employee_no    VARCHAR(20) UNIQUE,
+    name           VARCHAR(20) NOT NULL,
+    gender         VARCHAR(5)  NOT NULL,
+    birth_date     DATE        NOT NULL,
+    job_function   VARCHAR(30) NOT NULL,
+    admission_year INT         NOT NULL,
+    phone          VARCHAR(20) NULL,
+    email          VARCHAR(50) NULL
+#     employee_seq     INT NOT NULL,
+#     FOREIGN KEY (employee_seq) REFERENCES member (member_seq)
+    # use_yn CHAR
+);
+# -----------------------------------------------------------
+# administrator
+CREATE TABLE administrator
+(
+    administrator_seq INT AUTO_INCREMENT PRIMARY KEY,
+    administrator_no  VARCHAR(20) UNIQUE,
+    name              VARCHAR(20) NOT NULL,
+    gender            VARCHAR(5)  NOT NULL,
+    birth_date        DATE        NOT NULL,
+    admission_year    INT         NOT NULL,
+    phone             VARCHAR(20) NULL,
+    email             VARCHAR(50) NULL
+);
+# -----------------------------------------------------------
+# auth
