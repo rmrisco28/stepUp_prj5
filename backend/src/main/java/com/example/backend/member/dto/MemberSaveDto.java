@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MemberSaveDto {
 
-    private String loginId;     // Student의 studentNo
+    private String loginId;     // Student, Employee의 studentNo, employeeNo
     private String rawPassword; // 생년월일 (암호화 전), String 으로 가져옴
 }

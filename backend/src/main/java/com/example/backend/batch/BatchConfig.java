@@ -3,6 +3,7 @@ package com.example.backend.batch;
 import com.example.backend.batch.employee.dto.EmployeeCsvDto;
 import com.example.backend.batch.employee.entity.Employee;
 import com.example.backend.batch.employee.processor.EmployeeItemProcessor;
+import com.example.backend.batch.employee.processor.EmployeeSaveMemberItemProcessor;
 import com.example.backend.batch.employee.repository.EmployeeRepository;
 import com.example.backend.batch.student.dto.StudentCsvDto;
 import com.example.backend.batch.student.entity.Student;
@@ -53,6 +54,7 @@ public class BatchConfig {
     private final EmployeeItemProcessor employeeItemProcessor;
 
     private final StudentSaveMemberItemProcessor studentSaveMemberItemProcessor;
+    private final EmployeeSaveMemberItemProcessor employeeSaveMemberItemProcessor;
 
     private final EntityManagerFactory entityManagerFactory;
     private final EmployeeRepository employeeRepository;
@@ -232,7 +234,7 @@ public class BatchConfig {
     public Job employeeImportJob() {
         return new JobBuilder("employeeImportJob", jobRepository)
                 .start(employeeImportStep()) // Step 1 : csv -> employee (csv 파일 읽어서 학번 생성 후 employee table에 저장)
-//                .next(employeeSaveMemberStep()) // Step 2 : employee -> member (employee table의 학번과 생년월일(초기 비밀번호) 읽어서 가공 후 member table에 저장)
+                .next(employeeSaveMemberStep()) // Step 2 : employee -> member (employee table의 학번과 생년월일(초기 비밀번호) 읽어서 가공 후 member table에 저장)
 //                .next(memberSeqSaveEmployeeStep()) // Step 3 :  member -> employee (member의 member_seq를 employee 의 member_seq 컬럼에 추가 : 학번 같은 거 확인하는 로직)
                 .build();
     }
@@ -247,15 +249,15 @@ public class BatchConfig {
                 .build();
     }
 
-//    @Bean
-//    public Step employeeSaveMemberStep() {
-//        return new StepBuilder("employeeSaveMemberStep", jobRepository)
-//                .<MemberSaveDto, Member>chunk(5, transactionManager)
-//                .reader(studentDbReader())
-//                .processor(studentSaveMemberProcessor())
-//                .writer(studentMemberDbWriter())
-//                .build();
-//    }
+    @Bean
+    public Step employeeSaveMemberStep() {
+        return new StepBuilder("employeeSaveMemberStep", jobRepository)
+                .<MemberSaveDto, Member>chunk(5, transactionManager)
+                .reader(employeeDbReader())
+                .processor(employeeSaveMemberProcessor())
+                .writer(employeeMemberDbWriter())
+                .build();
+    }
 //
 //    @Bean
 //    public Step memberSeqSaveEmployeeStep() {
@@ -332,5 +334,30 @@ public class BatchConfig {
                 log.info("Saved {} new employees to database", newEmployees.size());
             }
         };
+    }
+
+    // Step 2 Reader - processor - writer
+    @Bean
+    public JdbcCursorItemReader<MemberSaveDto> employeeDbReader() {
+        return new JdbcCursorItemReaderBuilder<MemberSaveDto>()
+                .name("employeeDbReader")
+                .dataSource(dataSource)
+                .sql("SELECT employee_no as loginId, birth_date as rawPassword FROM employee ORDER BY employee_seq")
+                .rowMapper(new BeanPropertyRowMapper<>(MemberSaveDto.class))
+                .build();
+    }
+
+    @Bean
+    public ItemProcessor<MemberSaveDto, Member> employeeSaveMemberProcessor() {
+        // ItemProcessor<Input, Output>
+        return employeeSaveMemberItemProcessor::process;
+    }
+
+    @Bean
+    public JpaItemWriter<Member> employeeMemberDbWriter() {
+        // JpaItemWriter는 데이터를 JPA를 통해 DB에 저장하는 Writer
+        JpaItemWriter<Member> writer = new JpaItemWriter<>();
+        writer.setEntityManagerFactory(entityManagerFactory);
+        return writer;
     }
 }
