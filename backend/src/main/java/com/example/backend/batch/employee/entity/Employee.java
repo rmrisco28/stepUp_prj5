@@ -44,6 +44,6 @@ public class Employee {
     private String email;
 
     // jdbc
-//    @Column(name = "member_seq")
-//    private Integer memberSeq;
+    @Column(name = "member_seq")
+    private Integer memberSeq;
 }

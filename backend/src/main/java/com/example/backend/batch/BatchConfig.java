@@ -235,7 +235,7 @@ public class BatchConfig {
         return new JobBuilder("employeeImportJob", jobRepository)
                 .start(employeeImportStep()) // Step 1 : csv -> employee (csv 파일 읽어서 학번 생성 후 employee table에 저장)
                 .next(employeeSaveMemberStep()) // Step 2 : employee -> member (employee table의 학번과 생년월일(초기 비밀번호) 읽어서 가공 후 member table에 저장)
-//                .next(memberSeqSaveEmployeeStep()) // Step 3 :  member -> employee (member의 member_seq를 employee 의 member_seq 컬럼에 추가 : 학번 같은 거 확인하는 로직)
+                .next(memberSeqSaveEmployeeStep()) // Step 3 :  member -> employee (member의 member_seq를 employee 의 member_seq 컬럼에 추가 : 학번 같은 거 확인하는 로직)
                 .build();
     }
 
@@ -258,15 +258,15 @@ public class BatchConfig {
                 .writer(employeeMemberDbWriter())
                 .build();
     }
-//
-//    @Bean
-//    public Step memberSeqSaveEmployeeStep() {
-//        return new StepBuilder("memberSeqSaveEmployeeStep", jobRepository)
-//                .<Student, Student>chunk(5, transactionManager) // chunk 단위 처리
-//                .reader(memberSeqReader())
-//                .writer(memberSeqWriter())
-//                .build();
-//    }
+
+    @Bean
+    public Step memberSeqSaveEmployeeStep() {
+        return new StepBuilder("memberSeqSaveEmployeeStep", jobRepository)
+                .<Employee, Employee>chunk(5, transactionManager) // chunk 단위 처리
+                .reader(memberSeqEmployeeReader())
+                .writer(memberSeqEmployeeWriter())
+                .build();
+    }
 
     // Step 1 reader - processor - writer
 
@@ -358,6 +358,42 @@ public class BatchConfig {
         // JpaItemWriter는 데이터를 JPA를 통해 DB에 저장하는 Writer
         JpaItemWriter<Member> writer = new JpaItemWriter<>();
         writer.setEntityManagerFactory(entityManagerFactory);
+        return writer;
+    }
+
+    // Step 3 Reader - (processor, 생략) - writer
+    @Bean
+    public JdbcCursorItemReader<Employee> memberSeqEmployeeReader() {
+        JdbcCursorItemReader<Employee> reader = new JdbcCursorItemReader<>();
+        reader.setDataSource(dataSource);
+        reader.setRowMapper((rs, rowNum) -> {
+            Employee employee = new Employee();
+            employee.setId(rs.getInt("id")); // student PK
+            employee.setEmployeeNo(rs.getString("employee_no"));
+            employee.setMemberSeq(rs.getInt("member_seq")); // member PK
+
+            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, employee.getEmployeeNo(), employee.getMemberSeq());
+
+            return employee;
+        });
+
+        String sql = """
+                SELECT e.employee_seq AS id, e.employee_no, m.member_seq AS member_seq
+                FROM employee e
+                JOIN member m ON e.employee_no = m.login_id
+                WHERE e.member_seq IS NULL
+                """;
+
+        reader.setSql(sql);
+        return reader;
+    }
+
+    @Bean
+    public JdbcBatchItemWriter<Employee> memberSeqEmployeeWriter() {
+        JdbcBatchItemWriter<Employee> writer = new JdbcBatchItemWriter<>();
+        writer.setDataSource(dataSource);
+        writer.setSql("UPDATE employee SET member_seq = :memberSeq WHERE employee_seq = :id");
+        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
         return writer;
     }
 }
