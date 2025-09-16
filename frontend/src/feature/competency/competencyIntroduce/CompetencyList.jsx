@@ -93,12 +93,15 @@ export function CompetencyList() {
           <h2 className="mb-3">핵심역량 목록 </h2>
           <Table>
             <thead>
-              <tr>
+              <tr
+                style={{
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                }}
+              >
                 <th
                   style={{
                     width: "7%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   번호
@@ -106,8 +109,6 @@ export function CompetencyList() {
                 <th
                   style={{
                     width: "25%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   핵심역량
@@ -115,8 +116,6 @@ export function CompetencyList() {
                 <th
                   style={{
                     width: "200px",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   핵심역량 정의
@@ -124,8 +123,6 @@ export function CompetencyList() {
                 <th
                   style={{
                     width: "15%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   사용여부
@@ -133,8 +130,6 @@ export function CompetencyList() {
                 <th
                   style={{
                     width: "10%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   삭제
@@ -144,15 +139,11 @@ export function CompetencyList() {
             <tbody>
               {competency && competency.length > 0 ? (
                 competency.map((data) => (
-                  <tr key={data.seq}>
-                    <td align="center" valign="middle">
-                      {data.seq}
-                    </td>
-                    <td align="center" valign="middle">
-                      {data.competencyName}
-                    </td>
+                  <tr key={data.seq} align="center" valign="middle">
+                    <td>{data.seq}</td>
+                    <td>{data.competencyName}</td>
                     <td valign="middle">{data.competencyExpln}</td>
-                    <td align="center" valign="middle">
+                    <td>
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
                       <input
                         type="checkbox"
@@ -160,7 +151,7 @@ export function CompetencyList() {
                         onChange={() => handleUseYnChange(data.seq, data.useYn)} // 체크박스 상태 변경 시 호출
                       />
                     </td>
-                    <td align="center" valign="middle">
+                    <td>
                       <Button
                         variant="outline-danger"
                         onClick={() => {

@@ -88,12 +88,15 @@ export function CompetencySubList() {
           <h2 className="mb-3">하위역량 목록 </h2>
           <Table>
             <thead>
-              <tr>
+              <tr
+                style={{
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                }}
+              >
                 <th
                   style={{
                     width: "6%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   번호
@@ -101,8 +104,6 @@ export function CompetencySubList() {
                 <th
                   style={{
                     width: "15%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   핵심역량
@@ -110,25 +111,14 @@ export function CompetencySubList() {
                 <th
                   style={{
                     width: "15%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   하위역량
                 </th>
-                <th
-                  style={{
-                    textAlign: "center",
-                    verticalAlign: "middle",
-                  }}
-                >
-                  하위역량 정의
-                </th>
+                <th>하위역량 정의</th>
                 <th
                   style={{
                     width: "15%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   사용여부
@@ -136,8 +126,6 @@ export function CompetencySubList() {
                 <th
                   style={{
                     width: "10%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   삭제
@@ -147,11 +135,15 @@ export function CompetencySubList() {
             <tbody>
               {competency && competency.length > 0 ? (
                 competency.map((data) => (
-                  <tr key={data.seq}>
+                  <tr
+                    key={data.seq}
+                    style={{
+                      verticalAlign: "middle",
+                    }}
+                  >
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {data.seq}
@@ -159,7 +151,6 @@ export function CompetencySubList() {
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {data.competencySeqCompetencyName}
@@ -167,22 +158,14 @@ export function CompetencySubList() {
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {data.subCompetencyName}
                     </td>
-                    <td
-                      style={{
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.subCompetencyExpln}
-                    </td>
+                    <td>{data.subCompetencyExpln}</td>
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
