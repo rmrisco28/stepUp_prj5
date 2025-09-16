@@ -10,13 +10,8 @@ import lombok.NoArgsConstructor;
 public class LoginResponse {
     private boolean success;
     private String message;
-    private MemberInfo member;
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class MemberInfo {
-        private Integer memberSeq;
-        private String loginId;
-    }
+    private Integer memberSeq;
+    private String loginId;
+    private String name;
 }

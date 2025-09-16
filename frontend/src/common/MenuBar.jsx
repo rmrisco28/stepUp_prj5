@@ -16,13 +16,12 @@ export function MenuBar() {
       name: "비교과 프로그램",
       path: "/extracurricular",
       subItems: [
-        { name: "프로그램 신청", path: "/extracurricular/apply" },
-        { name: "프로그램 현황", path: "/extracurricular/status" },
+        { name: "프로그램 신청", path: "/extracurricular" },
         { name: "프로그램 관리", path: "/extracurricular/manage" },
       ],
     },
     {
-      name: "핵심 역량",
+      name: "핵심역량",
       path: "/competency",
       subItems: [
         { name: "역량 소개", path: "/competency" },

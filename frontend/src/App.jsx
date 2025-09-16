@@ -18,6 +18,7 @@ import { AuthProvider } from "./common/AuthContext.jsx";
 import { MainPage } from "./common/MainPage.jsx";
 import { CompetencyTextEditor } from "./feature/competency/CompetencyTextEditor.jsx";
 import { CompetencyText } from "./feature/competency/CompetencyText.jsx";
+import { ExtraCurricularDetail } from "./feature/extracurricular/ExtraCurricularDetail.jsx";
 
 function App() {
   return (
@@ -39,7 +40,11 @@ function App() {
             path="extracurricular/manage"
             element={<ExtraCurricularManage />}
           />
-          {/*핵심 역량*/}
+          <Route
+            path="extracurricular/detail/:seq"
+            element={<ExtraCurricularDetail />}
+          />
+          {/*핵심역량*/}
           <Route path="competency" element={<Competency />} />
           <Route path="competency/add" element={<CompetencyAdd />} />
           <Route path="competency/list" element={<CompetencyList />} />

@@ -1,4 +1,4 @@
-package com.example.backend.batch.student.controller;
+package com.example.backend.batch.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,16 +19,18 @@ public class BatchController implements CommandLineRunner {
 
     private final JobLauncher jobLauncher;
     private final Job studentImportJob;
+    private final Job employeeImportJob;
 
     @Override
     public void run(String... args) throws Exception {
 
-        boolean stu_batch_yn = false;
+        boolean batch = false;
 
-        if (stu_batch_yn) {
+        if (batch) {
             log.info("=== Backend Application Started ===");
             log.info("Available commands:");
-            log.info("  'batch' - Run student import batch");
+            log.info("  'student batch' - Run student import batch");
+            log.info("  'employee batch' - Run employee import batch");
             log.info("  'exit' - Shutdown application");
             log.info("=====================================");
 
@@ -39,8 +41,12 @@ public class BatchController implements CommandLineRunner {
                 String command = scanner.nextLine().trim().toLowerCase();
 
                 switch (command) {
-                    case "batch":
+                    case "student batch":
                         runStudentImportBatch();
+                        break;
+
+                    case "employee batch":
+                        runEmployeeImportBatch();
                         break;
 
                     case "exit":
@@ -88,8 +94,35 @@ public class BatchController implements CommandLineRunner {
 
     private void printHelp() {
         log.info("Available commands:");
-        log.info("  batch - Run student import batch job");
+        log.info("  student batch - Run student import batch job");
+        log.info("  employee batch - Run employee import batch job");
         log.info("  help  - Show this help message");
         log.info("  exit  - Shutdown the application");
+    }
+
+    private void runEmployeeImportBatch() {
+        try {
+            log.info("Starting Employee Import Batch Job...");
+
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addLong("startTime", System.currentTimeMillis())
+                    // 중복 batch 인식 방지를 위해 UUID 추가 : 같은 csv 파일이라도 실행될 때마다 새로운 batch로 인식하게 함.
+                    .addString("uniqueId", UUID.randomUUID().toString())
+                    .toJobParameters();
+
+            var jobExecution = jobLauncher.run(employeeImportJob, jobParameters);
+            log.info("Batch job completed with status: {}", jobExecution.getStatus());
+
+            if (jobExecution.getStatus().isUnsuccessful()) {
+                log.error("Batch job failed!");
+                jobExecution.getAllFailureExceptions().forEach(ex ->
+                        log.error("Failure: ", ex));
+            } else {
+                log.info("✅ Batch job completed successfully!");
+            }
+
+        } catch (Exception e) {
+            log.error("❌ Error running batch job", e);
+        }
     }
 }

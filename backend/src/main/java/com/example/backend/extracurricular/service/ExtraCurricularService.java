@@ -1,12 +1,17 @@
 package com.example.backend.extracurricular.service;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCListDto;
 import com.example.backend.extracurricular.entity.ExtraCurricularProgram;
 import com.example.backend.extracurricular.enums.OperationType;
 import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +53,32 @@ public class ExtraCurricularService {
             case "혼합" -> OperationType.HYBRID;
             default -> throw new IllegalArgumentException("알 수 없는 운영방식: " + value);
         };
+    }
+
+    // 프로그램 목록
+    public Map<String, Object> list(Integer pageNumber, String keyword) {
+
+        Page<ETCListDto> programPage = extraCurricularProgramRepository.findAllBy(
+                PageRequest.of(pageNumber - 1, 10),
+                keyword
+        );
+
+        int totalPages = programPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        var pageInfo = Map.of(
+                "totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber
+        );
+
+        return Map.of(
+                "pageInfo", pageInfo,
+                "programList", programPage.getContent()
+        );
     }
 }

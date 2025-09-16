@@ -59,7 +59,7 @@ export function CompetencySubAdd() {
     <>
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={4}>
-          <h2 className="mb-4">하위 역량 추가</h2>
+          <h2 className="mb-4">하위역량 추가</h2>
 
           {/*핵심역량 선택*/}
           <FormGroup>
@@ -77,18 +77,18 @@ export function CompetencySubAdd() {
             </FormSelect>
           </FormGroup>
 
-          {/*하위 역량명*/}
+          {/*하위역량명*/}
           <FormGroup className="mb-3" controlId="name">
-            <FormLabel style={{ fontSize: "1.5rem" }}>하위 역량</FormLabel>
+            <FormLabel style={{ fontSize: "1.5rem" }}>하위역량</FormLabel>
             <FormControl
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </FormGroup>
 
-          {/*하위 역량 설명*/}
+          {/*하위역량 설명*/}
           <FormGroup className="mb-3" controlId="expln">
-            <FormLabel style={{ fontSize: "1.5rem" }}>하위 역량 설명</FormLabel>
+            <FormLabel style={{ fontSize: "1.5rem" }}>하위역량 설명</FormLabel>
             <FormControl
               as="textarea"
               rows={3}

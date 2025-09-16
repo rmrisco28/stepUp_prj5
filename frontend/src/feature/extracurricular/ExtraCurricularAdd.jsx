@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 export function ExtraCurricularAdd() {
   const [formData, setFormData] = useState({
@@ -30,6 +31,8 @@ export function ExtraCurricularAdd() {
     mileagePoints: 0,
     author: "",
   });
+
+  const navigate = useNavigate();
 
   // 입력값 변경 처리
   const handleChange = (e) => {
@@ -57,7 +60,8 @@ export function ExtraCurricularAdd() {
     e.preventDefault();
     try {
       await axios.post("/api/extracurricular/add", formData);
-      alert("프로그램 등록 완료!");
+      alert("프로그램 등록이 완료되었습니다.");
+      navigate("/extracurricular/manage");
       // 필요시 초기화
       setFormData({
         title: "",
@@ -78,9 +82,7 @@ export function ExtraCurricularAdd() {
       });
     } catch (error) {
       console.error(error.response.data);
-      alert(
-        "등록 실패: " + (error.response?.data?.message?.text || error.message),
-      );
+      alert("등록에 실패하였습니다. ");
     }
   };
 
@@ -88,7 +90,9 @@ export function ExtraCurricularAdd() {
     <Container className="mt-5 my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4 text-center">비교과 프로그램 등록</h2>
+          <h2 className="mb-4 text-center text-primary fw-bold">
+            비교과 프로그램 등록
+          </h2>
           <Form onSubmit={handleSubmit}>
             {/* 프로그램 제목 */}
             <FormGroup className="mb-3">
@@ -280,7 +284,11 @@ export function ExtraCurricularAdd() {
               <Button type="submit" variant="primary" className="me-2">
                 등록
               </Button>
-              <Button type="button" variant="secondary">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate(-1)}
+              >
                 취소
               </Button>
             </div>
