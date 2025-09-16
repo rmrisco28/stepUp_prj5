@@ -4,6 +4,7 @@ import com.example.backend.batch.student.dto.StudentCsvDto;
 import com.example.backend.batch.student.entity.MjDepartment;
 import com.example.backend.batch.student.entity.Student;
 import com.example.backend.batch.student.repository.MjDepartmentRepository;
+import com.example.backend.batch.student.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class StudentNumberGenerator {
     // 학번은 1년에 한번 일어난다고 가정하고 항상 001 부터 시작되도 됨
-
+    private final StudentRepository studentRepository;
     private final MjDepartmentRepository mjDepartmentRepository;
 
     // CSV 데이터를 Student 엔티티 리스트로 변환하며 학번 생성
@@ -43,25 +44,36 @@ public class StudentNumberGenerator {
                     // 3. 순번을 매기면서 Student 엔티티 생성
                     AtomicInteger sequence = new AtomicInteger(1); // 원자적으로 처리해서 순번 중복 증가 방지
 
-                    return students.stream().map(dto -> {
-                        String departmentCode = getDepartmentCode(dto.getMajor());
-                        String studentNumber = generateStudentNumber(
-                                dto.getAdmissionYearAsInteger(),
-                                departmentCode,
-                                sequence.getAndIncrement()
-                        );
+                    return students.stream()
+                            .filter(dto -> !isDuplicateStudent(dto)) // 학생도 같은 학생인지 확인해서 학번 생성 안되도록
+                            .map(dto -> {
+                                String departmentCode = getDepartmentCode(dto.getMajor());
+                                String studentNumber = generateStudentNumber(
+                                        dto.getAdmissionYearAsInteger(),
+                                        departmentCode,
+                                        sequence.getAndIncrement()
+                                );
 
-                        return Student.builder()
-                                .studentNo(studentNumber)
-                                .name(dto.getName())
-                                .gender(dto.getGender())
-                                .birthDate(dto.getBirthDateAsLocalDate())
-                                .major(dto.getMajor())
-                                .admissionYear(dto.getAdmissionYearAsInteger())
-                                .build();
-                    });
+                                return Student.builder()
+                                        .studentNo(studentNumber)
+                                        .name(dto.getName())
+                                        .gender(dto.getGender())
+                                        .birthDate(dto.getBirthDateAsLocalDate())
+                                        .major(dto.getMajor())
+                                        .admissionYear(dto.getAdmissionYearAsInteger())
+                                        .build();
+                            });
                 })
                 .collect(Collectors.toList());
+    }
+
+    // 중복 학생 체크 (이름, 생년월일, 성별로 판단)
+    private boolean isDuplicateStudent(StudentCsvDto dto) {
+        return studentRepository.existsByNameAndBirthDateAndGender(
+                dto.getName(),
+                dto.getBirthDateAsLocalDate(),
+                dto.getGender()
+        );
     }
 
     // 학생 정렬 기준: 이름(오름차순) -> 성별(남자우선) -> 생년월일(빠른순)

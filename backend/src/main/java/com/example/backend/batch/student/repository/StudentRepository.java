@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     // 이름 가져오기
     Optional<Student> findByStudentNo(String studentNo);
+
+    // 이름, 생년월일, 성별로 중복 체크
+    boolean existsByNameAndBirthDateAndGender(String name, LocalDate birthDate, String gender);
 }
