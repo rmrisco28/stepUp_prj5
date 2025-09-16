@@ -26,7 +26,7 @@ public class AssessmentController {
     // 역량 진단 목록
     @GetMapping("")
     public Map<String, Object> list(
-            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
+            @RequestParam(defaultValue = "1") Integer pageNumber) {
         return assessmentService.list(pageNumber);
     }
 
@@ -36,6 +36,17 @@ public class AssessmentController {
         return assessmentService.delete(seq);
     }
 
+
+    // 진단 목록 세부 관리
+    @GetMapping("admin/{seq}")
+    public List<?> AdminList(@PathVariable int seq) {
+//        assessmentService.adminList(seq);
+
+        return assessmentService.detail(seq);
+    }
+
+
+    // 진단 문제 추가 시 핵심역량 목록
     @GetMapping("admin/competency")
     public List<?> competencyList() {
         return assessmentService.competencyList();

@@ -1,37 +1,42 @@
-import { Button, Col, Modal, Row, Table } from "react-bootstrap";
+import { Button, Col, Modal, Row, Spinner, Table } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export function CompetencyAssessmentAdmin() {
-  const [questionList, setQuestionList] = useState([]);
+  const [assessment, setAssessment] = useState([]);
   const [modalShow, setModalShow] = useState(false);
 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`/api/competency/assessment/admin/:seq`)
-  //     .then((res) => {
-  //       console.log("yes");
-  //       console.log(res.data);
-  //       setQuestionList(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log("no");
-  //     })
-  //     .finally(() => {
-  //       console.log("finally");
-  //     });
-  // }, []);
+  const { seq } = useParams();
 
+  useEffect(() => {
+    axios
+      .get(`/api/competency/assessment/admin/${seq}`)
+      .then((res) => {
+        console.log("yes");
+        console.log(res.data);
+        setAssessment(res.data[0]);
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }, [seq]);
+
+  if (!assessment) {
+    return <Spinner />;
+  }
   return (
     <>
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
           <Row className="d-flex justify-content-between align-items-center">
             <Col xs="auto">
-              <h2>진단 관리</h2>
+              <h2> {assessment.caTitle}</h2>
             </Col>
             <Col xs="auto" className="d-flex gap-2">
               <Button variant="outline-warning" onClick={() => navigate("")}>

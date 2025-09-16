@@ -5,8 +5,10 @@ import com.example.backend.competency.repository.CompetencyRepository;
 import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.competencyAssessment.dto.AssessmentDto;
 import com.example.backend.competency.dto.MainCompetencyDto;
+import com.example.backend.competencyAssessment.dto.AssessmentTitleDto;
 import com.example.backend.competencyAssessment.entity.Assessment;
 import com.example.backend.competencyAssessment.repository.AssessmentRepository;
+import com.example.backend.competencyAssessment.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,7 @@ public class AssessmentService {
     private final AssessmentRepository assessmentRepository;
     private final CompetencyRepository competencyRepository;
     private final SubCompetencyRepository subCompetencyRepository;
+    private final QuestionRepository questionRepository;
 
     public void add(AssessmentDto dto) {
         Assessment assessment = new Assessment();
@@ -43,11 +46,7 @@ public class AssessmentService {
         rightPageNumber = Math.min(rightPageNumber, totalPages);
         leftPageNumber = Math.max(leftPageNumber, 1);
 
-        var pageInfo = Map.of(
-                "totalPages", totalPages,
-                "rightPageNumber", rightPageNumber,
-                "leftPageNumber", leftPageNumber,
-                "currentPageNumber", pageNumber);
+        var pageInfo = Map.of("totalPages", totalPages, "rightPageNumber", rightPageNumber, "leftPageNumber", leftPageNumber, "currentPageNumber", pageNumber);
 
         return Map.of("pageInfo", pageInfo, "assessmentList", assessmentDtoPage.getContent());
     }
@@ -57,8 +56,7 @@ public class AssessmentService {
 
         System.out.println("assessment = " + assessment);
         assessmentRepository.delete(assessment);
-        return ResponseEntity.ok().body(Map.of(
-                "message", "역량 진단 목록이 삭제되었습니다."));
+        return ResponseEntity.ok().body(Map.of("message", "역량 진단 목록이 삭제되었습니다."));
     }
 
     public List<?> competencyList() {
@@ -66,8 +64,22 @@ public class AssessmentService {
         return competencyDtos;
     }
 
+    // 역량진단 목록 관리
     public List<?> subCompetencyList() {
         List<MainCompetencyDto> subCompetencyDtos = subCompetencyRepository.findAllSubCompetenciesUse();
         return subCompetencyDtos;
     }
+
+    // 진단 목록 세부 관리
+    public List<?> detail(int seq) {
+        List<AssessmentTitleDto> assessmentTitleDtos = assessmentRepository.findAssessmentBySeq(seq);
+        return assessmentTitleDtos;
+    }
+
+
+    // 진단 목록 세부 관리
+//    public List<?> adminList(int seq) {
+//        List<QuestionDto> questionDtos = questionRepository.findByCaSeqSeq(seq);
+//        return questionDtos;
+//    }
 }

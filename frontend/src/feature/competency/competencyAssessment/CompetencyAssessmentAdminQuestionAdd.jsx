@@ -21,7 +21,7 @@ export function CompetencyAssessmentAdminQuestionAdd() {
   const [subCompetency, setSubCompetency] = useState([]);
   const [selectedCompetency, setSelectedCompetency] = useState(null);
   const [selectedSubCompetency, setSelectedSubCompetency] = useState(null);
-  const [answer, setAnswer] = useState([``]);
+  const [choice, setChoice] = useState([``]);
   const [score, setScore] = useState(1);
   const [point, setPoint] = useState([0.0]);
 
@@ -56,15 +56,15 @@ export function CompetencyAssessmentAdminQuestionAdd() {
 
   // 보기 추가 함수
   const addAnswer = () => {
-    setAnswer([...answer, ""]); // 보기 추가
+    setChoice([...choice, ""]); // 보기 추가
     setPoint([...point, 0.0]); // 배점 추가
   };
 
   // 보기 값 변경 함수
   const handleAnswerChange = (index, value) => {
-    const newAnswers = [...answer];
+    const newAnswers = [...choice];
     newAnswers[index] = value;
-    setAnswer(newAnswers);
+    setChoice(newAnswers);
   };
 
   // 배점 값 변경 함수
@@ -76,8 +76,8 @@ export function CompetencyAssessmentAdminQuestionAdd() {
 
   // 보기 제거 함수
   const removeAnswer = () => {
-    if (answer.length > 1) {
-      setAnswer(answer.slice(0, -1)); // 마지막 보기 항목 삭제
+    if (choice.length > 1) {
+      setChoice(choice.slice(0, -1)); // 마지막 보기 항목 삭제
       setPoint(point.slice(0, -1)); // 마지막 배점 항목 삭제
     }
   };
@@ -177,7 +177,7 @@ export function CompetencyAssessmentAdminQuestionAdd() {
           {/*답변*/}
           <Row>
             <Col xs={8}>
-              {answer.map((item, index) => (
+              {choice.map((item, index) => (
                 <FormGroup
                   className="mb-3"
                   controlId={`answer-${index}`}

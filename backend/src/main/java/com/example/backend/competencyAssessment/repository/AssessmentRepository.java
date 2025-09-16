@@ -1,6 +1,7 @@
 package com.example.backend.competencyAssessment.repository;
 
 import com.example.backend.competencyAssessment.dto.AssessmentDto;
+import com.example.backend.competencyAssessment.dto.AssessmentTitleDto;
 import com.example.backend.competencyAssessment.entity.Assessment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,4 +26,6 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Integer>
     Page<AssessmentDto> findAllBy(PageRequest of);
 
     Assessment findBySeq(int seq);
+
+    List<AssessmentTitleDto> findAssessmentBySeq(Integer seq);
 }
