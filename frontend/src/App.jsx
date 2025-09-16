@@ -16,7 +16,8 @@ import { AuthProvider } from "./common/AuthContext.jsx";
 import { MainPage } from "./common/MainPage.jsx";
 import { CompetencyAssessment } from "./feature/competency/competencyAssessment/CompetencyAssessment.jsx";
 import { CompetencyAssessmentAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdd.jsx";
-import { CompetencyAssessmentTest } from "./feature/competency/competencyAssessment/CompetencyAssessmentTest.jsx";
+import { CompetencyAssessmentAdmin } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdmin.jsx";
+import { CompetencyAssessmentAdminQuestionAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionAdd.jsx";
 
 function CompetencyAssessmentCreate() {
   return null;
@@ -73,12 +74,13 @@ function App() {
             element={<CompetencyAssessmentAdd />}
           />
           <Route
-            path="competency/assessment/test/:seq"
-            element={<CompetencyAssessmentTest />}
+            path="competency/assessment/admin/:seq"
+            element={<CompetencyAssessmentAdmin />}
           />
+
           <Route
-            path="competency/assessment/question/:assessmentSeq"
-            element={<CompetencyAssessmentTest />}
+            path="competency/assessment/admin/:assessmentSeq/questionAdd"
+            element={<CompetencyAssessmentAdminQuestionAdd />}
           />
 
           <Route

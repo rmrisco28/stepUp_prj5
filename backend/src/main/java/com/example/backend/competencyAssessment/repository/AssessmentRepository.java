@@ -11,18 +11,6 @@ import java.util.List;
 
 public interface AssessmentRepository extends JpaRepository<Assessment, Integer> {
 
-    @Query(value = """
-                    SELECT new com.example.backend.competencyAssessment.dto.AssessmentDto(
-                        a.seq,
-                        a.caTitle,
-                        a.createDttm,
-                        a.startDttm,
-                        a.endDttm,
-                        a.useYn)
-                        FROM Assessment a ORDER BY a.seq DESC
-            """)
-    List<AssessmentDto> findAllAssessment();
-
 
     @Query(value = """
                     SELECT new com.example.backend.competencyAssessment.dto.AssessmentDto(

@@ -79,29 +79,29 @@ export function CompetencyAssessment() {
                   verticalAlign: "middle",
                 }}
               >
-                <td
+                <th
                   style={{
                     width: "7%",
                   }}
                 >
                   번호
-                </td>
-                <td>제목</td>
-                <td
+                </th>
+                <th>제목</th>
+                <th
                   style={{
                     width: "30%",
                   }}
                 >
                   진단기간
-                </td>
-                <td
+                </th>
+                <th
                   style={{
                     width: "20%",
                   }}
                 >
                   진단하기
-                </td>
-                <td style={{ width: "10%" }}>관리자만 삭제하기</td>
+                </th>
+                <th style={{ width: "10%" }}>관리자만</th>
               </tr>
             </thead>
             <tbody>
@@ -120,16 +120,12 @@ export function CompetencyAssessment() {
                     </td>
                     <td align="center">
                       <Button
-                        variant="danger"
+                        variant="warning"
                         onClick={() => {
-                          setSelectAssment({
-                            seq: data.seq,
-                            caTitle: data.caTitle,
-                          });
-                          setModalShow(true);
+                          navigate(`admin/${data.seq}`);
                         }}
                       >
-                        삭제
+                        관리
                       </Button>
                     </td>
                   </tr>
@@ -152,32 +148,6 @@ export function CompetencyAssessment() {
             </Button>
           </div>
         </Col>
-
-        {/*모달*/}
-        <Modal show={modalShow} onHide={() => setModalShow(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>진단 목록 삭제 확인</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            진단 목록 "{selectAssment.caTitle}" 을 삭제하시겠습니까?
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-              취소
-            </Button>
-
-            <Button
-              variant="outline-danger"
-              onClick={() => {
-                if (selectAssment) {
-                  handleDeleteButton(selectAssment.seq); // 삭제 처리 함수 호출
-                }
-              }}
-            >
-              삭제
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </Row>
 
       {/*페이지 네이션*/}

@@ -35,4 +35,16 @@ public class AssessmentController {
     public ResponseEntity<?> delete(@PathVariable int seq) {
         return assessmentService.delete(seq);
     }
+
+    @GetMapping("admin/competency")
+    public List<?> competencyList() {
+        return assessmentService.competencyList();
+    }
+
+    // 진단 문제 추가 시 하위역량 목록
+    @GetMapping("admin/subCompetency")
+    public List<?> subCompetencyList() {
+        return assessmentService.subCompetencyList();
+    }
+
 }

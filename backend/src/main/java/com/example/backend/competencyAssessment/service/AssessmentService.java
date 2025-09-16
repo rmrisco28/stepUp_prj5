@@ -1,6 +1,10 @@
 package com.example.backend.competencyAssessment.service;
 
+import com.example.backend.competency.dto.CompetencyDto;
+import com.example.backend.competency.repository.CompetencyRepository;
+import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.competencyAssessment.dto.AssessmentDto;
+import com.example.backend.competency.dto.MainCompetencyDto;
 import com.example.backend.competencyAssessment.entity.Assessment;
 import com.example.backend.competencyAssessment.repository.AssessmentRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +22,8 @@ import java.util.Map;
 @Transactional
 public class AssessmentService {
     private final AssessmentRepository assessmentRepository;
+    private final CompetencyRepository competencyRepository;
+    private final SubCompetencyRepository subCompetencyRepository;
 
     public void add(AssessmentDto dto) {
         Assessment assessment = new Assessment();
@@ -53,5 +59,15 @@ public class AssessmentService {
         assessmentRepository.delete(assessment);
         return ResponseEntity.ok().body(Map.of(
                 "message", "역량 진단 목록이 삭제되었습니다."));
+    }
+
+    public List<?> competencyList() {
+        List<CompetencyDto> competencyDtos = competencyRepository.findAllCompetenciesUse();
+        return competencyDtos;
+    }
+
+    public List<?> subCompetencyList() {
+        List<MainCompetencyDto> subCompetencyDtos = subCompetencyRepository.findAllSubCompetenciesUse();
+        return subCompetencyDtos;
     }
 }

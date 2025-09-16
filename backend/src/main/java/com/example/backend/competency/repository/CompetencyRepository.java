@@ -1,6 +1,7 @@
 package com.example.backend.competency.repository;
 
 import com.example.backend.competency.dto.CompetencyDto;
+import com.example.backend.competency.dto.MainCompetencyDto;
 import com.example.backend.competency.entity.Competency;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -36,4 +37,6 @@ public interface CompetencyRepository extends JpaRepository<Competency, Integer>
     Competency findById(int id);
 
     Competency findBySeq(int seq);
+
+
 }
