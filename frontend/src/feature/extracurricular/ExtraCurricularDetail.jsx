@@ -60,15 +60,21 @@ export function ExtraCurricularDetail() {
         >
           <Row className="mb-3">
             <Col>
-              <FormGroup className="mb-3">
+              <FormGroup className="mb-3" controlId="title">
                 <FormLabel>제목</FormLabel>
-                <FormControl type="text" value={program.title} readOnly />
+                <FormControl
+                  type="text"
+                  name="title"
+                  value={program.title}
+                  readOnly
+                />
               </FormGroup>
 
-              <FormGroup className="mb-3">
+              <FormGroup className="mb-3" controlId="content">
                 <FormLabel>내용</FormLabel>
                 <FormControl
                   as="textarea"
+                  name="content"
                   rows={5}
                   value={program.content}
                   readOnly
@@ -77,20 +83,22 @@ export function ExtraCurricularDetail() {
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="operationStartDt">
                     <FormLabel>운영 시작일</FormLabel>
                     <FormControl
                       type="text"
+                      name="operationStartDt"
                       value={program.operateStartDt.replace("T", " ")}
                       readOnly
                     />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="operationEndDt">
                     <FormLabel>운영 종료일</FormLabel>
                     <FormControl
                       type="text"
+                      name="operationEndDt"
                       value={program.operateEndDt.replace("T", " ")}
                       readOnly
                     />
@@ -100,20 +108,22 @@ export function ExtraCurricularDetail() {
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="applyStartDt">
                     <FormLabel>신청 시작일</FormLabel>
                     <FormControl
                       type="text"
+                      name="applyStartDt"
                       value={program.applyStartDt.replace("T", " ")}
                       readOnly
                     />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="applyEndDt">
                     <FormLabel>신청 종료일</FormLabel>
                     <FormControl
                       type="text"
+                      name="applyEndDt"
                       value={program.applyEndDt.replace("T", " ")}
                       readOnly
                     />
@@ -123,20 +133,22 @@ export function ExtraCurricularDetail() {
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="competency">
                     <FormLabel>역량</FormLabel>
                     <FormControl
                       type="text"
+                      name="competency"
                       value={program.competency}
                       readOnly
                     />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="location">
                     <FormLabel>장소</FormLabel>
                     <FormControl
                       type="text"
+                      name="location"
                       value={program.location}
                       readOnly
                     />
@@ -146,49 +158,58 @@ export function ExtraCurricularDetail() {
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="operationType">
                     <FormLabel>운영 형태</FormLabel>
                     <FormControl
                       type="text"
+                      name="operationType"
                       value={program.operationType}
                       readOnly
                     />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="grades">
                     <FormLabel>대상 학년</FormLabel>
-                    <FormControl type="text" value={program.grades} readOnly />
+                    <FormControl
+                      type="text"
+                      name="grades"
+                      value={program.grades}
+                      readOnly
+                    />
                   </FormGroup>
                 </Col>
               </Row>
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="capacity">
                     <FormLabel>정원</FormLabel>
                     <FormControl
                       type="number"
+                      name="capacity"
                       value={program.capacity}
                       readOnly
                     />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="applicants">
                     <FormLabel>신청자 수</FormLabel>
                     <FormControl
                       type="number"
+                      name="applicants"
                       value={program.applicants}
                       readOnly
                     />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="waiting">
                     <FormLabel>대기자 수</FormLabel>
                     <FormControl
                       type="number"
+                      name="waiting"
                       value={program.waiting}
                       readOnly
                     />
@@ -198,16 +219,22 @@ export function ExtraCurricularDetail() {
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="status">
                     <FormLabel>상태</FormLabel>
-                    <FormControl type="text" value={program.status} readOnly />
+                    <FormControl
+                      type="text"
+                      name="status"
+                      value={program.status}
+                      readOnly
+                    />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="mileagePoints">
                     <FormLabel>마일리지</FormLabel>
                     <FormControl
                       type="number"
+                      name="mileagePoint"
                       value={program.mileagePoints}
                       readOnly
                     />
@@ -217,16 +244,22 @@ export function ExtraCurricularDetail() {
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="manager">
                     <FormLabel>담당자</FormLabel>
-                    <FormControl type="text" value={program.manager} readOnly />
+                    <FormControl
+                      type="text"
+                      name="manager"
+                      value={program.manager}
+                      readOnly
+                    />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="managerPhone">
                     <FormLabel>담당자 전화번호</FormLabel>
                     <FormControl
                       type="text"
+                      name="managerPhone"
                       value={program.managerPhone}
                       readOnly
                     />
@@ -236,16 +269,22 @@ export function ExtraCurricularDetail() {
 
               <Row className="mb-3">
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="author">
                     <FormLabel>작성자</FormLabel>
-                    <FormControl type="text" value={program.author} readOnly />
+                    <FormControl
+                      type="text"
+                      name="author"
+                      value={program.author}
+                      readOnly
+                    />
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="createdAt">
                     <FormLabel>생성일</FormLabel>
                     <FormControl
                       type="text"
+                      name="createdAt"
                       value={program.createdAt
                         .replace("T", " ")
                         .replace("Z", "")}
@@ -254,10 +293,11 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
                 <Col>
-                  <FormGroup>
+                  <FormGroup controlId="updatedAt">
                     <FormLabel>수정일</FormLabel>
                     <FormControl
                       type="text"
+                      name="updatedAt"
                       value={program.updatedAt
                         .replace("T", " ")
                         .replace("Z", "")}
