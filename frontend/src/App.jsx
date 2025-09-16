@@ -19,6 +19,7 @@ import { MainPage } from "./common/MainPage.jsx";
 import { CompetencyTextEditor } from "./feature/competency/CompetencyTextEditor.jsx";
 import { CompetencyText } from "./feature/competency/CompetencyText.jsx";
 import { ExtraCurricularDetail } from "./feature/extracurricular/ExtraCurricularDetail.jsx";
+import { ExtraCurricularEdit } from "./feature/extracurricular/ExtraCurricularEdit.jsx";
 
 function App() {
   return (
@@ -43,6 +44,10 @@ function App() {
           <Route
             path="extracurricular/detail/:seq"
             element={<ExtraCurricularDetail />}
+          />
+          <Route
+            path="extracurricular/edit/:seq"
+            element={<ExtraCurricularEdit />}
           />
           {/*핵심역량*/}
           <Route path="competency" element={<Competency />} />

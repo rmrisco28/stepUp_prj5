@@ -1,6 +1,7 @@
 package com.example.backend.extracurricular.controller;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +46,26 @@ public class ExtraCurricularController {
         return extraCurricularService.list(pageNumber, keyword);
     }
 
-    //프로그램 상세 보기(관리자)
+    // 프로그램 상세 보기(관리자)
     @GetMapping("detail/{seq}")
     public ResponseEntity<?> detail(@PathVariable Integer seq) {
         return ResponseEntity.ok().body(extraCurricularService.detail(seq));
+    }
+
+    // 프로그램 수정
+    @PutMapping("edit/{seq}")
+    public ResponseEntity<?> edit(@PathVariable Integer seq, @RequestBody ETCEditForm form) {
+        try {
+            extraCurricularService.edit(seq, form);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", seq + "번 프로그램이 수정되었습니다.")));
     }
 }

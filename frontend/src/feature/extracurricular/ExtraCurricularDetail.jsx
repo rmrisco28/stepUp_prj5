@@ -309,7 +309,23 @@ export function ExtraCurricularDetail() {
             </Col>
           </Row>
         </section>
-        <Row className="text-end mt-4">
+        <Row className="text-end mt-3">
+          <Col>
+            <Button
+              className="me-3"
+              variant="outline-primary"
+              onClick={() =>
+                navigate(`/extracurricular/edit/${program.seq}?page=${page}`)
+              }
+            >
+              수정
+            </Button>
+            <Button variant="outline-danger" onClick={handleRedirectToList}>
+              삭제
+            </Button>
+          </Col>
+        </Row>
+        <Row className="text-end mt-2">
           <Col>
             <Button variant="secondary" onClick={handleRedirectToList}>
               목록

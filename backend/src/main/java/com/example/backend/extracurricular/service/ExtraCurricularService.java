@@ -2,6 +2,7 @@ package com.example.backend.extracurricular.service;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCDetailDto;
+import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.dto.ETCListDto;
 import com.example.backend.extracurricular.entity.ExtraCurricularProgram;
 import com.example.backend.extracurricular.enums.OperationType;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -125,5 +128,30 @@ public class ExtraCurricularService {
 
     }
 
+    // 프로그램 수정
+    public void edit(Integer seq, ETCEditForm form) {
+        ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("프로그램 수정 오류"));
 
+        data.setTitle(form.getTitle());
+        data.setContent(form.getContent());
+        data.setOperateStartDt(form.getOperateStartDt());
+        data.setOperateEndDt(form.getOperateEndDt());
+        data.setApplyStartDt(form.getApplyStartDt());
+        data.setApplyEndDt(form.getApplyEndDt());
+        data.setCompetency(form.getCompetency());
+        data.setLocation(form.getLocation());
+        data.setGrades(form.getGrades());
+        data.setCapacity(form.getCapacity());
+        data.setStatus(form.getStatus());
+        data.setManager(form.getManager());
+        data.setManagerPhone(form.getManagerPhone());
+        data.setMileagePoints(form.getMileagePoints());
+        data.setAuthor(form.getAuthor());
+
+        Instant now = Instant.now();
+        data.setUpdatedAt(now);
+
+        extraCurricularProgramRepository.save(data);
+    }
 }
