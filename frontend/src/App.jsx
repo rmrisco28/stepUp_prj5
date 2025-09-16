@@ -18,6 +18,22 @@ import { CompetencyAssessment } from "./feature/competency/competencyAssessment/
 import { CompetencyAssessmentAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdd.jsx";
 import { CompetencyAssessmentTest } from "./feature/competency/competencyAssessment/CompetencyAssessmentTest.jsx";
 
+function CompetencyAssessmentCreate() {
+  return null;
+}
+
+function CompetencyAssessmentEdit() {
+  return null;
+}
+
+function CompetencyAssessmentQuestions() {
+  return null;
+}
+
+function CompetencyAssessmentQuestionDetail() {
+  return null;
+}
+
 function App() {
   return (
     <AuthProvider>
@@ -59,6 +75,29 @@ function App() {
           <Route
             path="competency/assessment/test/:seq"
             element={<CompetencyAssessmentTest />}
+          />
+          <Route
+            path="competency/assessment/question/:assessmentSeq"
+            element={<CompetencyAssessmentTest />}
+          />
+
+          <Route
+            path="/competency/assessment/:assessmentSeq/create"
+            element={<CompetencyAssessmentCreate />}
+          />
+          <Route
+            path="/competency/assessment/:assessmentSeq/edit"
+            element={<CompetencyAssessmentEdit />}
+          />
+
+          {/* 학생 페이지 */}
+          <Route
+            path="/competency/assessment/:assessmentSeq/questions"
+            element={<CompetencyAssessmentQuestions />}
+          />
+          <Route
+            path="/competency/assessment/:assessmentSeq/questions/:questionId"
+            element={<CompetencyAssessmentQuestionDetail />}
           />
 
           {/*마일리지*/}
