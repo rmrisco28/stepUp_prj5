@@ -35,10 +35,10 @@ public class AuthService {
                 // 로그인 성공 시 세션에 정보 저장
                 httpSession.setAttribute("memberSeq", member.getId());
                 httpSession.setAttribute("loginId", member.getLoginId());
-                httpSession.setAttribute("name", name);
+                httpSession.setAttribute("name", member.getStudent().getName());
 
                 // LoginResponse 객체를 직접 생성하여 반환
-                return new LoginResponse(true, "로그인 성공", member.getId(), member.getLoginId(), name);
+                return new LoginResponse(true, "로그인 성공", member.getId(), member.getLoginId(), member.getStudent().getName());
             }
         }
         // 로그인 실패 시 실패 응답 생성

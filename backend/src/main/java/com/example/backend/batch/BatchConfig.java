@@ -202,9 +202,12 @@ public class BatchConfig {
             Student student = new Student();
             student.setId(rs.getInt("id")); // student PK
             student.setStudentNo(rs.getString("student_no"));
-            student.setMemberSeq(rs.getInt("member_seq")); // member PK
 
-            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, student.getStudentNo(), student.getMemberSeq());
+            Member member = new Member();
+            member.setId(rs.getInt("member_seq"));
+            student.setMember(member); // member PK
+
+            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, student.getStudentNo(), student.getMember().getId());
 
             return student;
         });

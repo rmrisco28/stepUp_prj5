@@ -1,5 +1,6 @@
 package com.example.backend.batch.student.entity;
 
+import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,7 +45,10 @@ public class Student {
     private String email;
 
     // jdbc
-    @Column(name = "member_seq")
-    private Integer memberSeq;
+//    @Column(name = "member_seq")
+//    private Integer memberSeq;
     // JoinToColumn으로 바꾸기 .. 그러면 가져올 수 있다 ㅜㅜ
+    @OneToOne
+    @JoinColumn(name = "member_seq")
+    private Member member;
 }
