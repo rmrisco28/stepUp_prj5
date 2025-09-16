@@ -44,4 +44,10 @@ public class ExtraCurricularController {
     ) {
         return extraCurricularService.list(pageNumber, keyword);
     }
+
+    //프로그램 상세 보기(관리자)
+    @GetMapping("detail/{seq}")
+    public ResponseEntity<?> detail(@PathVariable Integer seq) {
+        return ResponseEntity.ok().body(extraCurricularService.detail(seq));
+    }
 }

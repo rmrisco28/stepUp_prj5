@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ETCDetailForm {
+public class ETCDetailDto {
     private Integer seq;
     private String title;
     private String content;
@@ -26,10 +26,10 @@ public class ETCDetailForm {
     private Integer applicants;
     private Integer waiting;
     private String status;
+    private Integer mileagePoints;
     private String manager;
     private String managerPhone;
-    private Integer mileagePoints;
+    private String Author;
     private Instant createdAt;
     private Instant updatedAt;
-    private String author;
 }

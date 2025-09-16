@@ -1,6 +1,7 @@
 package com.example.backend.extracurricular.service;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCDetailDto;
 import com.example.backend.extracurricular.dto.ETCListDto;
 import com.example.backend.extracurricular.entity.ExtraCurricularProgram;
 import com.example.backend.extracurricular.enums.OperationType;
@@ -81,4 +82,48 @@ public class ExtraCurricularService {
                 "programList", programPage.getContent()
         );
     }
+
+    // Enum -> 한글 매핑
+    private String mapToLabel(OperationType value) {
+        return switch (value) {
+            case OFFLINE -> "대면";
+            case ONLINE -> "비대면";
+            case HYBRID -> "혼합";
+        };
+    }
+
+
+    // 프로그램 상세 정보
+    public Object detail(Integer seq) {
+        ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException(seq + "번 프로그램이 없습니다."));
+
+        ETCDetailDto dto = new ETCDetailDto();
+        dto.setSeq(data.getSeq());
+        dto.setTitle(data.getTitle());
+        dto.setContent(data.getContent());
+        dto.setOperateStartDt(data.getOperateStartDt());
+        dto.setOperateEndDt(data.getOperateEndDt());
+        dto.setApplyStartDt(data.getApplyStartDt());
+        dto.setApplyEndDt(data.getApplyEndDt());
+        dto.setCompetency(data.getCompetency());
+        dto.setLocation(data.getLocation());
+        dto.setOperationType(mapToLabel(data.getOperationType()));
+        dto.setGrades(data.getGrades());
+        dto.setCapacity(data.getCapacity());
+        dto.setApplicants(data.getApplicants());
+        dto.setWaiting(data.getWaiting());
+        dto.setStatus(data.getStatus());
+        dto.setMileagePoints(data.getMileagePoints());
+        dto.setManager(data.getManager());
+        dto.setManagerPhone(data.getManagerPhone());
+        dto.setAuthor(data.getAuthor());
+        dto.setCreatedAt(data.getCreatedAt());
+        dto.setUpdatedAt(data.getUpdatedAt());
+
+        return dto;
+
+    }
+
+
 }
