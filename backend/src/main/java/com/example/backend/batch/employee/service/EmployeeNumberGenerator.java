@@ -50,22 +50,24 @@ public class EmployeeNumberGenerator {
                     int lastSequence = getLastSequenceNumber(jobCode, admissionYear);
                     AtomicInteger sequence = new AtomicInteger(lastSequence + 1);
 
-                    return employees.stream().map(dto -> {
-                        String employeeNumber = generateEmployeeNumber(
-                                jobCode,
-                                dto.getAdmissionYearAsInteger(),
-                                sequence.getAndIncrement()
-                        );
+                    return employees.stream()
+                            .filter(dto -> !isDuplicateEmployee(dto)) // 같은 직원인지 중복체크
+                            .map(dto -> {
+                                String employeeNumber = generateEmployeeNumber(
+                                        jobCode,
+                                        dto.getAdmissionYearAsInteger(),
+                                        sequence.getAndIncrement()
+                                );
 
-                        return Employee.builder()
-                                .employeeNo(employeeNumber)
-                                .name(dto.getName())
-                                .gender(dto.getGender())
-                                .birthDate(dto.getBirthDateAsLocalDate())
-                                .jobFunction(dto.getJobFunction())
-                                .admissionYear(dto.getAdmissionYearAsInteger())
-                                .build();
-                    });
+                                return Employee.builder()
+                                        .employeeNo(employeeNumber)
+                                        .name(dto.getName())
+                                        .gender(dto.getGender())
+                                        .birthDate(dto.getBirthDateAsLocalDate())
+                                        .jobFunction(dto.getJobFunction())
+                                        .admissionYear(dto.getAdmissionYearAsInteger())
+                                        .build();
+                            });
                 })
                 .collect(Collectors.toList());
     }
@@ -84,6 +86,15 @@ public class EmployeeNumberGenerator {
                 .orElseThrow(() -> new IllegalArgumentException(
                         "존재하지 않는 직무입니다: " + jobFunctionName));
         return department.getJfCode();
+    }
+
+    // 중복 직원 체크 (이름, 생년월일, 성별로 판단)
+    private boolean isDuplicateEmployee(EmployeeCsvDto dto) {
+        return employeeRepository.existsByNameAndBirthDateAndGender(
+                dto.getName(),
+                dto.getBirthDateAsLocalDate(),
+                dto.getGender()
+        );
     }
 
     // 해당 직무+년도에서 마지막 순번 조회

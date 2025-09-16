@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -15,4 +16,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 
     // 중복 체크 메서드
     boolean existsByEmployeeNo(String employeeNo);
+
+    // 이름, 생년월일, 성별로 중복 체크 -> 사번 생성 자체를 막음
+    boolean existsByNameAndBirthDateAndGender(String name, LocalDate birthDate, String gender);
 }
