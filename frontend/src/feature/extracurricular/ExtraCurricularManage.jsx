@@ -5,6 +5,7 @@ import {
   Col,
   Container,
   Form,
+  FormControl,
   InputGroup,
   Pagination,
   Row,
@@ -76,7 +77,7 @@ export function ExtraCurricularManage() {
           <Col md="auto">
             <Form className="d-flex" onSubmit={handleSearchFormSubmit}>
               <InputGroup>
-                <Form.Control
+                <FormControl
                   placeholder="검색어 입력"
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
