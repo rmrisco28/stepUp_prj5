@@ -1,5 +1,9 @@
 package com.example.backend.batch;
 
+import com.example.backend.batch.employee.dto.EmployeeCsvDto;
+import com.example.backend.batch.employee.entity.Employee;
+import com.example.backend.batch.employee.processor.EmployeeItemProcessor;
+import com.example.backend.batch.employee.repository.EmployeeRepository;
 import com.example.backend.batch.student.dto.StudentCsvDto;
 import com.example.backend.batch.student.entity.Student;
 import com.example.backend.batch.student.processor.StudentItemProcessor;
@@ -46,9 +50,12 @@ public class BatchConfig {
     private final DataSource dataSource; // jdbc로 db 접속하기 때문에 db 연결정보를 위해 필요함
     private final StudentRepository studentRepository;
     private final StudentItemProcessor studentItemProcessor;
+    private final EmployeeItemProcessor employeeItemProcessor;
+
     private final StudentSaveMemberItemProcessor studentSaveMemberItemProcessor;
 
     private final EntityManagerFactory entityManagerFactory;
+    private final EmployeeRepository employeeRepository;
 
     @Bean
     public Job studentImportJob() {
@@ -220,4 +227,110 @@ public class BatchConfig {
         return writer;
     }
 
+    // ------------------ Employee
+    @Bean
+    public Job employeeImportJob() {
+        return new JobBuilder("employeeImportJob", jobRepository)
+                .start(employeeImportStep()) // Step 1 : csv -> employee (csv 파일 읽어서 학번 생성 후 employee table에 저장)
+//                .next(employeeSaveMemberStep()) // Step 2 : employee -> member (employee table의 학번과 생년월일(초기 비밀번호) 읽어서 가공 후 member table에 저장)
+//                .next(memberSeqSaveEmployeeStep()) // Step 3 :  member -> employee (member의 member_seq를 employee 의 member_seq 컬럼에 추가 : 학번 같은 거 확인하는 로직)
+                .build();
+    }
+
+    @Bean
+    public Step employeeImportStep() {
+        return new StepBuilder("employeeImportStep", jobRepository)
+                .<List<EmployeeCsvDto>, List<Employee>>chunk(1, transactionManager) // 사번 생성도 로직이 복잡해서 전체 데이터 읽어서 한번에 가져옴
+                .reader(employeeCsvReader())
+                .processor(employeeListProcessor())
+                .writer(employeeListWriter())
+                .build();
+    }
+
+//    @Bean
+//    public Step employeeSaveMemberStep() {
+//        return new StepBuilder("employeeSaveMemberStep", jobRepository)
+//                .<MemberSaveDto, Member>chunk(5, transactionManager)
+//                .reader(studentDbReader())
+//                .processor(studentSaveMemberProcessor())
+//                .writer(studentMemberDbWriter())
+//                .build();
+//    }
+//
+//    @Bean
+//    public Step memberSeqSaveEmployeeStep() {
+//        return new StepBuilder("memberSeqSaveEmployeeStep", jobRepository)
+//                .<Student, Student>chunk(5, transactionManager) // chunk 단위 처리
+//                .reader(memberSeqReader())
+//                .writer(memberSeqWriter())
+//                .build();
+//    }
+
+    // Step 1 reader - processor - writer
+
+    @Bean
+    public ItemReader<List<EmployeeCsvDto>> employeeCsvReader() {
+        return new ItemReader<List<EmployeeCsvDto>>() {
+            private boolean read = false;
+
+            @Override
+            public List<EmployeeCsvDto> read() throws Exception {
+                if (!read) {
+                    read = true;
+
+                    // CSV 파일 경로 - src/main/resources/employees.csv
+                    ClassPathResource resource = new ClassPathResource("employees.csv");
+
+                    log.info("Reading CSV file: {}", resource.getFilename());
+
+                    // CSVToBeanBuilder를 사용해 CSV 파일을 DTO 리스트로 파싱
+                    List<EmployeeCsvDto> employees = new CsvToBeanBuilder<EmployeeCsvDto>(
+                            new FileReader(resource.getFile()))
+                            .withType(EmployeeCsvDto.class)
+                            .withIgnoreLeadingWhiteSpace(true)
+                            .withSkipLines(1) // 헤더 스킵(첫줄 스킵)
+                            .build()
+                            .parse();
+
+                    log.info("Total employees read from CSV: {}", employees.size());
+                    return employees;
+                }
+                return null; // 한 번만 읽음 -> 청크에서 1 해서 어차피 한번만 읽긴 함.
+            }
+        };
+    }
+
+    @Bean
+    public ItemProcessor<List<EmployeeCsvDto>, List<Employee>> employeeListProcessor() {
+        // ItemProcessor<Input, Output>
+        // 데이터 가공 (employeeItemProcessor)
+        // ItemReader에서 읽은 List<EmployeeCsvDto>를 비즈니스 로직을 통해 List<Employee>로 변환
+        return employeeItemProcessor::process;
+    }
+
+    @Bean
+    public ItemWriter<List<Employee>> employeeListWriter() {
+        return new ItemWriter<List<Employee>>() {
+            @Override
+            public void write(Chunk<? extends List<Employee>> chunk) throws Exception {
+                // chunk.getItems()는 List<List<Student>> 형태이지만, 현재 ItemReader가 한 번에 전체 리스트를 반환하므로, 리스트는 단 하나의 아이템(전체 직원 목록)만 가짐
+                List<Employee> employeeList = chunk.getItems().get(0);
+                // TODO 유민 : 중복 체크 processor 에서 처리되도록 하기
+                // 중복 학번 체크 후 새로운 직원만 저장
+                List<Employee> newEmployees = employeeList.stream()
+                        .filter(employee -> {
+                            if (!employeeRepository.existsByEmployeeNo(employee.getEmployeeNo())) {
+                                return true; // 저장할 직원
+                            } else {
+                                log.info("Employee already exists, skipping: {}", employee.getEmployeeNo());
+                                return false; // 스킵할 직원
+                            }
+                        })
+                        .collect(Collectors.toList());
+
+                employeeRepository.saveAll(newEmployees);
+                log.info("Saved {} new employees to database", newEmployees.size());
+            }
+        };
+    }
 }

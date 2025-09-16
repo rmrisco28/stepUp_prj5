@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class StudentNumberGenerator {
+    // 학번은 1년에 한번 일어난다고 가정하고 항상 001 부터 시작되도 됨
 
     private final MjDepartmentRepository mjDepartmentRepository;
 

@@ -88,10 +88,26 @@ CREATE TABLE employee
     admission_year INT         NOT NULL,
     phone          VARCHAR(20) NULL,
     email          VARCHAR(50) NULL
-#     employee_seq     INT NOT NULL,
+#     member_seq     INT NOT NULL,
 #     FOREIGN KEY (employee_seq) REFERENCES member (member_seq)
     # use_yn CHAR
 );
+DROP TABLE employee;
+ALTER TABLE employee
+    ADD member_seq INT,
+    ADD CONSTRAINT fk_employee_member
+        FOREIGN KEY (member_seq)
+            REFERENCES member (member_seq);
+
+CREATE TABLE jf_department
+(
+    jf_code VARCHAR(5) PRIMARY KEY,
+    jf_name VARCHAR(20)
+);
+INSERT INTO jf_department
+VALUES ('EC', '비교과센터');
+
+
 # -----------------------------------------------------------
 # administrator
 CREATE TABLE administrator
