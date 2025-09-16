@@ -46,4 +46,5 @@ public class Student {
     // jdbc
     @Column(name = "member_seq")
     private Integer memberSeq;
+    // JoinToColumn으로 바꾸기 .. 그러면 가져올 수 있다 ㅜㅜ
 }
