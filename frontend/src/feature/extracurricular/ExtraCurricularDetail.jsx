@@ -184,7 +184,7 @@ export function ExtraCurricularDetail() {
               <Row className="mb-3">
                 <Col>
                   <FormGroup controlId="capacity">
-                    <FormLabel>정원</FormLabel>
+                    <FormLabel>모집정원</FormLabel>
                     <FormControl
                       type="number"
                       name="capacity"
@@ -231,7 +231,7 @@ export function ExtraCurricularDetail() {
                 </Col>
                 <Col>
                   <FormGroup controlId="mileagePoints">
-                    <FormLabel>마일리지</FormLabel>
+                    <FormLabel>마일리지 점수</FormLabel>
                     <FormControl
                       type="number"
                       name="mileagePoint"
@@ -281,7 +281,7 @@ export function ExtraCurricularDetail() {
                 </Col>
                 <Col>
                   <FormGroup controlId="createdAt">
-                    <FormLabel>생성일</FormLabel>
+                    <FormLabel>등록일시</FormLabel>
                     <FormControl
                       type="text"
                       name="createdAt"
@@ -294,7 +294,7 @@ export function ExtraCurricularDetail() {
                 </Col>
                 <Col>
                   <FormGroup controlId="updatedAt">
-                    <FormLabel>수정일</FormLabel>
+                    <FormLabel>수정일시</FormLabel>
                     <FormControl
                       type="text"
                       name="updatedAt"
