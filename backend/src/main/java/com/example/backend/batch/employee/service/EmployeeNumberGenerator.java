@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,10 @@ public class EmployeeNumberGenerator {
     // CSV 데이터를 Employee 엔티티 리스트로 변환하며 사번 생성
     public List<Employee> generateEmployeeNumbers(List<EmployeeCsvDto> csvDataList) {
 
-        // 1. 입사년도 + 직무별로 그룹핑
+        // 1. 직무별로만 그룹핑 (입사년도는 상관없이)
         Map<String, List<EmployeeCsvDto>> groupedEmployees = csvDataList.stream()
-                .collect(Collectors.groupingBy(dto ->
-                        dto.getAdmissionYearAsInteger() + "_" + dto.getJobFunction()));
+                .collect(Collectors.groupingBy(EmployeeCsvDto::getJobFunction));
+        // 즉 여기서 '비교과센터' 나 '역량관리센터'로 그룹핑 하니까
 
         return groupedEmployees.entrySet().stream()
                 .flatMap(entry -> {
@@ -38,24 +39,22 @@ public class EmployeeNumberGenerator {
 
                     log.info("Processing group: {}, employee count: {}", groupKey, employees.size());
 
-                    // 2. 그룹 내에서 정렬 (이름 -> 성별 -> 생년월일)
+                    // 2. 그룹 내에서 정렬 (입사일 -> 이름 -> 성별 -> 생년월일)
                     employees.sort(getEmployeeComparator());
 
-                    // 3. 해당 직무+년도 조합에서 마지막 순번 조회
-                    String[] parts = groupKey.split("_");
-                    int admissionYear = Integer.parseInt(parts[0]);
-                    String jobFunctionName = parts[1];
-                    String jobCode = getJobCode(jobFunctionName);
+                    // 3. 해당 직무에서 마지막 순번 조회
+                    // groupKey 자체가 '비교과센터'등의 이름이 됨
+                    String jobCode = getJobCode(groupKey);
 
-                    int lastSequence = getLastSequenceNumber(jobCode, admissionYear);
+                    int lastSequence = getLastSequenceNumber(jobCode);
                     AtomicInteger sequence = new AtomicInteger(lastSequence + 1);
 
                     return employees.stream()
-                            .filter(dto -> !isDuplicateEmployee(dto)) // 같은 직원인지 중복체크
+                            .filter(dto -> !isDuplicateEmployee(dto)) // 중복 체크
                             .map(dto -> {
                                 String employeeNumber = generateEmployeeNumber(
                                         jobCode,
-                                        dto.getAdmissionYearAsInteger(),
+                                        dto.getHireDateAsLocalDate(),
                                         sequence.getAndIncrement()
                                 );
 
@@ -65,17 +64,18 @@ public class EmployeeNumberGenerator {
                                         .gender(dto.getGender())
                                         .birthDate(dto.getBirthDateAsLocalDate())
                                         .jobFunction(dto.getJobFunction())
-                                        .admissionYear(dto.getAdmissionYearAsInteger())
+                                        .hireDate(dto.getHireDateAsLocalDate())
                                         .build();
                             });
                 })
                 .collect(Collectors.toList());
     }
 
-    // 직원 정렬 기준: 이름(오름차순) -> 성별(남자우선) -> 생년월일(빠른순)
+    // 직원 정렬 기준: 입사일(빠른순) -> 이름(오름차순) -> 성별(남자우선) -> 생년월일(빠른순)
     private Comparator<EmployeeCsvDto> getEmployeeComparator() {
         return Comparator
-                .comparing(EmployeeCsvDto::getName)
+                .comparing(EmployeeCsvDto::getHireDateAsLocalDate)
+                .thenComparing(EmployeeCsvDto::getName)
                 .thenComparing(dto -> dto.getGender().equals("남") ? 0 : 1)
                 .thenComparing(EmployeeCsvDto::getBirthDateAsLocalDate);
     }
@@ -97,14 +97,10 @@ public class EmployeeNumberGenerator {
         );
     }
 
-    // 해당 직무+년도에서 마지막 순번 조회
-    private int getLastSequenceNumber(String jobCode, int admissionYear) {
-        // 사번 패턴: 직무코드(2자리) + 입사년도(2자리) + 순번(3자리)
-        String yearSuffix = String.format("%02d", admissionYear % 100); // 년도를 2자리로
-        String employeeNumberPrefix = jobCode + yearSuffix;
-
-        // 해당 패턴으로 시작하는 사번 중 가장 큰 순번 조회
-        List<String> existingEmployeeNumbers = employeeRepository.findEmployeeNumbersByPrefix(employeeNumberPrefix);
+    // 해당 직무에서 마지막 순번 조회
+    private int getLastSequenceNumber(String jobCode) {
+        // 해당 직무으로 시작하는 사번 중 가장 큰 순번 조회
+        List<String> existingEmployeeNumbers = employeeRepository.findEmployeeNumbersByPrefix(jobCode);
 
         return existingEmployeeNumbers.stream()
                 .mapToInt(empNo -> {
@@ -123,9 +119,9 @@ public class EmployeeNumberGenerator {
     }
 
     // 사번 생성: 직무코드(2자리) + 입사년도(2자리) + 순번(3자리)
-    // 예: EC19002 (비교과센터, 2019년, 2번째)
-    private String generateEmployeeNumber(String jobCode, Integer admissionYear, int sequence) {
-        String yearSuffix = String.format("%02d", admissionYear % 100);
+    // 예: EC19002 (비교과센터, 2019년 입사, 해당 부서 2번째)
+    private String generateEmployeeNumber(String jobCode, LocalDate hireDate, int sequence) {
+        String yearSuffix = String.format("%02d", hireDate.getYear() % 100);
         return String.format("%s%s%03d", jobCode, yearSuffix, sequence);
     }
 }

@@ -25,14 +25,14 @@ public class EmployeeCsvDto {
     private String jobFunction;
 
     @CsvBindByPosition(position = 4)
-    private String admissionYear; // CSV에서는 문자열로 받아서 나중에 Integer로 변환
+    private String hireDate; // CSV에서는 문자열로 받아서 나중에 LocalDate로 변환
 
     // 편의 메서드
     public LocalDate getBirthDateAsLocalDate() {
         return LocalDate.parse(birthDate);
     }
 
-    public Integer getAdmissionYearAsInteger() {
-        return Integer.parseInt(admissionYear);
+    public LocalDate getHireDateAsLocalDate() {
+        return LocalDate.parse(hireDate);
     }
 }

@@ -3,9 +3,6 @@ package com.example.backend.batch.employee.processor;
 import com.example.backend.batch.employee.dto.EmployeeCsvDto;
 import com.example.backend.batch.employee.entity.Employee;
 import com.example.backend.batch.employee.service.EmployeeNumberGenerator;
-import com.example.backend.batch.student.dto.StudentCsvDto;
-import com.example.backend.batch.student.entity.Student;
-import com.example.backend.batch.student.service.StudentNumberGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.item.ItemProcessor;
@@ -62,11 +59,11 @@ public class EmployeeItemProcessor implements ItemProcessor<List<EmployeeCsvDto>
             }
 
             if (dto.getJobFunction() == null || dto.getJobFunction().trim().isEmpty()) {
-                throw new IllegalArgumentException("Line " + lineNumber + ": 학과가 비어있습니다.");
+                throw new IllegalArgumentException("Line " + lineNumber + ": 부서가 비어있습니다.");
             }
 
-            if (dto.getAdmissionYear() == null || dto.getAdmissionYear().trim().isEmpty()) {
-                throw new IllegalArgumentException("Line " + lineNumber + ": 입학년도가 비어있습니다.");
+            if (dto.getHireDate() == null || dto.getHireDate().trim().isEmpty()) {
+                throw new IllegalArgumentException("Line " + lineNumber + ": 입사일이 비어있습니다.");
             }
 
             try {
@@ -76,9 +73,9 @@ public class EmployeeItemProcessor implements ItemProcessor<List<EmployeeCsvDto>
             }
 
             try {
-                dto.getAdmissionYearAsInteger();
+                dto.getHireDateAsLocalDate();
             } catch (Exception e) {
-                throw new IllegalArgumentException("Line " + lineNumber + ": 입학년도 형식이 올바르지 않습니다.");
+                throw new IllegalArgumentException("Line " + lineNumber + ": 입사일 형식이 올바르지 않습니다.");
             }
         }
     }

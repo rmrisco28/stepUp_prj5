@@ -34,8 +34,8 @@ public class Employee {
     @Column(name = "job_function", nullable = false, length = 30)
     private String jobFunction;
 
-    @Column(name = "admission_year", nullable = false)
-    private Integer admissionYear;
+    @Column(name = "hire_date", nullable = false)
+    private LocalDate hireDate;
 
     @Column(name = "phone", length = 20)
     private String phone;
