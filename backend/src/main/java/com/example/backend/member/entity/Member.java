@@ -24,7 +24,7 @@ public class Member {
     @Column(name = "password")
     private String password;
 
-    @OneToOne
+    @OneToOne(mappedBy = "memberSeq")
     private Student student;
 
 }

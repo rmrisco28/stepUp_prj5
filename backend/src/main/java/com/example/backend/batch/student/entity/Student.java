@@ -50,5 +50,5 @@ public class Student {
     // JoinToColumn으로 바꾸기 .. 그러면 가져올 수 있다 ㅜㅜ
     @OneToOne
     @JoinColumn(name = "member_seq")
-    private Member member;
+    private Member memberSeq;
 }
