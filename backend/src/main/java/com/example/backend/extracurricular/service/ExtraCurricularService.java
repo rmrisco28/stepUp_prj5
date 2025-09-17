@@ -153,7 +153,7 @@ public class ExtraCurricularService {
         data.setUseYn(form.getUseYn());
 
         LocalDateTime now = LocalDateTime.now();
-        data.setCreatedAt(now);
+        data.setUpdatedAt(now);
 
         extraCurricularProgramRepository.save(data);
     }
