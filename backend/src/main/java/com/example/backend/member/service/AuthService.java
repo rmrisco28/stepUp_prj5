@@ -43,6 +43,7 @@ public class AuthService {
                 httpSession.setAttribute("memberSeq", member.getId());
                 httpSession.setAttribute("loginId", member.getLoginId());
                 httpSession.setAttribute("name", name);
+                httpSession.setAttribute("authName", authName);
 
                 // LoginResponse 객체를 직접 생성하여 반환
                 return new LoginResponse(true, "로그인 성공", member.getId(), member.getLoginId(), name, authName);
