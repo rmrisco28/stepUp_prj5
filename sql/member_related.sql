@@ -147,7 +147,7 @@ DROP TABLE auth;
 INSERT INTO auth
 VALUES ('extra', 108);
 INSERT INTO auth
-VALUES ('admin', 108);
+VALUES ('admin', 107);
 
 
 # 아무것도 안 됨 ;;
