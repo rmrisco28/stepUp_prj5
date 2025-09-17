@@ -142,6 +142,7 @@ public class ExtraCurricularService {
         data.setApplyEndDt(form.getApplyEndDt());
         data.setCompetency(form.getCompetency());
         data.setLocation(form.getLocation());
+        data.setOperationType(mapToEnum(form.getOperationType()));
         data.setGrades(form.getGrades());
         data.setCapacity(form.getCapacity());
         data.setStatus(form.getStatus());
@@ -149,6 +150,7 @@ public class ExtraCurricularService {
         data.setManagerPhone(form.getManagerPhone());
         data.setMileagePoints(form.getMileagePoints());
         data.setAuthor(form.getAuthor());
+        data.setUseYn(form.getUseYn());
 
         LocalDateTime now = LocalDateTime.now();
         data.setCreatedAt(now);

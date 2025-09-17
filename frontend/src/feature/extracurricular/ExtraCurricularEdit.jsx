@@ -81,24 +81,10 @@ export function ExtraCurricularEdit() {
       });
   }, [seq, navigate]);
 
-  // 모든 입력값 처리
+  // 모든 입력값 처리 (텍스트, 날짜, 셀렉트 전용)
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-
-    if (name === "grades") {
-      const newGrades = [...formData.grades];
-      if (checked) {
-        newGrades.push(value);
-      } else {
-        const index = newGrades.indexOf(value);
-        if (index > -1) newGrades.splice(index, 1);
-      }
-      setFormData({ ...formData, grades: newGrades });
-    } else if (type === "checkbox") {
-      setFormData({ ...formData, [name]: checked });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   // 폼 제출
@@ -265,8 +251,24 @@ export function ExtraCurricularEdit() {
                   type="checkbox"
                   label={`${grade}학년`}
                   value={grade}
-                  checked={formData.grades.includes(`${grade}`)}
-                  onChange={handleChange}
+                  checked={formData.grades.includes(String(grade))}
+                  onChange={(e) => {
+                    if (e.target.checked) {
+                      setFormData({
+                        ...formData,
+                        grades: [...formData.grades, String(grade)].sort(
+                          (a, b) => Number(a) - Number(b),
+                        ),
+                      });
+                    } else {
+                      setFormData({
+                        ...formData,
+                        grades: formData.grades.filter(
+                          (g) => g !== String(grade),
+                        ),
+                      });
+                    }
+                  }}
                 />
               ))}
             </FormGroup>
@@ -335,8 +337,11 @@ export function ExtraCurricularEdit() {
                 inline
                 type="checkbox"
                 name="useYn"
+                label="사용"
                 checked={formData.useYn}
-                onChange={handleChange}
+                onChange={(e) =>
+                  setFormData({ ...formData, useYn: e.target.checked })
+                }
               />
             </FormGroup>
 
