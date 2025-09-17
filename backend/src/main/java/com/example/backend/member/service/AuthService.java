@@ -29,13 +29,21 @@ public class AuthService {
 
         if (memberOpt.isPresent()) {
             Member member = memberOpt.get();
+            // 중복 로그인 차단
+            if (member.getUserYn() == 1) {
+                return new LoginResponse(false, "이미 로그인 중입니다.", null, null, null, null);
+            }
+
             if (bCryptPasswordEncoder.matches(password, member.getPassword())) {
+                // 로그인 상태로 변경
+                member.setUserYn(1);
+                memberRepository.save(member);
+
+                // 사용자 이름 가져오기
                 String name = (member.getStudent() != null) ? name = member.getStudent().getName()
                         : (member.getEmployee() != null) ? name = member.getEmployee().getName()
                         : "알 수 없음"; // 나중에 관리자도 추가하기
-
-
-                // 권한 가져오기
+                // 사용자 권한 가져오기
                 List<Auth> authList = authRepository.findByMemberSeq_Id(member.getId());
                 String authName = authList.isEmpty() ? "student" : authList.get(0).getId().getAuthName();
 
@@ -54,6 +62,14 @@ public class AuthService {
     }
 
     public void logout() {
+        // 로그아웃시 user_yn 다시 0으로
+        String loginId = (String) httpSession.getAttribute("loginId");
+        if (loginId != null) {
+            memberRepository.findByLoginId(loginId).ifPresent(member -> {
+                member.setUserYn(0);
+                memberRepository.save(member);
+            });
+        }
         httpSession.invalidate();
     }
 

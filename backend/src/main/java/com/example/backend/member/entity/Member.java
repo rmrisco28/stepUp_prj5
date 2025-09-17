@@ -25,6 +25,9 @@ public class Member {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "user_yn")
+    private Integer userYn;
+
     @OneToOne(mappedBy = "memberSeq")
     private Student student;
 

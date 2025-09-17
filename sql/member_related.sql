@@ -18,6 +18,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 INSERT INTO member(login_id, password)
 VALUES ('yyy', '1234');
 # 비밀번호 암호화 안 해서 그런지 로그인 안 되넹 그냥 관리자도 만들어야지 ..
+ALTER TABLE member
+    ADD COLUMN user_yn INT NOT NULL DEFAULT 0 COMMENT '0=로그아웃, 1=로그인';
+
 # -----------------------------------------------------------
 # student
 CREATE TABLE student
