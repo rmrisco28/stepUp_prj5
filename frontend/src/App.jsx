@@ -20,6 +20,7 @@ import { CompetencyAssessmentAdmin } from "./feature/competency/competencyAssess
 import { CompetencyAssessmentAdminQuestionAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionAdd.jsx";
 import { ExtraCurricularDetail } from "./feature/extracurricular/ExtraCurricularDetail.jsx";
 import { ExtraCurricularEdit } from "./feature/extracurricular/ExtraCurricularEdit.jsx";
+import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricularProgram.jsx";
 
 function CompetencyAssessmentCreate() {
   return null;
@@ -67,6 +68,10 @@ function App() {
           <Route
             path="extracurricular/edit/:seq"
             element={<ExtraCurricularEdit />}
+          />
+          <Route
+            path="extracurricular/program/:seq"
+            element={<ExtraCurricularProgram />}
           />
           {/*핵심역량*/}
           <Route path="competency" element={<Competency />} />

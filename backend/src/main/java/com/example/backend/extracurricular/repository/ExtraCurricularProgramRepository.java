@@ -12,6 +12,11 @@ public interface ExtraCurricularProgramRepository extends JpaRepository<ExtraCur
                 SELECT new com.example.backend.extracurricular.dto.ETCListDto(
                     e.seq,
                     e.title,
+                    e.operateStartDt,
+                    e.operateEndDt,
+                    e.applyStartDt,
+                    e.applyEndDt,
+                    e.capacity,
                     e.createdAt,
                     e.status,
                     e.useYn
