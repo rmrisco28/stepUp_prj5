@@ -205,9 +205,9 @@ public class BatchConfig {
 
             Member member = new Member();
             member.setId(rs.getInt("member_seq"));
-            student.setMember(member); // member PK
+            student.setMemberSeq(member); // member PK
 
-            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, student.getStudentNo(), student.getMember().getId());
+            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, student.getStudentNo(), student.getMemberSeq().getId());
 
             return student;
         });
@@ -227,8 +227,13 @@ public class BatchConfig {
     public JdbcBatchItemWriter<Student> memberSeqWriter() {
         JdbcBatchItemWriter<Student> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
-        writer.setSql("UPDATE student SET member_seq = :memberSeq WHERE student_seq = :id");
-        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+        writer.setSql("UPDATE student SET member_seq = ? WHERE student_seq = ?");
+        writer.setItemPreparedStatementSetter((student, ps) -> {
+            // Member 객체의 PK만 꺼내서 바인딩
+            // 변수가 저래서 그렇지 student 가 member 라고 생각하면 됨
+            ps.setInt(1, student.getMemberSeq().getId()); // 첫번째 ? : 즉 위에서 저장한 member 의 seq를 이거로 업뎃하겠다
+            ps.setInt(2, student.getId()); // 두번째 ? : student_seq랑 member의 id가 같은지 엥?
+        });
         return writer;
     }
 
