@@ -1,27 +1,40 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Login } from "./feature/member/Login.jsx";
 import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
-import { Competency } from "./feature/competency/Competency.jsx";
+import { Competency } from "./feature/competency/introduce/Competency.jsx";
 import { Career } from "./feature/career/Career.jsx";
 import { Mileage } from "./feature/mileage/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularAdd } from "./feature/extracurricular/ExtraCurricularAdd.jsx";
 import { MenuBar } from "./common/MenuBar.jsx";
-import { CompetencyTest } from "./feature/competency/CompetencyTest.jsx";
-import { CompetencyAdd } from "./feature/competency/CompetencyAdd.jsx";
-import { CompetencyList } from "./feature/competency/CompetencyList.jsx";
-import { CompetencySubAdd } from "./feature/competency/CompetencySubAdd.jsx";
-import { CompetencySubList } from "./feature/competency/CompetencySubList.jsx";
+import { CompetencyAdd } from "./feature/competency/introduce/CompetencyAdd.jsx";
+import { CompetencyList } from "./feature/competency/introduce/CompetencyList.jsx";
+import { CompetencySubAdd } from "./feature/competency/introduce/CompetencySubAdd.jsx";
+import { CompetencySubList } from "./feature/competency/introduce/CompetencySubList.jsx";
 import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricularManage.jsx";
 import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
 import { AuthProvider } from "./common/AuthContext.jsx";
 import { MainPage } from "./common/MainPage.jsx";
-import { CompetencyAssessment } from "./feature/competency/test/CompetencyAssessment.jsx";
-import { CompetencyAssessmentAdd } from "./feature/competency/test/CompetencyAssessmentAdd.jsx";
-import { CompetencyTextEditor } from "./feature/competency/CompetencyTextEditor.jsx";
-import { CompetencyText } from "./feature/competency/CompetencyText.jsx";
-import { ExtraCurricularDetail } from "./feature/extracurricular/ExtraCurricularDetail.jsx";
-import { ExtraCurricularEdit } from "./feature/extracurricular/ExtraCurricularEdit.jsx";
+import { CompetencyAssessment } from "./feature/competency/competencyAssessment/CompetencyAssessment.jsx";
+import { CompetencyAssessmentAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdd.jsx";
+import { CompetencyAssessmentAdmin } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdmin.jsx";
+import { CompetencyAssessmentAdminQuestionAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionAdd.jsx";
+
+function CompetencyAssessmentCreate() {
+  return null;
+}
+
+function CompetencyAssessmentEdit() {
+  return null;
+}
+
+function CompetencyAssessmentQuestions() {
+  return null;
+}
+
+function CompetencyAssessmentQuestionDetail() {
+  return null;
+}
 
 function App() {
   return (
@@ -69,6 +82,34 @@ function App() {
           <Route
             path="competency/assessment/add"
             element={<CompetencyAssessmentAdd />}
+          />
+          <Route
+            path="competency/assessment/admin/:seq"
+            element={<CompetencyAssessmentAdmin />}
+          />
+
+          <Route
+            path="competency/assessment/admin/:assessmentSeq/questionAdd"
+            element={<CompetencyAssessmentAdminQuestionAdd />}
+          />
+
+          <Route
+            path="/competency/assessment/:assessmentSeq/create"
+            element={<CompetencyAssessmentCreate />}
+          />
+          <Route
+            path="/competency/assessment/:assessmentSeq/edit"
+            element={<CompetencyAssessmentEdit />}
+          />
+
+          {/* 학생 페이지 */}
+          <Route
+            path="/competency/assessment/:assessmentSeq/questions"
+            element={<CompetencyAssessmentQuestions />}
+          />
+          <Route
+            path="/competency/assessment/:assessmentSeq/questions/:questionId"
+            element={<CompetencyAssessmentQuestionDetail />}
           />
 
           {/*마일리지*/}

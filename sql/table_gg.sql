@@ -56,8 +56,34 @@ CREATE TABLE `assessment`
 drop table assessment;
 
 
+# 문항 목록
+CREATE TABLE `question`
+(
+    `question_seq`       INT AUTO_INCREMENT NOT NULL,
+    `ca_seq`             INT                NOT NULL COMMENT '역량 진단 제목',
+    `sub_competency_seq` INT                NOT NULL,
+    `question_num`       INT                NOT NULL UNIQUE COMMENT 'UK',
+    `question`           VARCHAR(200)       NOT NULL,
+    `score`              DECIMAL(10, 2)     NOT NULL,
+    CONSTRAINT pk_question PRIMARY KEY (question_seq),
+    FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq),
+    FOREIGN KEY (sub_competency_seq) REFERENCES sub_competency (sub_competency_seq)
+);
 
+DROP TABLE question;
 
+# 답안 목록
+CREATE TABLE `choice`
+(
+    `choice_seq`   INT AUTO_INCREMENT NOT NULL,
+    `question_seq` INT                NOT NULL,
+    `option`       VARCHAR(50)        NOT NULL,
+    `point`        INT                NULL,
+    CONSTRAINT pk_choice PRIMARY KEY (choice_seq),
+    FOREIGN KEY (question_seq) REFERENCES question (question_seq)
+);
+
+DROP TABLE choice;
 
 
 

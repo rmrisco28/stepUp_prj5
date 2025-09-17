@@ -1,9 +1,9 @@
-import { Button, Col, Modal, Row, Table } from "react-bootstrap";
-import axios from "axios";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { Button, Col, Modal, Row, Table } from "react-bootstrap";
 import { useNavigate } from "react-router";
 
-export function CompetencyList() {
+export function CompetencySubList() {
   const [competency, setCompetency] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [selectedCompetency, setSelectedCompetency] = useState({}); // 선택된 항목의 정보
@@ -12,7 +12,7 @@ export function CompetencyList() {
 
   useEffect(() => {
     axios
-      .get("/api/competency/list")
+      .get("/api/competency/subList")
       .then((res) => {
         console.log("yes");
         setCompetency(res.data);
@@ -28,7 +28,7 @@ export function CompetencyList() {
 
   function handleUseYnChange(seq, currentUseYn) {
     axios
-      .put(`/api/competency/update/${seq}`, {
+      .put(`/api/competency/subUpdate/${seq}`, {
         useYn: !currentUseYn,
       })
       .then((res) => {
@@ -54,7 +54,7 @@ export function CompetencyList() {
   // 데이터를 다시 불러오는 함수
   const fetchCompetencies = () => {
     axios
-      .get("/api/competency/list")
+      .get("/api/competency/subList")
       .then((res) => {
         setCompetency(res.data); // 데이터 새로 설정
       })
@@ -65,18 +65,13 @@ export function CompetencyList() {
 
   function handleDeleteButton(seq) {
     axios
-      .delete(`/api/competency/delete/${seq}`)
+      .delete(`/api/competency/subDelete/${seq}`)
       .then((res) => {
         console.log(res);
         alert(res.data.message);
       })
       .catch((err) => {
         console.log(err);
-        if (err.response) {
-          alert(err.response.data.message);
-        } else {
-          alert("삭제에 실패했습니다.");
-        }
       })
       .finally(() => {
         console.log("finally");
@@ -90,42 +85,40 @@ export function CompetencyList() {
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
           <div className="mb-3"></div>
-          <h2 className="mb-3">핵심역량 목록 </h2>
+          <h2 className="mb-3">하위역량 목록 </h2>
           <Table>
             <thead>
-              <tr>
+              <tr
+                style={{
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                }}
+              >
                 <th
                   style={{
-                    width: "7%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
+                    width: "6%",
                   }}
                 >
                   번호
                 </th>
                 <th
                   style={{
-                    width: "25%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
+                    width: "15%",
                   }}
                 >
                   핵심역량
                 </th>
                 <th
                   style={{
-                    width: "200px",
-                    textAlign: "center",
-                    verticalAlign: "middle",
+                    width: "15%",
                   }}
                 >
-                  핵심역량 정의
+                  하위역량
                 </th>
+                <th>하위역량 정의</th>
                 <th
                   style={{
                     width: "15%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   사용여부
@@ -133,8 +126,6 @@ export function CompetencyList() {
                 <th
                   style={{
                     width: "10%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   삭제
@@ -144,15 +135,39 @@ export function CompetencyList() {
             <tbody>
               {competency && competency.length > 0 ? (
                 competency.map((data) => (
-                  <tr key={data.seq}>
-                    <td align="center" valign="middle">
+                  <tr
+                    key={data.seq}
+                    style={{
+                      verticalAlign: "middle",
+                    }}
+                  >
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       {data.seq}
                     </td>
-                    <td align="center" valign="middle">
-                      {data.competencyName}
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {data.competencySeqCompetencyName}
                     </td>
-                    <td valign="middle">{data.competencyExpln}</td>
-                    <td align="center" valign="middle">
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
+                      {data.subCompetencyName}
+                    </td>
+                    <td>{data.subCompetencyExpln}</td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                      }}
+                    >
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
                       <input
                         type="checkbox"
@@ -166,7 +181,7 @@ export function CompetencyList() {
                         onClick={() => {
                           setSelectedCompetency({
                             seq: data.seq,
-                            competencyName: data.competencyName,
+                            subCompetencyName: data.subCompetencyName,
                           });
                           setModalShow(true);
                         }}
@@ -178,7 +193,7 @@ export function CompetencyList() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4">데이터가 없습니다.</td>
+                  <td colSpan="5">데이터가 없습니다.</td>
                 </tr>
               )}
             </tbody>
@@ -188,21 +203,20 @@ export function CompetencyList() {
             style={{ marginTop: "20px" }}
           >
             <Button
-              className="me-3 "
-              onClick={() => navigate("/competency/add")}
+              className="me-3"
+              onClick={() => navigate("/competency/subAdd")}
             >
-              핵심역량 추가
+              하위역량 추가
             </Button>
           </div>
         </Col>
-
-        {/*모달*/}
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>핵심역량 삭제 확인</Modal.Title>
+            <Modal.Title>하위역량 삭제 확인</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            핵심역량 "{selectedCompetency.competencyName}" 을 삭제하시겠습니까?
+            하위역량 "{selectedCompetency.subCompetencyName}" 을
+            삭제하시겠습니까?
           </Modal.Body>
           <Modal.Footer>
             <Button variant="outline-dark" onClick={() => setModalShow(false)}>
