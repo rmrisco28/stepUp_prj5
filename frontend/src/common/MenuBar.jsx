@@ -10,6 +10,9 @@ export function MenuBar() {
   const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const [activeMenu, setActiveMenu] = useState(null);
 
+  const name = user?.name;
+  const loginId = user?.loginId;
+
   const menus = [
     {
       name: "비교과 프로그램",
@@ -66,7 +69,16 @@ export function MenuBar() {
               onClick={isAuthenticated ? logout : null}
               className="text-white"
             >
-              {isAuthenticated ? "로그아웃" : "로그인"}
+              {isAuthenticated ? (
+                <>
+                  <span className="me-2" style={{ cursor: "default" }}>
+                    [ {name}({loginId}) ] 님 환영합니다.
+                  </span>
+                  <span>로그아웃</span>
+                </>
+              ) : (
+                "로그인"
+              )}
             </Nav.Link>
           </Nav>
         </Container>
