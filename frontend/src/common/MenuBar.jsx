@@ -45,80 +45,88 @@ export function MenuBar() {
         { name: "취업 자료실", path: "/career/resources" },
       ],
     },
-    // {
-    //   name: "통합 상담",
-    //   path: "/counseling",
-    //   subItems: [
-    //     { name: "상담 신청", path: "/counseling/apply" },
-    //     { name: "상담 내역", path: "/counseling/history" },
-    //   ],
-    // },
+    {
+      name: "통합 상담",
+      path: "/counseling",
+      subItems: [
+        { name: "상담 신청", path: "/counseling/apply" },
+        { name: "상담 내역", path: "/counseling/history" },
+      ],
+    },
   ];
 
   return (
-    <Navbar bg="light" expand="lg" className="mb-3 shadow-sm">
-      <Container>
-        {/* 로고 */}
-        <Navbar.Brand as={Link} to="/">
-          <img
-            src="../image/stepUp_logo_수정.png"
-            alt="logo"
-            className="logo"
-          />
-        </Navbar.Brand>
-
-        <Navbar.Toggle aria-controls="main-nav" />
-        <Navbar.Collapse id="main-nav">
-          <Nav className="ms-auto">
-            {menus.map((menu, idx) => (
-              // 부모에 position-relative + hover 제어
-              <div
-                key={menu.name}
-                className="nav-item position-relative"
-                onMouseEnter={() => setActiveMenu(idx)}
-                onMouseLeave={() => setActiveMenu(null)}
-              >
-                {/* 대분류 */}
-                <Nav.Link
-                  as={Link}
-                  to={menu.path}
-                  className="px-3"
-                  style={{ fontSize: "1.2rem" }}
-                >
-                  {menu.name}
-                </Nav.Link>
-
-                {/* 하위 메뉴 */}
-                <div
-                  className={`dropdown-menu border-0 border-top rounded-0 shadow-sm ${
-                    activeMenu === idx ? "show" : ""
-                  }`}
-                  style={{ left: 10, top: "100%" }} // 바로 아래
-                >
-                  {menu.subItems.map((sub) => (
-                    <Link
-                      key={sub.path}
-                      to={sub.path}
-                      className="dropdown-item py-2"
-                    >
-                      {sub.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ))}
+    <>
+      <Navbar bg="success" className="py-0 border-bottom shadow-sm">
+        <Container className="justify-content-end">
+          <Nav>
             <Nav.Link
               as={Link}
-              to={isAuthenticated ? "#" : "/login"} // Use '#' for logout since it doesn't navigate
+              to={isAuthenticated ? "#" : "/login"}
               onClick={isAuthenticated ? logout : null}
-              className="px-3"
-              style={{ fontSize: "1.2rem" }}
+              className="text-white"
             >
               {isAuthenticated ? "로그아웃" : "로그인"}
             </Nav.Link>
           </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+        </Container>
+      </Navbar>
+
+      <Navbar bg="light" expand="lg" className="mb-3 shadow-sm">
+        <Container>
+          {/* 로고 */}
+          <Navbar.Brand as={Link} to="/">
+            <img
+              src="../image/stepUp_logo_수정.png"
+              alt="logo"
+              className="logo"
+            />
+          </Navbar.Brand>
+
+          <Navbar.Toggle aria-controls="main-nav" />
+          <Navbar.Collapse id="main-nav">
+            <Nav className="ms-auto">
+              {menus.map((menu, idx) => (
+                // 부모에 position-relative + hover 제어
+                <div
+                  key={menu.name}
+                  className="nav-item position-relative"
+                  onMouseEnter={() => setActiveMenu(idx)}
+                  onMouseLeave={() => setActiveMenu(null)}
+                >
+                  {/* 대분류 */}
+                  <Nav.Link
+                    as={Link}
+                    to={menu.path}
+                    className="px-3"
+                    style={{ fontSize: "1.2rem" }}
+                  >
+                    {menu.name}
+                  </Nav.Link>
+
+                  {/* 하위 메뉴 */}
+                  <div
+                    className={`dropdown-menu border-0 border-top rounded-0 shadow-sm ${
+                      activeMenu === idx ? "show" : ""
+                    }`}
+                    style={{ left: 10, top: "100%" }} // 바로 아래
+                  >
+                    {menu.subItems.map((sub) => (
+                      <Link
+                        key={sub.path}
+                        to={sub.path}
+                        className="dropdown-item py-2"
+                      >
+                        {sub.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 }
