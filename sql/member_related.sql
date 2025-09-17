@@ -156,6 +156,6 @@ SHOW INDEX FROM member;
 ALTER TABLE member
     DROP INDEX UKngvxyco6he6s1ikscenee9b99;
 ALTER TABLE member
-    DROP FOREIGN KEY UKngvxyco6he6s1ikscenee9b99;
+    DROP FOREIGN KEY FKmj5jegh4c3g7n0vj0mryuwv67;
 ALTER TABLE member
     DROP COLUMN student_student_seq;
