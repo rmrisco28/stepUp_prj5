@@ -1,7 +1,5 @@
 package com.example.backend.member.service;
 
-import com.example.backend.batch.student.entity.Student;
-import com.example.backend.batch.student.repository.StudentRepository;
 import com.example.backend.member.dto.LoginResponse;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
@@ -18,7 +16,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthService {
     private final MemberRepository memberRepository;
-    private final StudentRepository studentRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final HttpSession httpSession;
 
@@ -29,9 +26,14 @@ public class AuthService {
         if (memberOpt.isPresent()) {
             Member member = memberOpt.get();
             if (bCryptPasswordEncoder.matches(password, member.getPassword())) {
-                Optional<Student> studentOpt = studentRepository.findByStudentNo(loginId);
-                String name = studentOpt.map(Student::getName).orElse(null);
-
+                String name = null;
+                if (member.getStudent() != null) {
+                    name = member.getStudent().getName();
+                } else if (member.getEmployee() != null) {
+                    name = member.getEmployee().getName();
+                } else {
+                    name = "알 수 없음"; // 나중에 관리자도 추가하기
+                }
                 // 로그인 성공 시 세션에 정보 저장
                 httpSession.setAttribute("memberSeq", member.getId());
                 httpSession.setAttribute("loginId", member.getLoginId());

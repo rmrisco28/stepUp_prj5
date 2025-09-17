@@ -1,5 +1,7 @@
 package com.example.backend.member.entity;
 
+import com.example.backend.batch.employee.entity.Employee;
+import com.example.backend.batch.student.entity.Student;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,5 +24,11 @@ public class Member {
 
     @Column(name = "password")
     private String password;
+
+    @OneToOne(mappedBy = "memberSeq")
+    private Student student;
+
+    @OneToOne(mappedBy = "memberSeq")
+    private Employee employee;
 
 }
