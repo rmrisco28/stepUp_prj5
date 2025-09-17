@@ -28,13 +28,18 @@ public class AssessmentService {
     private final SubCompetencyRepository subCompetencyRepository;
     private final QuestionRepository questionRepository;
 
-    public void add(AssessmentDto dto) {
+    // 진단 목록 추가
+    public ResponseEntity<?> add(AssessmentDto dto) {
+        if (dto.getStartDttm().isAfter(dto.getEndDttm())) {
+            return ResponseEntity.badRequest().body(Map.of("error", "시작일은 종료일보다 늦을 수 없습니다."));
+        }
         Assessment assessment = new Assessment();
         assessment.setCaTitle(dto.getCaTitle());
         assessment.setStartDttm(dto.getStartDttm());
         assessment.setEndDttm(dto.getEndDttm());
 
         assessmentRepository.save(assessment);
+        return ResponseEntity.ok().body(Map.of("message", "진단 목록이 생성되었습니다."));
     }
 
     public Map<String, Object> list(Integer pageNumber) {
@@ -51,13 +56,15 @@ public class AssessmentService {
         return Map.of("pageInfo", pageInfo, "assessmentList", assessmentDtoPage.getContent());
     }
 
-    public ResponseEntity<?> delete(int seq) {
+/*
+        public ResponseEntity<?> delete(int seq) {
         Assessment assessment = assessmentRepository.findBySeq(seq);
 
         System.out.println("assessment = " + assessment);
         assessmentRepository.delete(assessment);
         return ResponseEntity.ok().body(Map.of("message", "역량 진단 목록이 삭제되었습니다."));
     }
+    */
 
     public List<?> competencyList() {
         List<CompetencyDto> competencyDtos = competencyRepository.findAllCompetenciesUse();
@@ -74,6 +81,27 @@ public class AssessmentService {
     public List<?> detail(int seq) {
         List<AssessmentTitleDto> assessmentTitleDtos = assessmentRepository.findAssessmentBySeq(seq);
         return assessmentTitleDtos;
+    }
+
+    // 진단목록 수정 데이터 조회
+    public ResponseEntity<?> edit(int seq) {
+        AssessmentDto assessmentDto = assessmentRepository.findBySeq(seq);
+        return ResponseEntity.ok().body(assessmentDto);
+    }
+
+    // 진단 목록 수정 데이터 수정
+    public ResponseEntity<?> update(int seq, AssessmentDto dto) {
+        Assessment assessment = assessmentRepository.findEntityBySeq(seq);
+        if (assessment == null) {
+            return ResponseEntity.badRequest().body(Map.of("error", "잘못된 값입니다."));
+        }
+        assessment.setCaTitle(dto.getCaTitle());
+        assessment.setStartDttm(dto.getStartDttm());
+        assessment.setEndDttm(dto.getEndDttm());
+
+        assessmentRepository.save(assessment);
+
+        return ResponseEntity.ok().body(Map.of("message", "수정이 완료되었습니다."));
     }
 
 

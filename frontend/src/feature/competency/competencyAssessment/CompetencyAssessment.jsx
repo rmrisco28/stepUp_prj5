@@ -65,6 +65,8 @@ export function CompetencyAssessment() {
       .finally(() => {});
   }
 
+  const today = new Date();
+
   return (
     <>
       <Row className="justify-content-center">
@@ -106,30 +108,39 @@ export function CompetencyAssessment() {
             </thead>
             <tbody>
               {assessment && assessment.length > 0 ? (
-                assessment.map((data) => (
-                  <tr key={data.seq} valign="middle">
-                    <td align="center">{data.seq}</td>
-                    <td valign="middle">{data.caTitle}</td>
-                    <td align="center">
-                      {data.startDttm} ~ {data.endDttm}
-                    </td>
-                    <td align="center">
-                      <Button onClick={() => navigate(`test/${data.seq}`)}>
-                        진단하기
-                      </Button>
-                    </td>
-                    <td align="center">
-                      <Button
-                        variant="warning"
-                        onClick={() => {
-                          navigate(`admin/${data.seq}`);
-                        }}
-                      >
-                        관리
-                      </Button>
-                    </td>
-                  </tr>
-                ))
+                assessment.map((data) => {
+                  const endDate = new Date(data.endDttm);
+                  const inDisabled = endDate < today;
+
+                  return (
+                    <tr key={data.seq} valign="middle">
+                      <td align="center">{data.seq}</td>
+                      <td valign="middle">{data.caTitle}</td>
+                      <td align="center">
+                        {data.startDttm} ~ {data.endDttm}
+                      </td>
+                      <td align="center">
+                        <Button
+                          onClick={() => navigate(`test/${data.seq}`)}
+                          disabled={inDisabled}
+                          variant={inDisabled ? "secondary" : "primary"}
+                        >
+                          진단하기
+                        </Button>
+                      </td>
+                      <td align="center">
+                        <Button
+                          variant="warning"
+                          onClick={() => {
+                            navigate(`admin/${data.seq}`);
+                          }}
+                        >
+                          관리
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
                   <td colSpan="5">데이터가 없습니다.</td>

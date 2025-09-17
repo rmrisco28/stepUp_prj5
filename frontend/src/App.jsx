@@ -1,30 +1,28 @@
 import { BrowserRouter, Route, Routes } from "react-router";
 import { Login } from "./feature/member/Login.jsx";
 import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
-import { Competency } from "./feature/competency/introduce/Competency.jsx";
+import { Competency } from "./feature/competency/competencyIntroduce/Competency.jsx";
 import { Career } from "./feature/career/Career.jsx";
 import { Mileage } from "./feature/mileage/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularAdd } from "./feature/extracurricular/ExtraCurricularAdd.jsx";
 import { MenuBar } from "./common/MenuBar.jsx";
-import { CompetencyAdd } from "./feature/competency/introduce/CompetencyAdd.jsx";
-import { CompetencyList } from "./feature/competency/introduce/CompetencyList.jsx";
-import { CompetencySubAdd } from "./feature/competency/introduce/CompetencySubAdd.jsx";
-import { CompetencySubList } from "./feature/competency/introduce/CompetencySubList.jsx";
+import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
+import { CompetencyList } from "./feature/competency/competencyIntroduce/CompetencyList.jsx";
+import { CompetencySubAdd } from "./feature/competency/competencyIntroduce/CompetencySubAdd.jsx";
+import { CompetencySubList } from "./feature/competency/competencyIntroduce/CompetencySubList.jsx";
 import { ExtraCurricularManage } from "./feature/extracurricular/ExtraCurricularManage.jsx";
-import { CompetencyEditor } from "./feature/competency/CompetencyEditor.jsx";
 import { AuthProvider } from "./common/AuthContext.jsx";
 import { MainPage } from "./common/MainPage.jsx";
 import { CompetencyAssessment } from "./feature/competency/competencyAssessment/CompetencyAssessment.jsx";
 import { CompetencyAssessmentAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdd.jsx";
 import { CompetencyAssessmentAdmin } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdmin.jsx";
 import { CompetencyAssessmentAdminQuestionAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionAdd.jsx";
+import { ExtraCurricularDetail } from "./feature/extracurricular/ExtraCurricularDetail.jsx";
+import { ExtraCurricularEdit } from "./feature/extracurricular/ExtraCurricularEdit.jsx";
+import { CompetencyAssessmentAdminEdit } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminEdit.jsx";
 
 function CompetencyAssessmentCreate() {
-  return null;
-}
-
-function CompetencyAssessmentEdit() {
   return null;
 }
 
@@ -65,6 +63,7 @@ function App() {
             path="extracurricular/edit/:seq"
             element={<ExtraCurricularEdit />}
           />
+
           {/*핵심역량*/}
           <Route path="competency" element={<Competency />} />
           <Route path="competency/add" element={<CompetencyAdd />} />
@@ -98,8 +97,8 @@ function App() {
             element={<CompetencyAssessmentCreate />}
           />
           <Route
-            path="/competency/assessment/:assessmentSeq/edit"
-            element={<CompetencyAssessmentEdit />}
+            path="/competency/assessment/admin/:assessmentSeq/edit"
+            element={<CompetencyAssessmentAdminEdit />}
           />
 
           {/* 학생 페이지 */}

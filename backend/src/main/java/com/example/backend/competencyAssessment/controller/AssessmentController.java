@@ -19,8 +19,7 @@ public class AssessmentController {
     // 역량 진단 목록 저장
     @PostMapping("add")
     public ResponseEntity<?> add(@RequestBody AssessmentDto dto) {
-        assessmentService.add(dto);
-        return ResponseEntity.ok().body(Map.of("message", "진단 목록이 생성되었습니다."));
+        return assessmentService.add(dto);
     }
 
     // 역량 진단 목록
@@ -30,11 +29,15 @@ public class AssessmentController {
         return assessmentService.list(pageNumber);
     }
 
+/*
     // 역량 진단 삭제
     @DeleteMapping("delete/{seq}")
     public ResponseEntity<?> delete(@PathVariable int seq) {
         return assessmentService.delete(seq);
     }
+*/
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~ 목록 세부 관리 ~~~~~~~~~~~~~~~~~~~~~~~*/
 
 
     // 진단 목록 세부 관리
@@ -45,7 +48,19 @@ public class AssessmentController {
         return assessmentService.detail(seq);
     }
 
+    // 진단 목록 수정 데이터 조회
+    @GetMapping("admin/{seq}/edit")
+    public ResponseEntity<?> edit(@PathVariable int seq) {
+        return assessmentService.edit(seq);
+    }
 
+    @PutMapping("admin/{seq}/edit")
+    public ResponseEntity<?> update(@PathVariable int seq, @RequestBody AssessmentDto dto) {
+        return assessmentService.update(seq, dto);
+    }
+
+
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~ 문제 추가 ~~~~~~~~~~~~~~~~~~~~~~*/
     // 진단 문제 추가 시 핵심역량 목록
     @GetMapping("admin/competency")
     public List<?> competencyList() {

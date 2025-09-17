@@ -25,7 +25,10 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Integer>
             """)
     Page<AssessmentDto> findAllBy(PageRequest of);
 
-    Assessment findBySeq(int seq);
+    AssessmentDto findBySeq(int seq);
+
 
     List<AssessmentTitleDto> findAssessmentBySeq(Integer seq);
+
+    Assessment findEntityBySeq(int seq);
 }

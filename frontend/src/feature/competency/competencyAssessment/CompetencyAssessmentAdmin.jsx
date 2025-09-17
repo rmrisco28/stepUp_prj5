@@ -34,15 +34,21 @@ export function CompetencyAssessmentAdmin() {
     <>
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
-          <Row className="d-flex justify-content-between align-items-center">
+          <Row className="d-flex justify-content-between align-items-center mb-3">
             <Col xs="auto">
-              <h2> {assessment.caTitle}</h2>
+              <h2 className="mb-3"> {assessment.caTitle}</h2>
             </Col>
             <Col xs="auto" className="d-flex gap-2">
-              <Button variant="outline-warning" onClick={() => navigate("")}>
+              <Button
+                variant="outline-warning"
+                onClick={() => navigate("edit")}
+              >
                 수정
               </Button>
-              <Button variant="outline-danger" onClick={() => navigate("")}>
+              <Button
+                variant="outline-danger"
+                onClick={() => setModalShow(true)}
+              >
                 삭제
               </Button>
             </Col>
