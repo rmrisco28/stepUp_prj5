@@ -1,13 +1,11 @@
 package com.example.backend.extracurricular.controller;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -37,5 +35,37 @@ public class ExtraCurricularController {
         return ResponseEntity.ok().body(
                 Map.of("message",
                         Map.of("type", "success", "text", "프로그램 등록이 완료되었습니다.")));
+    }
+
+    // 프로그램 목록 보기(관리자, 검색+페이지네이션)
+    @GetMapping("list")
+    public Map<String, Object> list(
+            @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
+            @RequestParam(value = "q", defaultValue = "") String keyword
+    ) {
+        return extraCurricularService.list(pageNumber, keyword);
+    }
+
+    // 프로그램 상세 보기(관리자)
+    @GetMapping("detail/{seq}")
+    public ResponseEntity<?> detail(@PathVariable Integer seq) {
+        return ResponseEntity.ok().body(extraCurricularService.detail(seq));
+    }
+
+    // 프로그램 수정
+    @PutMapping("edit/{seq}")
+    public ResponseEntity<?> edit(@PathVariable Integer seq, @RequestBody ETCEditForm form) {
+        try {
+            extraCurricularService.edit(seq, form);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", seq + "번 프로그램이 수정되었습니다.")));
     }
 }

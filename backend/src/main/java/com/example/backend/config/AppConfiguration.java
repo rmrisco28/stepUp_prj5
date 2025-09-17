@@ -29,7 +29,7 @@ public class AppConfiguration {
                         "/api/auth/**",
                         "/api/competency/**",
                         "/api/subCompetency/**",
-                        "/api/competency/assessment/"
+                        "/api/extracurricular/**"
                 ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session

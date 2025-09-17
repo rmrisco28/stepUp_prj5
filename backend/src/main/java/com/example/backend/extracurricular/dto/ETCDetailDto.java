@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ETCAddForm {
+@NoArgsConstructor
+public class ETCDetailDto {
+    private Integer seq;
     private String title;
     private String content;
     private LocalDateTime operateStartDt;
@@ -21,8 +23,13 @@ public class ETCAddForm {
     private String operationType;
     private String grades;
     private Integer capacity;
+    private Integer applicants;
+    private Integer waiting;
+    private String status;
+    private Integer mileagePoints;
     private String manager;
     private String managerPhone;
-    private Integer mileagePoints;
-    private String author;
+    private String Author;
+    private Instant createdAt;
+    private Instant updatedAt;
 }
