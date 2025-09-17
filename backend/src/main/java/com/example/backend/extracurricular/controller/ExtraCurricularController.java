@@ -17,10 +17,10 @@ public class ExtraCurricularController {
     private final ExtraCurricularService extraCurricularService;
 
     // 비교과 프로그램 등록(관리목록에 등록)
-    @PostMapping("add")
-    public ResponseEntity<?> add(@RequestBody ETCAddForm etcAddForm) {
+    @PostMapping("register")
+    public ResponseEntity<?> register(@RequestBody ETCAddForm etcAddForm) {
         try {
-            extraCurricularService.add(etcAddForm);
+            extraCurricularService.register(etcAddForm);
         } catch (Exception e) {
             // 콘솔에 예외 발생 정보 출력
             e.printStackTrace();
@@ -86,5 +86,5 @@ public class ExtraCurricularController {
                 Map.of("type", "success",
                         "text", seq + "번 프로그램이 삭제 되었습니다.")));
     }
-    
+
 }

@@ -141,7 +141,7 @@ export function ExtraCurricularManage() {
           {/* 프로그램 등록버튼*/}
           <Button
             variant="outline-primary"
-            onClick={() => navigate("/extracurricular/add")}
+            onClick={() => navigate("/extracurricular/register")}
             style={{
               position: "absolute",
               left: 10,

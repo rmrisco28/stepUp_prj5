@@ -5,6 +5,9 @@ import {
   Col,
   Container,
   Form,
+  FormControl,
+  FormLabel,
+  FormSelect,
   Row,
 } from "react-bootstrap";
 
@@ -28,69 +31,56 @@ export function ExtraCurricular() {
             {/* 1행: 모집/활동 날짜 */}
             <Row className="mb-3">
               <Col md={3}>
-                <Form.Label>모집시작일</Form.Label>
-                <Form.Control type="date" />
+                <FormLabel>모집시작일</FormLabel>
+                <FormControl type="date" />
               </Col>
               <Col md={3}>
-                <Form.Label>모집종료일</Form.Label>
-                <Form.Control type="date" />
+                <FormLabel>모집종료일</FormLabel>
+                <FormControl type="date" />
               </Col>
               <Col md={3}>
-                <Form.Label>활동시작일</Form.Label>
-                <Form.Control type="date" />
+                <FormLabel>활동시작일</FormLabel>
+                <FormControl type="date" />
               </Col>
               <Col md={3}>
-                <Form.Label>활동종료일</Form.Label>
-                <Form.Control type="date" />
+                <FormLabel>활동종료일</FormLabel>
+                <FormControl type="date" />
               </Col>
             </Row>
 
             {/* 2행: 운영년도/학기/대학/부서 */}
             <Row className="mb-3">
               <Col md={3}>
-                <Form.Label>운영년도</Form.Label>
-                <Form.Select>
+                <FormLabel>역량</FormLabel>
+                <FormSelect>
                   <option>전체</option>
-                  <option>2025</option>
-                  <option>2024</option>
-                  <option>2023</option>
-                  <option>2022</option>
-                  <option>2021</option>
-                </Form.Select>
+                </FormSelect>
               </Col>
               <Col md={3}>
-                <Form.Label>운영학기</Form.Label>
-                <Form.Select>
+                <FormLabel>신청학년</FormLabel>
+                <FormSelect>
                   <option>전체</option>
-                  <option>1학기</option>
-                  <option>여름계절학기</option>
-                  <option>2학기</option>
-                  <option>겨울계절학기</option>
-                </Form.Select>
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                </FormSelect>
               </Col>
               <Col md={3}>
-                <Form.Label>참여대학/학과</Form.Label>
-                <Form.Select>
+                <FormLabel>담당센터</FormLabel>
+                <FormSelect>
                   <option>전체</option>
-                  <option>전자공학과</option>
-                  <option>컴퓨터공학과</option>
-                </Form.Select>
-              </Col>
-              <Col md={3}>
-                <Form.Label>운영부서</Form.Label>
-                <Form.Select>
-                  <option>전체</option>
-                  <option>학생처</option>
-                  <option>취업지원팀</option>
-                </Form.Select>
+                  <option>역량관리센터</option>
+                  <option>비교과센터</option>
+                </FormSelect>
               </Col>
             </Row>
 
             {/* 3행: 프로그램명 */}
             <Row className="mb-3">
               <Col md={10}>
-                <Form.Label>프로그램명</Form.Label>
-                <Form.Control
+                <FormLabel>프로그램명</FormLabel>
+                <FormControl
                   type="text"
                   placeholder="프로그램명을 입력하세요."
                 />
