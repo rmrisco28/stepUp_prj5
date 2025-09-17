@@ -5,7 +5,7 @@ CREATE TABLE `extra_curricular_program`
     program_seq      INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     title            VARCHAR(100)                   NOT NULL,
     content          VARCHAR(4000)                  NOT NULL,
-    author           INT                            NOT NULL,
+    author           VARCHAR(100)                   NOT NULL,
     operate_start_dt DATETIME                       NOT NULL,
     operate_end_dt   DATETIME                       NOT NULL,
     apply_start_dt   DATETIME                       NOT NULL,
@@ -17,13 +17,13 @@ CREATE TABLE `extra_curricular_program`
     capacity         INT                            NOT NULL DEFAULT 0,
     applicants       INT                            NOT NULL DEFAULT 0,
     waiting          INT                            NOT NULL DEFAULT 0,
-    status           VARCHAR(100)                   NOT NULL,
+    status           VARCHAR(100)                   NOT NULL DEFAULT 'DRAFT',
     manager          VARCHAR(100)                   NULL,
     manager_phone    VARCHAR(100)                   NULL,
     mileage_points   INT                            NULL     DEFAULT 0,
     view             INT                            NULL     DEFAULT 0,
-    created_at       TIMESTAMP                      NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at       TIMESTAMP                      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     use_yn           BOOLEAN                        NOT NULL DEFAULT TRUE
 );
 

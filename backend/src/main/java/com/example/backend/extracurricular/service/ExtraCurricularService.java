@@ -123,6 +123,7 @@ public class ExtraCurricularService {
         dto.setAuthor(data.getAuthor());
         dto.setCreatedAt(data.getCreatedAt());
         dto.setUpdatedAt(data.getUpdatedAt());
+        dto.setUseYn(data.getUseYn());
 
         return dto;
 
@@ -149,8 +150,8 @@ public class ExtraCurricularService {
         data.setMileagePoints(form.getMileagePoints());
         data.setAuthor(form.getAuthor());
 
-        Instant now = Instant.now();
-        data.setUpdatedAt(now);
+        LocalDateTime now = LocalDateTime.now();
+        data.setCreatedAt(now);
 
         extraCurricularProgramRepository.save(data);
     }

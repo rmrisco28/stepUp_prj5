@@ -30,6 +30,7 @@ public class ETCDetailDto {
     private String manager;
     private String managerPhone;
     private String Author;
-    private Instant createdAt;
-    private Instant updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Boolean useYn;
 }

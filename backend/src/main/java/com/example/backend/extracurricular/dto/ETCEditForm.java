@@ -27,7 +27,7 @@ public class ETCEditForm {
     private String managerPhone;
     private Integer mileagePoints;
     private String author;
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
     private Boolean useYn;
 
 
