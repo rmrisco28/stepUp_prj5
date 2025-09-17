@@ -24,7 +24,7 @@ public class ExtraCurricularService {
 
     private final ExtraCurricularProgramRepository extraCurricularProgramRepository;
 
-    // 비교과 프로그램 등록(관리목록에 등록
+    // 비교과 프로그램 등록(관리목록에 등록)
     public void add(ETCAddForm etcAddForm) {
 
         ExtraCurricularProgram ETCProgram = new ExtraCurricularProgram();

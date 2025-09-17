@@ -104,6 +104,7 @@ export function ExtraCurricularManage() {
               <th>프로그램명</th>
               <th>등록일시</th>
               <th>상태</th>
+              <th>사용여부</th>
             </tr>
           </thead>
           <tbody>
@@ -124,6 +125,7 @@ export function ExtraCurricularManage() {
                     {program.createdAt.replace("T", " ").replace("Z", "")}
                   </td>
                   <td>{statusMap[program.status] || program.status}</td>
+                  <td>{program.useYn ? "사용중" : "삭제"}</td>
                 </tr>
               ))
             ) : (

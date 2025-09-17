@@ -13,7 +13,8 @@ public interface ExtraCurricularProgramRepository extends JpaRepository<ExtraCur
                     e.seq,
                     e.title,
                     e.createdAt,
-                    e.status
+                    e.status,
+                    e.useYn
                 )
                 FROM ExtraCurricularProgram e
                 WHERE (:keyword = '' OR e.title LIKE %:keyword%)

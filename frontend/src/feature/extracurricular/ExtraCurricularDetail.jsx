@@ -10,6 +10,7 @@ import {
   FormLabel,
   FormGroup,
   Spinner,
+  FormCheck,
 } from "react-bootstrap";
 import axios from "axios";
 
@@ -309,6 +310,23 @@ export function ExtraCurricularDetail() {
                       value={program.updatedAt
                         .replace("T", " ")
                         .replace("Z", "")}
+                      readOnly
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+
+              {/* 사용 여부 */}
+              <Row>
+                <Col>
+                  <FormGroup controlId="useYn">
+                    <FormLabel className="me-3">사용여부</FormLabel>
+                    <FormCheck
+                      inline
+                      type="checkbox"
+                      name="useYn"
+                      label="사용"
+                      checked={program.useYn}
                       readOnly
                     />
                   </FormGroup>
