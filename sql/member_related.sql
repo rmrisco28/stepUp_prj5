@@ -11,6 +11,9 @@ CREATE TABLE member
     # user_yn CHAR(1)
 );
 DROP TABLE member;
+TRUNCATE TABLE member;
+SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS = 1;
 # -----------------------------------------------------------
 # student
 CREATE TABLE student
@@ -29,6 +32,7 @@ CREATE TABLE student
     # use_yn CHAR
 );
 DROP TABLE student;
+TRUNCATE TABLE student;
 # -----------------------------------------------------------
 # 외래키 제약사항 추가
 # -> student, member 만들 때 student에 추가해서 사용하면 됨(위에 주석처리 확인하기)
