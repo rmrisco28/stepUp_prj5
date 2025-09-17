@@ -157,4 +157,16 @@ public class ExtraCurricularService {
 
         extraCurricularProgramRepository.save(data);
     }
+
+    // 프로그램 삭제
+    public void delete(Integer seq) {
+        ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("프로그램 삭제 오류"));
+
+        data.setUseYn(false);
+        LocalDateTime now = LocalDateTime.now();
+        data.setUpdatedAt(now);
+
+        extraCurricularProgramRepository.save(data);
+    }
 }

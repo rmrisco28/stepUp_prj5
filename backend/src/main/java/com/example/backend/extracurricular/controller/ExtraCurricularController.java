@@ -68,4 +68,23 @@ public class ExtraCurricularController {
                 Map.of("type", "success",
                         "text", seq + "번 프로그램이 수정되었습니다.")));
     }
+
+    // 프로그램 삭제
+    @PutMapping("delete/{seq}")
+    public ResponseEntity<?> delete(@PathVariable Integer seq) {
+
+        try {
+            extraCurricularService.delete(seq);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", seq + "번 프로그램이 삭제 되었습니다.")));
+    }
+    
 }

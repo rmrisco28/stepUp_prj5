@@ -367,13 +367,7 @@ export function ExtraCurricularEdit() {
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() =>
-                  navigate(
-                    page
-                      ? `/extracurricular/manage?page=${page}`
-                      : "/extracurricular/manage",
-                  )
-                }
+                onClick={() => navigate(-1)}
               >
                 취소
               </Button>
