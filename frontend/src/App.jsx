@@ -5,7 +5,7 @@ import { Competency } from "./feature/competency/competencyIntroduce/Competency.
 import { Career } from "./feature/career/Career.jsx";
 import { Mileage } from "./feature/mileage/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
-import { ExtraCurricularAdd } from "./feature/extracurricular/ExtraCurricularAdd.jsx";
+import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
 import { MenuBar } from "./common/MenuBar.jsx";
 import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
 import { CompetencyList } from "./feature/competency/competencyIntroduce/CompetencyList.jsx";
@@ -20,6 +20,7 @@ import { CompetencyAssessmentAdmin } from "./feature/competency/competencyAssess
 import { CompetencyAssessmentAdminQuestionAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionAdd.jsx";
 import { ExtraCurricularDetail } from "./feature/extracurricular/ExtraCurricularDetail.jsx";
 import { ExtraCurricularEdit } from "./feature/extracurricular/ExtraCurricularEdit.jsx";
+import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricularProgram.jsx";
 
 function CompetencyAssessmentCreate() {
   return null;
@@ -52,7 +53,10 @@ function App() {
           <Route index element={<MainPage />} />
           {/*비교과*/}
           <Route path="extracurricular" element={<ExtraCurricular />} />
-          <Route path="extracurricular/add" element={<ExtraCurricularAdd />} />
+          <Route
+            path="extracurricular/register"
+            element={<ExtraCurricularRegister />}
+          />
           <Route
             path="extracurricular/manage"
             element={<ExtraCurricularManage />}
@@ -64,6 +68,10 @@ function App() {
           <Route
             path="extracurricular/edit/:seq"
             element={<ExtraCurricularEdit />}
+          />
+          <Route
+            path="extracurricular/program/:seq"
+            element={<ExtraCurricularProgram />}
           />
           {/*핵심역량*/}
           <Route path="competency" element={<Competency />} />

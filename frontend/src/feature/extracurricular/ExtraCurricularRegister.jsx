@@ -13,7 +13,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
-export function ExtraCurricularAdd() {
+export function ExtraCurricularRegister() {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -56,35 +56,43 @@ export function ExtraCurricularAdd() {
   };
 
   // 폼 제출
-  const handleSubmit = async (e) => {
+  function handleSubmitButtonClick(e) {
     e.preventDefault();
-    try {
-      await axios.post("/api/extracurricular/add", formData);
-      alert("프로그램 등록이 완료되었습니다.");
-      navigate("/extracurricular/manage");
-      // 필요시 초기화
-      setFormData({
-        title: "",
-        content: "",
-        operateStartDt: "",
-        operateEndDt: "",
-        applyStartDt: "",
-        applyEndDt: "",
-        competency: "",
-        location: "",
-        operationType: "대면",
-        grades: "",
-        capacity: 0,
-        manager: "",
-        managerPhone: "",
-        mileagePoints: 0,
-        author: "",
+
+    axios
+      .post("/api/extracurricular/register", formData)
+      .then(() => {
+        alert("프로그램 등록이 완료되었습니다.");
+        navigate("/extracurricular/manage");
+
+        // 필요시 초기화
+        setFormData({
+          title: "",
+          content: "",
+          operateStartDt: "",
+          operateEndDt: "",
+          applyStartDt: "",
+          applyEndDt: "",
+          competency: "",
+          location: "",
+          operationType: "대면",
+          grades: "",
+          capacity: 0,
+          manager: "",
+          managerPhone: "",
+          mileagePoints: 0,
+          author: "",
+        });
+      })
+      .catch((error) => {
+        console.error(error.response?.data || error.message);
+        alert("등록에 실패하였습니다.");
+      })
+      .finally(() => {
+        // 요청 완료 후 공통 처리 (예: 로딩 해제)
+        console.log("프로그램 등록 요청 완료");
       });
-    } catch (error) {
-      console.error(error.response.data);
-      alert("등록에 실패하였습니다. ");
-    }
-  };
+  }
 
   return (
     <Container className="mt-5 my-5">
@@ -93,7 +101,7 @@ export function ExtraCurricularAdd() {
           <h2 className="mb-4 text-center text-primary fw-bold">
             비교과 프로그램 등록
           </h2>
-          <Form onSubmit={handleSubmit}>
+          <Form>
             {/* 프로그램 제목 */}
             <FormGroup className="mb-3" controlId="title">
               <FormLabel>제목</FormLabel>
@@ -281,7 +289,11 @@ export function ExtraCurricularAdd() {
             </FormGroup>
 
             <div className="text-center">
-              <Button type="submit" variant="primary" className="me-2">
+              <Button
+                variant="primary"
+                className="me-2"
+                onClick={handleSubmitButtonClick}
+              >
                 등록
               </Button>
               <Button

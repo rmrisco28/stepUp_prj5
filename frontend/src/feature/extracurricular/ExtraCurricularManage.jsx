@@ -23,6 +23,12 @@ export function ExtraCurricularManage() {
 
   const [keyword, setKeyword] = useState("");
 
+  const statusMap = {
+    DRAFT: "임시저장",
+    OPEN: "모집중",
+    CLOSED: "모집마감",
+  };
+
   useEffect(() => {
     const q = searchParams.get("q") || "";
     setKeyword(q);
@@ -98,6 +104,7 @@ export function ExtraCurricularManage() {
               <th>프로그램명</th>
               <th>등록일시</th>
               <th>상태</th>
+              <th>사용여부</th>
             </tr>
           </thead>
           <tbody>
@@ -117,7 +124,8 @@ export function ExtraCurricularManage() {
                   <td>
                     {program.createdAt.replace("T", " ").replace("Z", "")}
                   </td>
-                  <td>{program.status}</td>
+                  <td>{statusMap[program.status] || program.status}</td>
+                  <td>{program.useYn ? "사용중" : "삭제"}</td>
                 </tr>
               ))
             ) : (
@@ -133,7 +141,7 @@ export function ExtraCurricularManage() {
           {/* 프로그램 등록버튼*/}
           <Button
             variant="outline-primary"
-            onClick={() => navigate("/extracurricular/add")}
+            onClick={() => navigate("/extracurricular/register")}
             style={{
               position: "absolute",
               left: 10,

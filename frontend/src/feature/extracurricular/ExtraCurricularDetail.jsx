@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import {
-  Form,
   Button,
-  Container,
-  Row,
   Col,
+  Container,
+  Form,
+  FormCheck,
   FormControl,
-  FormLabel,
   FormGroup,
+  FormLabel,
+  Row,
   Spinner,
 } from "react-bootstrap";
 import axios from "axios";
@@ -46,6 +47,28 @@ export function ExtraCurricularDetail() {
 
   if (!program) {
     return <Spinner />;
+  }
+
+  function handleDeleteButtonCLick() {
+    // 확인 창 띄우기
+    const confirmed = window.confirm("프로그램을 삭제하시겠습니까?");
+    if (!confirmed) return; // 취소 시 종료
+
+    // 삭제 요청
+    axios
+      .put(`/api/extracurricular/delete/${program.seq}`)
+      .then((res) => {
+        alert("삭제가 완료되었습니다.");
+        // 삭제 후 목록으로 이동 (페이지 유지)
+        navigate(`/extracurricular/manage?page=${page || 1}`);
+      })
+      .catch((err) => {
+        console.error("삭제 실패", err);
+        alert("삭제 중 오류가 발생했습니다.");
+      })
+      .finally(() => {
+        console.log("always");
+      });
   }
 
   return (
@@ -224,7 +247,15 @@ export function ExtraCurricularDetail() {
                     <FormControl
                       type="text"
                       name="status"
-                      value={program.status}
+                      value={
+                        program.status === "DRAFT"
+                          ? "임시저장"
+                          : program.status === "OPEN"
+                            ? "모집중"
+                            : program.status === "CLOSED"
+                              ? "모집마감"
+                              : ""
+                      }
                       readOnly
                     />
                   </FormGroup>
@@ -306,6 +337,23 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
+
+              {/* 사용 여부 */}
+              <Row>
+                <Col>
+                  <FormGroup controlId="useYn">
+                    <FormLabel className="me-3">사용여부</FormLabel>
+                    <FormCheck
+                      inline
+                      type="checkbox"
+                      name="useYn"
+                      label="사용"
+                      checked={program.useYn}
+                      readOnly
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </section>
@@ -320,7 +368,7 @@ export function ExtraCurricularDetail() {
             >
               수정
             </Button>
-            <Button variant="outline-danger" onClick={handleRedirectToList}>
+            <Button variant="outline-danger" onClick={handleDeleteButtonCLick}>
               삭제
             </Button>
           </Col>

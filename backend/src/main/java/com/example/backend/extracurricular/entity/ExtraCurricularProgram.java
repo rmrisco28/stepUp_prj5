@@ -86,11 +86,11 @@ public class ExtraCurricularProgram {
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
-    private Instant createdAt;
+    private LocalDateTime createdAt;
 
     @ColumnDefault("current_timestamp()")
     @Column(name = "updated_at", nullable = false, insertable = false)
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     @ColumnDefault("1")
     @Column(name = "use_yn", nullable = false)

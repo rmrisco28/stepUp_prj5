@@ -24,8 +24,8 @@ public class ExtraCurricularService {
 
     private final ExtraCurricularProgramRepository extraCurricularProgramRepository;
 
-    // 비교과 프로그램 등록(관리목록에 등록
-    public void add(ETCAddForm etcAddForm) {
+    // 비교과 프로그램 등록(관리목록에 등록)
+    public void register(ETCAddForm etcAddForm) {
 
         ExtraCurricularProgram ETCProgram = new ExtraCurricularProgram();
         ETCProgram.setTitle(etcAddForm.getTitle());
@@ -123,6 +123,7 @@ public class ExtraCurricularService {
         dto.setAuthor(data.getAuthor());
         dto.setCreatedAt(data.getCreatedAt());
         dto.setUpdatedAt(data.getUpdatedAt());
+        dto.setUseYn(data.getUseYn());
 
         return dto;
 
@@ -141,6 +142,7 @@ public class ExtraCurricularService {
         data.setApplyEndDt(form.getApplyEndDt());
         data.setCompetency(form.getCompetency());
         data.setLocation(form.getLocation());
+        data.setOperationType(mapToEnum(form.getOperationType()));
         data.setGrades(form.getGrades());
         data.setCapacity(form.getCapacity());
         data.setStatus(form.getStatus());
@@ -148,8 +150,21 @@ public class ExtraCurricularService {
         data.setManagerPhone(form.getManagerPhone());
         data.setMileagePoints(form.getMileagePoints());
         data.setAuthor(form.getAuthor());
+        data.setUseYn(form.getUseYn());
 
-        Instant now = Instant.now();
+        LocalDateTime now = LocalDateTime.now();
+        data.setUpdatedAt(now);
+
+        extraCurricularProgramRepository.save(data);
+    }
+
+    // 프로그램 삭제
+    public void delete(Integer seq) {
+        ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("프로그램 삭제 오류"));
+
+        data.setUseYn(false);
+        LocalDateTime now = LocalDateTime.now();
         data.setUpdatedAt(now);
 
         extraCurricularProgramRepository.save(data);
