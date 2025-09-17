@@ -26,13 +26,21 @@ public class AuthService {
         if (memberOpt.isPresent()) {
             Member member = memberOpt.get();
             if (bCryptPasswordEncoder.matches(password, member.getPassword())) {
+                String name = null;
+                if (member.getStudent() != null) {
+                    name = member.getStudent().getName();
+                } else if (member.getEmployee() != null) {
+                    name = member.getEmployee().getName();
+                } else {
+                    name = "알 수 없음"; // 나중에 관리자도 추가하기
+                }
                 // 로그인 성공 시 세션에 정보 저장
                 httpSession.setAttribute("memberSeq", member.getId());
                 httpSession.setAttribute("loginId", member.getLoginId());
-                httpSession.setAttribute("name", member.getStudent().getName());
+                httpSession.setAttribute("name", name);
 
                 // LoginResponse 객체를 직접 생성하여 반환
-                return new LoginResponse(true, "로그인 성공", member.getId(), member.getLoginId(), member.getStudent().getName());
+                return new LoginResponse(true, "로그인 성공", member.getId(), member.getLoginId(), name);
             }
         }
         // 로그인 실패 시 실패 응답 생성

@@ -1,5 +1,6 @@
 package com.example.backend.batch.employee.entity;
 
+import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -44,6 +45,7 @@ public class Employee {
     private String email;
 
     // jdbc
-    @Column(name = "member_seq")
-    private Integer memberSeq;
+    @OneToOne
+    @JoinColumn(name = "member_seq")
+    private Member memberSeq;
 }

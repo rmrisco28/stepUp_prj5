@@ -378,9 +378,12 @@ public class BatchConfig {
             Employee employee = new Employee();
             employee.setId(rs.getInt("id")); // student PK
             employee.setEmployeeNo(rs.getString("employee_no"));
-            employee.setMemberSeq(rs.getInt("member_seq")); // member PK
 
-            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, employee.getEmployeeNo(), employee.getMemberSeq());
+            Member member = new Member();
+            member.setId(rs.getInt("member_seq"));
+            employee.setMemberSeq(member); // member PK
+
+            log.info("Reader Row {}: studentNo={}, memberSeq={}", rowNum, employee.getEmployeeNo(), employee.getMemberSeq().getId());
 
             return employee;
         });
@@ -400,8 +403,11 @@ public class BatchConfig {
     public JdbcBatchItemWriter<Employee> memberSeqEmployeeWriter() {
         JdbcBatchItemWriter<Employee> writer = new JdbcBatchItemWriter<>();
         writer.setDataSource(dataSource);
-        writer.setSql("UPDATE employee SET member_seq = :memberSeq WHERE employee_seq = :id");
-        writer.setItemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>());
+        writer.setSql("UPDATE employee SET member_seq = ? WHERE employee_seq = ?");
+        writer.setItemPreparedStatementSetter((employee, ps) -> {
+            ps.setInt(1, employee.getMemberSeq().getId());
+            ps.setInt(2, employee.getId());
+        });
         return writer;
     }
 }

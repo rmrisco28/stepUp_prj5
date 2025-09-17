@@ -91,9 +91,9 @@ CREATE TABLE employee
     job_function VARCHAR(30) NOT NULL,
     hire_date    DATE        NOT NULL,
     phone        VARCHAR(20) NULL,
-    email        VARCHAR(50) NULL
-#     member_seq     INT NOT NULL,
-#     FOREIGN KEY (employee_seq) REFERENCES member (member_seq)
+    email        VARCHAR(50) NULL,
+    member_seq   INT         NULL,
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq)
     # use_yn CHAR
 );
 DROP TABLE employee;
