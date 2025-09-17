@@ -32,42 +32,48 @@ export function Login() {
   }
 
   return (
-    <Card style={{ maxWidth: "400px", margin: "2rem auto" }}>
-      <Card.Body>
-        <h4 className="mb-3 text-center">로그인</h4>
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="formLoginId">
-            <Form.Label>아이디</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="아이디 입력"
-              value={loginId}
-              onChange={(e) => setLoginId(e.target.value)}
-            />
-          </Form.Group>
+    <>
+      <Card style={{ maxWidth: "400px", margin: "2rem auto" }}>
+        <Card.Body>
+          <h4 className="mb-3 text-center">로그인</h4>
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
+          <Form onSubmit={handleSubmit}>
+            <Form.Group className="mb-3" controlId="formLoginId">
+              <Form.Label>아이디</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="아이디 입력"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
+              />
+            </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formPassword">
-            <Form.Label>비밀번호</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="비밀번호 입력"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </Form.Group>
+            <Form.Group className="mb-3" controlId="formPassword">
+              <Form.Label>비밀번호</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="비밀번호 입력"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
 
-          <Button
-            type="submit"
-            variant="primary"
-            className="w-100"
-            disabled={loading}
-          >
-            {loading ? <Spinner animation="border" size="sm" /> : "로그인"}
-          </Button>
-        </Form>
-      </Card.Body>
-    </Card>
+            <Button
+              type="submit"
+              variant="primary"
+              className="w-100"
+              disabled={loading}
+            >
+              {loading ? <Spinner animation="border" size="sm" /> : "로그인"}
+            </Button>
+          </Form>
+        </Card.Body>
+        <hr />
+        <div>학생 아이디 : 2021134001 | 비밀번호 : 050405 </div>
+        <div>센터 아이디 : EC93001 | 비밀번호 : 690928 </div>
+        <div>관리자 아이디 : CM21007 | 비밀번호 : 000524 </div>
+      </Card>
+    </>
   );
 }

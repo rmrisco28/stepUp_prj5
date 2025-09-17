@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
           memberSeq: response.memberSeq,
           loginId: response.loginId,
           name: response.name,
+          authName: response.authName,
         });
       }
     } catch (error) {
@@ -47,6 +48,7 @@ export const AuthProvider = ({ children }) => {
           memberSeq: response.memberSeq,
           loginId: response.loginId,
           name: response.name,
+          authName: response.authName,
         });
         return { success: true, message: response.message };
       } else {
@@ -69,12 +71,19 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const isAdmin = () => user?.authName?.includes("admin");
+  const isExtra = () => user?.authName?.includes("extra");
+  const isStd = () => user?.authName?.includes("std"); // 얘는 쓰려나?
+
   const value = {
     user,
     login,
     logout,
     loading,
-    isAuthenticated: !!user,
+    isAuthenticated: !!user, // 로그인 유무
+    isAdmin, // 관리자 유무
+    isExtra, // 부서별 관리자 유무
+    isStd, // 학생 유무
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

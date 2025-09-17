@@ -7,8 +7,7 @@ import { AuthProvider } from "./AuthContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
 
 export function MenuBar() {
-  // const [showSubMenu, setShowSubMenu] = useState(false);
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const [activeMenu, setActiveMenu] = useState(null);
 
   const menus = [
@@ -46,14 +45,14 @@ export function MenuBar() {
         { name: "취업 자료실", path: "/career/resources" },
       ],
     },
-    {
-      name: "통합 상담",
-      path: "/counseling",
-      subItems: [
-        { name: "상담 신청", path: "/counseling/apply" },
-        { name: "상담 내역", path: "/counseling/history" },
-      ],
-    },
+    // {
+    //   name: "통합 상담",
+    //   path: "/counseling",
+    //   subItems: [
+    //     { name: "상담 신청", path: "/counseling/apply" },
+    //     { name: "상담 내역", path: "/counseling/history" },
+    //   ],
+    // },
   ];
 
   return (
@@ -89,25 +88,23 @@ export function MenuBar() {
                   {menu.name}
                 </Nav.Link>
 
-                {/* 하위 메뉴 - 없는건 렌더링 안 되도록 */}
-                {menu.subItems.length > 0 && (
-                  <div
-                    className={`dropdown-menu border-0 border-top rounded-0 shadow-sm ${
-                      activeMenu === idx ? "show" : ""
-                    }`}
-                    style={{ left: 10, top: "100%" }} // 바로 아래
-                  >
-                    {menu.subItems.map((sub) => (
-                      <Link
-                        key={sub.path}
-                        to={sub.path}
-                        className="dropdown-item py-2"
-                      >
-                        {sub.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
+                {/* 하위 메뉴 */}
+                <div
+                  className={`dropdown-menu border-0 border-top rounded-0 shadow-sm ${
+                    activeMenu === idx ? "show" : ""
+                  }`}
+                  style={{ left: 10, top: "100%" }} // 바로 아래
+                >
+                  {menu.subItems.map((sub) => (
+                    <Link
+                      key={sub.path}
+                      to={sub.path}
+                      className="dropdown-item py-2"
+                    >
+                      {sub.name}
+                    </Link>
+                  ))}
+                </div>
               </div>
             ))}
             <Nav.Link
