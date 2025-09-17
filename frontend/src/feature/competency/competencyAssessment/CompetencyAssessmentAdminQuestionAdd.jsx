@@ -11,7 +11,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 
 export function CompetencyAssessmentAdminQuestionAdd() {
@@ -24,8 +24,10 @@ export function CompetencyAssessmentAdminQuestionAdd() {
   const [choice, setChoice] = useState([``]);
   const [score, setScore] = useState(1);
   const [point, setPoint] = useState([0.0]);
+  const [questionNum, setQuestionNum] = useState("");
 
   const navigate = useNavigate();
+  const { assessmentSeq } = useParams();
 
   useEffect(() => {
     // 핵심역량 불러오기
@@ -53,6 +55,61 @@ export function CompetencyAssessmentAdminQuestionAdd() {
         console.log("sub no");
       });
   }, []);
+
+  // 저장 버튼
+  function handleQuestionSaveButton() {
+    axios
+      .post(`/api/competency/assessment/admin/${assessmentSeq}/questionAdd`, {
+        caSeqSeq: selectedCompetency,
+        subCompetencySeqSeq: selectedSubCompetency,
+        questionNum: questionNum,
+        question: question,
+        score: score,
+      })
+      .then((res) => {
+        // 생성된 문제 Seq 전달
+        const questionSeq = res.data.question.seq;
+        console.log(res.data.question.seq, "번호 전달");
+
+        const choicePromises = choice.map((item, index) => {
+          return axios
+            .post(
+              `/api/competency/assessment/admin/${assessmentSeq}/choiceAdd`,
+              {
+                questionSeqSeq: questionSeq,
+                option: item,
+                point: point[index],
+              },
+            )
+            .then((res) => {
+              console.log("선택지 저장 성공", res.data);
+            })
+            .catch((err) => {
+              console.log("선택지 저장 실패", err);
+            })
+            .finally(() => {
+              console.log("선택지 finally");
+            });
+        });
+        Promise.all(choicePromises)
+          .then(() => {
+            console.log();
+            alert("성공적으로 문제가 저장되었습니다.");
+            navigate(`/competency/assessment/admin/${assessmentSeq}`);
+          })
+          .catch((err) => {
+            console.error("선택지 저장 중 오류 발생:", err);
+            alert(err);
+          });
+      })
+      .catch((err) => {
+        console.log("문제 저장 중 오류 발생", err);
+        alert(err.response.data.message);
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }
 
   // 보기 추가 함수
   const addAnswer = () => {
@@ -132,39 +189,71 @@ export function CompetencyAssessmentAdminQuestionAdd() {
               </div>
             )}
           </FormGroup>
+
           <hr className="mb-4" />
+
           {/*보기 추가/삭제*/}
-          <Row className="align-items-center mb-3">
+          <Row className="align-items-center mb-4">
             <Col>
               <Button
                 variant="outline-success"
-                className="me-3"
+                className="me-3 mb-3"
                 onClick={addAnswer}
               >
                 보기 추가
               </Button>
-              <Button variant="outline-warning" onClick={removeAnswer}>
+              <Button
+                variant="outline-warning"
+                className="me-3 mb-3"
+                onClick={removeAnswer}
+              >
                 보기 삭제
               </Button>
             </Col>
+            {/* 점수 */}
             <Col>
               <FormGroup controlId="score">
                 <Row className="align-items-center">
-                  <Col className="col-auto">
-                    <FormLabel style={{ fontSize: "1.2rem" }}>
-                      기본 점수:
-                    </FormLabel>
-                  </Col>
-                  <Col>
-                    <FormControl
-                      value={score}
-                      onChange={(e) => setScore(e.target.value)}
-                    ></FormControl>
-                  </Col>
+                  <Row>
+                    <Col className="col-auto mb-3">
+                      <div>
+                        <FormLabel style={{ fontSize: "1.2rem" }}>
+                          문항 번호:
+                        </FormLabel>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div>
+                        <FormControl
+                          value={questionNum}
+                          onChange={(e) => setQuestionNum(e.target.value)}
+                        ></FormControl>
+                      </div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col className="col-auto">
+                      <div>
+                        <FormLabel style={{ fontSize: "1.2rem" }}>
+                          기본 점수:
+                        </FormLabel>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div>
+                        <FormControl
+                          value={score}
+                          onChange={(e) => setScore(e.target.value)}
+                        ></FormControl>
+                      </div>
+                    </Col>
+                  </Row>
                 </Row>
               </FormGroup>
             </Col>
           </Row>
+
+          <hr className="mb-4" />
 
           {/*문제*/}
           <FormGroup className="mb-3" controlId="question">
@@ -207,9 +296,8 @@ export function CompetencyAssessmentAdminQuestionAdd() {
                     }
                   >
                     <option value="0.0">없음</option>
-                    <option value="1.0">100%</option>
+                    <option value="1">100%</option>
                     <option value="0.9">90%</option>
-                    <option value="0.8333333">83.33%</option>
                     <option value="0.8">80%</option>
                     <option value="0.75">75%</option>
                     <option value="0.7">70%</option>
@@ -221,32 +309,9 @@ export function CompetencyAssessmentAdminQuestionAdd() {
                     <option value="0.3">30%</option>
                     <option value="0.25">25%</option>
                     <option value="0.2">20%</option>
-                    <option value="0.1666667">16.67%</option>
-                    <option value="0.1428571">14.29%</option>
                     <option value="0.125">12.5%</option>
-                    <option value="0.1111111">11.11%</option>
                     <option value="0.1">10%</option>
                     <option value="0.05">5%</option>
-                    <option value="-0.05">-5%</option>
-                    <option value="-0.1">-10%</option>
-                    <option value="-0.1111111">-11.11%</option>
-                    <option value="-0.125">-12.5%</option>
-                    <option value="-0.1428571">-14.29%</option>
-                    <option value="-0.1666667">-16.67%</option>
-                    <option value="-0.2">-20%</option>
-                    <option value="-0.25">-25%</option>
-                    <option value="-0.3">-30%</option>
-                    <option value="-0.3333333">-33.33%</option>
-                    <option value="-0.4">-40%</option>
-                    <option value="-0.5">-50%</option>
-                    <option value="-0.6">-60%</option>
-                    <option value="-0.6666667">-66.67%</option>
-                    <option value="-0.7">-70%</option>
-                    <option value="-0.75">-75%</option>
-                    <option value="-0.8">-80%</option>
-                    <option value="-0.8333333">-83.33%</option>
-                    <option value="-0.9">-90%</option>
-                    <option value="-1.0">-100%</option>
                   </FormSelect>
                 </FormGroup>
               ))}
@@ -261,14 +326,19 @@ export function CompetencyAssessmentAdminQuestionAdd() {
             >
               취소
             </Button>
-            <Button variant="outline-primary">저장</Button>
+            <Button
+              variant="outline-primary"
+              onClick={handleQuestionSaveButton}
+            >
+              저장
+            </Button>
           </div>
         </Col>
 
         {/*모달*/}
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>미저장 여부 확인</Modal.Title>
+            <Modal.Title>저장 여부 확인</Modal.Title>
           </Modal.Header>
           <Modal.Body>저장하지 않고 돌아가시겠습니까?</Modal.Body>
           <Modal.Footer>
@@ -279,7 +349,7 @@ export function CompetencyAssessmentAdminQuestionAdd() {
             <Button
               variant="outline-danger"
               onClick={() =>
-                navigate(`/api/competency/assessment/admin/${data.seq}`)
+                navigate(`/competency/assessment/admin/${assessmentSeq}`)
               }
             >
               뒤로

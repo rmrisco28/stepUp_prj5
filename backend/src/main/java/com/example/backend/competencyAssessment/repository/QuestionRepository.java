@@ -1,14 +1,18 @@
 package com.example.backend.competencyAssessment.repository;
 
-import com.example.backend.competencyAssessment.dto.QuestionDto;
+import com.example.backend.competencyAssessment.dto.QuestionListDto;
 import com.example.backend.competencyAssessment.entity.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
+
 
 import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
-    List<QuestionDto> findByCaSeqSeq(int seq);
+    List<QuestionListDto> findByCaSeqSeq(int seq);
+
+    Question findBySeq(Integer questionSeqSeq);
+
+    Object findByQuestionNum(Integer questionNum);
 
 
 //    List<QuestionDto> findByCaSeq(int seq);

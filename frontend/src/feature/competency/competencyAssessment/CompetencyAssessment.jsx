@@ -71,9 +71,9 @@ export function CompetencyAssessment() {
     <>
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
-          <h2 className="mb-4">역량 진단 목록</h2>
+          <h2 className="mb-4">역량 진단 검사 목록</h2>
 
-          <Table className="mb-4">
+          <Table className="mb-4" striped={true} hover={true}>
             <thead>
               <tr
                 style={{

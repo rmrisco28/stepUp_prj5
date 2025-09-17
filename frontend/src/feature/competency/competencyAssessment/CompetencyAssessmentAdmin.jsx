@@ -4,20 +4,26 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router";
 
 export function CompetencyAssessmentAdmin() {
-  const [assessment, setAssessment] = useState([]);
+  const [assessment, setAssessment] = useState("");
+  const [questionList, setQuestionList] = useState([]);
+
   const [modalShow, setModalShow] = useState(false);
 
   const navigate = useNavigate();
 
-  const { seq } = useParams();
+  const { assessmentSeq } = useParams();
 
   useEffect(() => {
     axios
-      .get(`/api/competency/assessment/admin/${seq}`)
+      .get(`/api/competency/assessment/admin/${assessmentSeq}`)
       .then((res) => {
         console.log("yes");
-        console.log(res.data);
-        setAssessment(res.data[0]);
+        console.log("받아온 값", res.data);
+        console.log("title값", res.data.title);
+        setAssessment(res.data.title[0]);
+        console.log("문제 목록", res.data.questionList);
+
+        setQuestionList(res.data.questionList);
       })
       .catch((err) => {
         console.log("no");
@@ -25,11 +31,21 @@ export function CompetencyAssessmentAdmin() {
       .finally(() => {
         console.log("finally");
       });
-  }, [seq]);
+  }, [assessmentSeq]);
+
+  // 총점 계산기
+  const totalScore = questionList.reduce((sum, data) => {
+    return sum + (data.score || 0);
+  }, 0);
 
   if (!assessment) {
     return <Spinner />;
   }
+
+  function handleQuestionEditButton(questionNum) {
+    navigate(`questionEdit/${questionNum}`);
+  }
+
   return (
     <>
       <Row className="justify-content-center">
@@ -53,8 +69,7 @@ export function CompetencyAssessmentAdmin() {
               </Button>
             </Col>
           </Row>
-
-          <Table>
+          <Table striped={true} hover={true}>
             <thead>
               <tr
                 style={{
@@ -63,53 +78,88 @@ export function CompetencyAssessmentAdmin() {
                 }}
               >
                 <th>번호</th>
+                <th>핵심역량</th>
+                <th>하위역량</th>
                 <th>문제</th>
                 <th>배점</th>
-                <th>사용여부</th>
               </tr>
             </thead>
             <tbody>
-              <tr
-                style={{
-                  verticalAlign: "middle",
-                }}
-              >
-                <td
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  1
-                </td>
-                <td>1. 다음 중 일어나는시간은?</td>
-                <td
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  5.0
-                </td>
-                <td
-                  style={{
-                    textAlign: "center",
-                  }}
-                >
-                  <input type="checkbox" />
-                </td>
-              </tr>
+              {questionList && questionList.length > 0 ? (
+                questionList.map((data) => (
+                  <tr
+                    key={data.seq}
+                    valign="middle"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleQuestionEditButton(data.questionNum)}
+                  >
+                    <td
+                      style={{
+                        textAlign: "center",
+                        width: "7%",
+                      }}
+                    >
+                      {/*문제 번호*/}
+                      {data.questionNum}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        width: "15%",
+                      }}
+                    >
+                      {/*핵심역량*/}
+                      {data.subCompetencySeqCompetencySeqCompetencyName}
+                    </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        width: "15%",
+                      }}
+                    >
+                      {/*하위역량*/}
+                      {data.subCompetencySeqSubCompetencyName}
+                    </td>
+                    {/* 문제 */}
+                    <td>{data.question}</td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        width: "7%",
+                      }}
+                    >
+                      {/*배점*/}
+                      {data.score}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5}>문제가 없습니다.</td>
+                </tr>
+              )}
             </tbody>
           </Table>
-          <div
-            className="d-flex justify-content-end"
-            style={{ marginTop: "30px" }}
-          >
-            <Button
-              variant="outline-primary"
-              onClick={() => navigate("questionAdd")}
-            >
-              문제 추가
-            </Button>
-          </div>
+          <Row>
+            <Col>
+              <h3 style={{ margin: "20px", marginLeft: "30px" }}>
+                총점: {totalScore}
+              </h3>
+            </Col>
+            <Col>
+              <div
+                className="d-flex justify-content-end"
+                style={{ margin: "20px", marginRight: "30px" }}
+              >
+                <Button
+                  variant="outline-primary"
+                  onClick={() => navigate("questionAdd")}
+                >
+                  문제 추가
+                </Button>
+              </div>
+            </Col>
+          </Row>
         </Col>
 
         {/*모달*/}
