@@ -3,6 +3,7 @@ package com.example.backend.competencyAssessment.controller;
 import com.example.backend.competencyAssessment.dto.AssessmentDto;
 import com.example.backend.competencyAssessment.dto.ChoiceAddDto;
 import com.example.backend.competencyAssessment.dto.QuestionAddDto;
+import com.example.backend.competencyAssessment.dto.QuestionListDto;
 import com.example.backend.competencyAssessment.service.AssessmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -45,9 +46,11 @@ public class AssessmentController {
 
     // 진단 목록 세부 관리
     @GetMapping("admin/{seq}")
-    public Map<String, Object> AdminList(@PathVariable int seq) {
+    public Map<String, Object> AdminList(
+            @PathVariable int seq,
+            @RequestParam(defaultValue = "1") Integer pageNumber) {
         Object title = assessmentService.title(seq);
-        Object questionList = assessmentService.questionList(seq);
+        Object questionList = assessmentService.questionList(seq, pageNumber);
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
         map.put("questionList", questionList);
@@ -95,6 +98,14 @@ public class AssessmentController {
         System.out.println("seq = " + seq);
         System.out.println("dto = " + dto);
         return assessmentService.choiceAdd(seq, dto);
+    }
+
+    // 문제 수정 데이터 전달
+    @GetMapping("admin/{seq}/questionEdit/{num}")
+    public QuestionListDto questionEdit(@PathVariable int seq, @PathVariable int num) {
+        System.out.println("seq = " + seq);
+        System.out.println("num = " + num);
+        return assessmentService.questionDetail(seq, num);
     }
 
 

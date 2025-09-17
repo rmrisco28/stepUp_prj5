@@ -1,13 +1,22 @@
-import { Button, Col, Modal, Row, Spinner, Table } from "react-bootstrap";
+import {
+  Button,
+  Col,
+  Modal,
+  Pagination,
+  Row,
+  Spinner,
+  Table,
+} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 
 export function CompetencyAssessmentAdmin() {
   const [assessment, setAssessment] = useState("");
+  const [pageInfo, setPageInfo] = useState(null);
   const [questionList, setQuestionList] = useState([]);
-
   const [modalShow, setModalShow] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const navigate = useNavigate();
 
@@ -23,7 +32,9 @@ export function CompetencyAssessmentAdmin() {
         setAssessment(res.data.title[0]);
         console.log("문제 목록", res.data.questionList);
 
-        setQuestionList(res.data.questionList);
+        setQuestionList(res.data.questionList.questionList);
+        console.log("페이지", res.data.questionList.pageInfo);
+        setPageInfo(res.data.questionList.pageInfo);
       })
       .catch((err) => {
         console.log("no");
@@ -44,6 +55,19 @@ export function CompetencyAssessmentAdmin() {
 
   function handleQuestionEditButton(questionNum) {
     navigate(`questionEdit/${questionNum}`);
+  }
+
+  function handlePageNumberClick(pageNumber) {
+    // console.log(pageNumber + "페이지로 이동");
+    // navigate(`/?p=${pageNumber}`);
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.set("p", pageNumber);
+    setSearchParams(nextSearchParams);
+  }
+
+  const pageNumbers = [];
+  for (let i = pageInfo.leftPageNumber; i <= pageInfo.rightPageNumber; i++) {
+    pageNumbers.push(i);
   }
 
   return (
@@ -142,14 +166,14 @@ export function CompetencyAssessmentAdmin() {
           </Table>
           <Row>
             <Col>
-              <h3 style={{ margin: "20px", marginLeft: "30px" }}>
-                총점: {totalScore}
+              <h3 style={{ margin: "10px", marginLeft: "30px" }}>
+                총점: {totalScore}점
               </h3>
             </Col>
             <Col>
               <div
                 className="d-flex justify-content-end"
-                style={{ margin: "20px", marginRight: "30px" }}
+                style={{ margin: "10px", marginRight: "30px" }}
               >
                 <Button
                   variant="outline-primary"
@@ -187,6 +211,41 @@ export function CompetencyAssessmentAdmin() {
             </Button>
           </Modal.Footer>
         </Modal>
+      </Row>
+
+      {/*페이지 네이션*/}
+      <Row className="my-3">
+        <Col>
+          <Pagination className="justify-content-center">
+            <Pagination.First
+              disabled={pageInfo.currentPageNumber === 1}
+              onClick={() => handlePageNumberClick(1)}
+            ></Pagination.First>
+            <Pagination.Prev
+              disabled={pageInfo.leftPageNumber <= 1}
+              onClick={() => handlePageNumberClick(pageInfo.leftPageNumber - 5)}
+            ></Pagination.Prev>
+            {pageNumbers.map((pageNumber) => (
+              <Pagination.Item
+                key={pageNumber}
+                onClick={() => handlePageNumberClick(pageNumber)}
+                active={pageInfo.currentPageNumber === pageNumber}
+              >
+                {pageNumber}
+              </Pagination.Item>
+            ))}
+            <Pagination.Next
+              disabled={pageInfo.rightPageNumber >= pageInfo.totalPages}
+              onClick={() =>
+                handlePageNumberClick(pageInfo.rightPageNumber + 1)
+              }
+            ></Pagination.Next>
+            <Pagination.Last
+              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+              onClick={() => handlePageNumberClick(pageInfo.totalPages)}
+            ></Pagination.Last>
+          </Pagination>
+        </Col>
       </Row>
     </>
   );

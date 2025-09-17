@@ -15,6 +15,7 @@ import com.example.backend.competencyAssessment.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,9 +83,27 @@ public class AssessmentService {
     }
 
     // 진단 목록 문항 전달
-    public List<?> questionList(int seq) {
-        List<QuestionListDto> questionList = questionRepository.findByCaSeqSeq(seq);
-        return questionList;
+    public Map<String, Object> questionList(int seq, Integer pageNumber) {
+//        List<QuestionListDto> questionList = questionRepository.findByCaSeqSeq(seq);
+
+        Pageable pageable = PageRequest.of(pageNumber - 1, 20);  // 한 페이지당 20개의 문항
+        Page<QuestionListDto> questionListPage = questionRepository.findByCaSeqSeq(seq, pageable);
+        int totalPages = questionListPage.getTotalPages();
+        int rightPageNumber = ((pageNumber - 1) / 20 + 1) * 20;
+        int leftPageNumber = rightPageNumber - 19;
+        rightPageNumber = Math.min(rightPageNumber, totalPages);
+        leftPageNumber = Math.max(leftPageNumber, 1);
+
+        Map<String, Object> pageInfo = Map.of(
+                "totalPages", totalPages,
+                "rightPageNumber", rightPageNumber,
+                "leftPageNumber", leftPageNumber,
+                "currentPageNumber", pageNumber
+        );
+        return Map.of(
+                "pageInfo", pageInfo,
+                "questionList", questionListPage.getContent()  // 페이지에 맞게 데이터만 가져옵니다.
+        );
     }
 
     // 진단 목록 수정 데이터 수정
@@ -158,6 +177,11 @@ public class AssessmentService {
 
         return ResponseEntity.ok().body(Map.of("message", "답안저장이 완료되었습니다."));
 
+    }
+
+    public QuestionListDto questionDetail(int seq, int num) {
+        QuestionListDto questionDetail = questionRepository.findByQuestionNum(seq, num);
+        return questionDetail;
     }
 
 

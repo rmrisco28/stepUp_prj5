@@ -225,6 +225,7 @@ export function CompetencyAssessmentAdminQuestionAdd() {
                     <Col>
                       <div>
                         <FormControl
+                          type="number"
                           value={questionNum}
                           onChange={(e) => setQuestionNum(e.target.value)}
                         ></FormControl>
@@ -259,6 +260,7 @@ export function CompetencyAssessmentAdminQuestionAdd() {
           <FormGroup className="mb-3" controlId="question">
             <FormLabel style={{ fontSize: "1.5rem" }}>문제</FormLabel>
             <FormControl
+              as="textarea"
               value={question}
               onChange={(e) => setQuestion(e.target.value)}
             ></FormControl>
