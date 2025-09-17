@@ -1,20 +1,18 @@
 import {
   Button,
   Col,
-  FormCheck,
   FormControl,
   FormGroup,
   FormLabel,
   FormSelect,
   Modal,
   Row,
-  Spinner,
 } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 
-export function CompetencyAssessmentAdminQuestionAdd() {
+export function CompetencyAssessmentAdminQuestionEdit() {
   const [modalShow, setModalShow] = useState(false);
   const [question, setQuestion] = useState("");
   const [competency, setCompetency] = useState([]);
@@ -24,10 +22,34 @@ export function CompetencyAssessmentAdminQuestionAdd() {
   const [choice, setChoice] = useState([``]);
   const [score, setScore] = useState(1);
   const [point, setPoint] = useState([0.0]);
-  const [questionNum, setQuestionNum] = useState("");
+  const [caSeqSeq, setCaSeqSeq] = useState("");
+  const { questionNum } = useParams();
+  const [questionNumState, setQuestionNumState] = useState("");
 
   const navigate = useNavigate();
   const { assessmentSeq } = useParams();
+
+  useEffect(() => {
+    if (questionNum) {
+      setQuestionNumState(questionNum);
+    }
+  }, [questionNum]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `/api/competency/assessment/admin/${assessmentSeq}/questionEdit/${questionNum}`,
+      )
+      .then((res) => {
+        console.log(res.data);
+        setCaSeqSeq(res.data.caSeqSeq);
+        setQuestion(res.data.question);
+        setQuestionNumState(res.data.questionNum);
+        setScore(res.data.score);
+        setSelectedCompetency(res.data.subCompetencySeqCompetencySeqSeq);
+        setSelectedSubCompetency(res.data.subCompetencySeqSeq);
+      });
+  }, []);
 
   useEffect(() => {
     // 핵심역량 불러오기
@@ -55,61 +77,6 @@ export function CompetencyAssessmentAdminQuestionAdd() {
         console.log("sub no");
       });
   }, []);
-
-  // 저장 버튼
-  function handleQuestionSaveButton() {
-    axios
-      .post(`/api/competency/assessment/admin/${assessmentSeq}/questionAdd`, {
-        caSeqSeq: selectedCompetency,
-        subCompetencySeqSeq: selectedSubCompetency,
-        questionNum: questionNum,
-        question: question,
-        score: score,
-      })
-      .then((res) => {
-        // 생성된 문제 Seq 전달
-        const questionSeq = res.data.question.seq;
-        console.log(res.data.question.seq, "번호 전달");
-
-        const choicePromises = choice.map((item, index) => {
-          return axios
-            .post(
-              `/api/competency/assessment/admin/${assessmentSeq}/choiceAdd`,
-              {
-                questionSeqSeq: questionSeq,
-                option: item,
-                point: point[index],
-              },
-            )
-            .then((res) => {
-              console.log("선택지 저장 성공", res.data);
-            })
-            .catch((err) => {
-              console.log("선택지 저장 실패", err);
-            })
-            .finally(() => {
-              console.log("선택지 finally");
-            });
-        });
-        Promise.all(choicePromises)
-          .then(() => {
-            console.log();
-            alert("성공적으로 문제가 저장되었습니다.");
-            navigate(`/competency/assessment/admin/${assessmentSeq}`);
-          })
-          .catch((err) => {
-            console.error("선택지 저장 중 오류 발생:", err);
-            alert(err);
-          });
-      })
-      .catch((err) => {
-        console.log("문제 저장 중 오류 발생", err);
-        alert(err.response.data.message);
-      })
-      .finally(() => {
-        console.log("finally");
-      });
-  }
 
   // 보기 추가 함수
   const addAnswer = () => {
@@ -142,11 +109,13 @@ export function CompetencyAssessmentAdminQuestionAdd() {
     (item) => item.competencySeqSeq === selectedCompetency,
   );
 
+  function handleQuestionSaveButton() {}
+
   return (
     <>
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={6}>
-          <h2 className="mb-4">문제 추가</h2>
+          <h2 className="mb-4">{questionNum}번 문제 수정</h2>
 
           {/*핵심역량 선택*/}
           <FormGroup className="mb-3">
@@ -226,8 +195,8 @@ export function CompetencyAssessmentAdminQuestionAdd() {
                       <div>
                         <FormControl
                           type="number"
-                          value={questionNum}
-                          onChange={(e) => setQuestionNum(e.target.value)}
+                          value={questionNumState}
+                          onChange={(e) => setQuestionNumState(e.target.value)}
                         ></FormControl>
                       </div>
                     </Col>

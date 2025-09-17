@@ -20,23 +20,10 @@ import { CompetencyAssessmentAdmin } from "./feature/competency/competencyAssess
 import { CompetencyAssessmentAdminQuestionAdd } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionAdd.jsx";
 import { ExtraCurricularDetail } from "./feature/extracurricular/ExtraCurricularDetail.jsx";
 import { ExtraCurricularEdit } from "./feature/extracurricular/ExtraCurricularEdit.jsx";
+import { CompetencyAssessmentAdminEdit } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminEdit.jsx";
+import { CompetencyAssessmentAdminQuestionEdit } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionEdit.jsx";
 import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricularProgram.jsx";
 
-function CompetencyAssessmentCreate() {
-  return null;
-}
-
-function CompetencyAssessmentEdit() {
-  return null;
-}
-
-function CompetencyAssessmentQuestions() {
-  return null;
-}
-
-function CompetencyAssessmentQuestionDetail() {
-  return null;
-}
 
 function App() {
   return (
@@ -61,6 +48,7 @@ function App() {
             path="extracurricular/manage"
             element={<ExtraCurricularManage />}
           />
+          {/*핵심역량 소개*/}
           <Route
             path="extracurricular/detail/:seq"
             element={<ExtraCurricularDetail />}
@@ -73,6 +61,8 @@ function App() {
             path="extracurricular/program/:seq"
             element={<ExtraCurricularProgram />}
           />
+
+          {/*------------------핵심역량----------------*/}
           {/*핵심역량*/}
           <Route path="competency" element={<Competency />} />
           <Route path="competency/add" element={<CompetencyAdd />} />
@@ -80,45 +70,39 @@ function App() {
           <Route path="competency/subAdd" element={<CompetencySubAdd />} />
           <Route path="competency/subList" element={<CompetencySubList />} />
 
-          {/*핵심역량 5개 추가로 생성*/}
-          {/*핵심역량 진단*/}
+          {/*------------------역량 진단----------------*/}
           {/*진단 검사 목록*/}
           <Route
             path="competency/assessment"
             element={<CompetencyAssessment />}
           />
+          {/*진단 검사 추가*/}
           <Route
             path="competency/assessment/add"
             element={<CompetencyAssessmentAdd />}
           />
+          {/*진단 검사 문제 목록*/}
           <Route
-            path="competency/assessment/admin/:seq"
+            path="competency/assessment/admin/:assessmentSeq"
             element={<CompetencyAssessmentAdmin />}
           />
-
+          {/*진단 검사 수정*/}
+          <Route
+            path="/competency/assessment/admin/:assessmentSeq/edit"
+            element={<CompetencyAssessmentAdminEdit />}
+          />
+          {/*문제 추가*/}
           <Route
             path="competency/assessment/admin/:assessmentSeq/questionAdd"
             element={<CompetencyAssessmentAdminQuestionAdd />}
           />
-
+          {/*문제 수정*/}
           <Route
-            path="/competency/assessment/:assessmentSeq/create"
-            element={<CompetencyAssessmentCreate />}
-          />
-          <Route
-            path="/competency/assessment/:assessmentSeq/edit"
-            element={<CompetencyAssessmentEdit />}
+            path="/competency/assessment/admin/:assessmentSeq/questionEdit/:questionNum"
+            element={<CompetencyAssessmentAdminQuestionEdit />}
           />
 
           {/* 학생 페이지 */}
-          <Route
-            path="/competency/assessment/:assessmentSeq/questions"
-            element={<CompetencyAssessmentQuestions />}
-          />
-          <Route
-            path="/competency/assessment/:assessmentSeq/questions/:questionId"
-            element={<CompetencyAssessmentQuestionDetail />}
-          />
 
           {/*마일리지*/}
           <Route path="mileage" element={<Mileage />} />

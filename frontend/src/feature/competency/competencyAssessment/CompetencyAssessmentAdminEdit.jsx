@@ -4,14 +4,15 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
-  Modal,
   Row,
+  Spinner,
 } from "react-bootstrap";
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router";
 
-export function CompetencyAssessmentAdd() {
+export function CompetencyAssessmentAdminEdit() {
+  const [assessment, setAssessment] = useState(null);
   const [title, setTitle] = useState("");
   const [startDttm, setStartDttm] = useState("");
   const [endDttm, setEndDttm] = useState("");
@@ -20,7 +21,28 @@ export function CompetencyAssessmentAdd() {
 
   const navigate = useNavigate();
 
-  function handleSaveButton() {
+  const { assessmentSeq } = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`/api/competency/assessment/admin/${assessmentSeq}/edit`)
+      .then((res) => {
+        const data = res.data;
+        console.log(data);
+        setAssessment(data);
+        setTitle(data.caTitle);
+        setStartDttm(data.startDttm);
+        setEndDttm(data.endDttm);
+      })
+      .catch((err) => {
+        console.log("no");
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }, []);
+
+  function handleUpdateButton() {
     if (!title.trim() || !startDttm || !endDttm) {
       alert("모든 항목을 입력 후 저장 버튼을 눌러주세요.");
       return;
@@ -34,7 +56,7 @@ export function CompetencyAssessmentAdd() {
     setIsProcessing(true);
 
     axios
-      .post("/api/competency/assessment/add", {
+      .put(`/api/competency/assessment/admin/${assessmentSeq}/edit`, {
         caTitle: title,
         startDttm: startDttm,
         endDttm: endDttm,
@@ -54,13 +76,16 @@ export function CompetencyAssessmentAdd() {
       });
   }
 
+  if (!assessment) {
+    return <Spinner />;
+  }
+
   return (
     <>
       <Row className="justify-content-center">
         <Col xs={10} md={8} lg={4}>
-          <h2 className="mb-4">역량 진단 추가</h2>
+          <h2 className="mb-4">{assessment.caTitle}</h2>
 
-          {/*역량 진단 제목*/}
           <FormGroup className="mb-3" controlId="name">
             <FormLabel style={{ fontSize: "1.5rem" }}>제목</FormLabel>
             <FormControl
@@ -76,6 +101,7 @@ export function CompetencyAssessmentAdd() {
                 <FormControl
                   type="date"
                   name="startDttm"
+                  value={startDttm}
                   onChange={(e) => setStartDttm(e.target.value)}
                 />
               </FormGroup>
@@ -86,45 +112,28 @@ export function CompetencyAssessmentAdd() {
                 <FormControl
                   type="date"
                   name="endDttm"
+                  value={endDttm}
                   onChange={(e) => setEndDttm(e.target.value)}
                 />
               </FormGroup>
             </Col>
           </Row>
-
           <div className="d-flex justify-content-end">
             <Button
               className="me-2"
-              variant="outline-secondary"
-              onClick={() => setModalShow(true)}
+              variant="outline-danger"
+              onClick={() =>
+                navigate(`/competency/assessment/admin/${assessment.seq}`)
+              }
             >
               뒤로
             </Button>
-            <Button variant="outline-success" onClick={handleSaveButton}>
+
+            <Button variant="outline-primary" onClick={handleUpdateButton}>
               저장
             </Button>
           </div>
         </Col>
-
-        {/*뒤로 모달*/}
-        <Modal show={modalShow} onHide={() => setModalShow(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>역량 진단 저장</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>저장하지 않고 이동하시겠습니까?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
-              아니요
-            </Button>
-
-            <Button
-              variant="outline-danger"
-              onClick={() => navigate("/competency/assessment")}
-            >
-              이동
-            </Button>
-          </Modal.Footer>
-        </Modal>
       </Row>
     </>
   );

@@ -34,6 +34,6 @@ public class Assessment {
 
     @ColumnDefault("1")
     @Column(name = "use_Yn", nullable = false)
-    private Boolean useYn = false;
+    private Boolean useYn = true;
 
 }
