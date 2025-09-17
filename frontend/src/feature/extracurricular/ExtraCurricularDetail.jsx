@@ -224,7 +224,15 @@ export function ExtraCurricularDetail() {
                     <FormControl
                       type="text"
                       name="status"
-                      value={program.status}
+                      value={
+                        program.status === "DRAFT"
+                          ? "임시저장"
+                          : program.status === "OPEN"
+                            ? "모집중"
+                            : program.status === "CLOSED"
+                              ? "모집마감"
+                              : ""
+                      }
                       readOnly
                     />
                   </FormGroup>
