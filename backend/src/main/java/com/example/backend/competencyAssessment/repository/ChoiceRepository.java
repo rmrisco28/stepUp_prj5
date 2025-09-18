@@ -17,13 +17,14 @@ public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
                     c.questionSeq.seq,
                     c.questionSeq.caSeq.seq,
                     c.questionSeq.questionNum,
-            
+                    c.order,
                     c.option,
                     c.point
                 )
                 FROM Choice c
                 WHERE c.questionSeq.questionNum = :questionNum
                 AND c.questionSeq.caSeq.seq = :seq
+                ORDER BY c.order
             
             """)
     List<ChoiceListDto> findByQuestionSeqNum(int seq, int questionNum);
@@ -31,4 +32,6 @@ public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
     Choice findByQuestionSeqSeq(int num);
 
     Choice findBySeq(Integer seq);
+
+    List<ChoiceListDto> findByQuestionSeqCaSeqSeq(int seq);
 }

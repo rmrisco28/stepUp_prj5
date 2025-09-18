@@ -6,7 +6,6 @@ import { Career } from "./feature/career/Career.jsx";
 import { Mileage } from "./feature/mileage/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
-import { MenuBar } from "./common/MenuBar.jsx";
 import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
 import { CompetencyList } from "./feature/competency/competencyIntroduce/CompetencyList.jsx";
 import { CompetencySubAdd } from "./feature/competency/competencyIntroduce/CompetencySubAdd.jsx";
@@ -24,6 +23,8 @@ import { CompetencyAssessmentAdminEdit } from "./feature/competency/competencyAs
 import { CompetencyAssessmentAdminQuestionEdit } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionEdit.jsx";
 import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricularProgram.jsx";
 import { MainLayout } from "./common/MainLayout.jsx";
+import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTest/CompetencyAssessmentTestReady.jsx";
+import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTest/CompetencyAssessmentTestStart.jsx";
 
 function App() {
   return (
@@ -66,7 +67,7 @@ function App() {
             <Route path="competency/subAdd" element={<CompetencySubAdd />} />
             <Route path="competency/subList" element={<CompetencySubList />} />
 
-            {/*------------------역량 진단----------------*/}
+            {/*------------------역량 진단 관리자용----------------*/}
             {/*진단 검사 목록*/}
             <Route
               path="competency/assessment"
@@ -98,7 +99,19 @@ function App() {
               element={<CompetencyAssessmentAdminQuestionEdit />}
             />
 
-            {/* 학생 페이지 */}
+            {/*------------------역량 진단 학생용----------------*/}
+
+            {/* 역량 진단 준비화면 */}
+            <Route
+              path="/competency/assessment/test/Ready/:assessmentSeq"
+              element={<CompetencyAssessmentTestReady />}
+            />
+
+            {/* 역량 진단 진행화면 */}
+            <Route
+              path="/competency/assessment/test/start/:assessmentSeq"
+              element={<CompetencyAssessmentTestStart />}
+            />
 
             {/*마일리지*/}
             <Route path="mileage" element={<Mileage />} />

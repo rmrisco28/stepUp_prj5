@@ -85,8 +85,9 @@ CREATE TABLE `choice`
 (
     `choice_seq`   INT AUTO_INCREMENT NOT NULL,
     `question_seq` INT                NOT NULL,
+    `order`        INT                NOT NULL,
     `option`       VARCHAR(50)        NOT NULL,
-    `point`        DECIMAL(10, 2)     NULL,
+    `point`        DECIMAL(10, 2)     NOT NULL,
     CONSTRAINT pk_choice PRIMARY KEY (choice_seq),
     FOREIGN KEY (question_seq) REFERENCES question (question_seq)
 );

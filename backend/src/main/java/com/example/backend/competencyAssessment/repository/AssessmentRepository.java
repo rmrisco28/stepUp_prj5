@@ -2,6 +2,7 @@ package com.example.backend.competencyAssessment.repository;
 
 import com.example.backend.competencyAssessment.dto.AssessmentDto;
 import com.example.backend.competencyAssessment.dto.AssessmentTitleDto;
+import com.example.backend.competencyAssessment.dto.ChoiceListDto;
 import com.example.backend.competencyAssessment.entity.Assessment;
 import com.example.backend.competencyAssessment.entity.Question;
 import org.springframework.data.domain.Page;
