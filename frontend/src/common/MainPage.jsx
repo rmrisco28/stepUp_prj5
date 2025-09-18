@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import axios from "axios";
+import { ExtraCurricular } from "../feature/extracurricular/ExtraCurricular.jsx";
+import { AppFooter } from "./AppFooter.jsx";
 
 export function MainPage() {
   const [loginStatus, setLoginStatus] =
@@ -35,6 +37,9 @@ export function MainPage() {
     <>
       <Button onClick={handleStatusButton}>로그인 상태 확인</Button>
       <p>{loginStatus}</p>
+      {/* 캐루셀로 뭐 보이게? 근데 이러면 세션 그거 해야함 !! 흠*/}
+      {/*<ExtraCurricular />*/}
+      <AppFooter />
     </>
   );
 }
