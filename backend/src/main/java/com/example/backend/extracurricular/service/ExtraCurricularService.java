@@ -4,6 +4,8 @@ import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCDetailDto;
 import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.dto.ETCListDto;
+import com.example.backend.extracurricular.entity.ExtraCurricularImageThumb;
+import com.example.backend.extracurricular.entity.ExtraCurricularImageThumbId;
 import com.example.backend.extracurricular.entity.ExtraCurricularProgram;
 import com.example.backend.extracurricular.enums.OperationType;
 import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
@@ -12,9 +14,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -57,6 +61,25 @@ public class ExtraCurricularService {
             case "혼합" -> OperationType.HYBRID;
             default -> throw new IllegalArgumentException("알 수 없는 운영방식: " + value);
         };
+    }
+
+    // 이미지 저장
+    private void saveImages(ExtraCurricularProgram ETCProgram, List<MultipartFile> images, String target) {
+        if (images != null && images.size() > 0) {
+            for (MultipartFile image : images) {
+                if (image != null && image.getSize() > 0) {
+                    // image_thumb 테이블에 새 레코드 입력
+                    ExtraCurricularImageThumb extraCurricularImageThumb = new ExtraCurricularImageThumb();
+                    // entity 내용 채우기
+                    ExtraCurricularImageThumbId id = new ExtraCurricularImageThumbId();
+                    id.setProgramSeq(ETCProgram.getSeq());
+                    id.setName(image.getOriginalFilename());
+                    extraCurricularImageThumb.setProgram(ETCProgram);
+                    extraCurricularImageThumb.setId(id);
+
+                }
+            }
+        }
     }
 
     // 프로그램 목록

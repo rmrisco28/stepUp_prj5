@@ -17,9 +17,6 @@ public class ExtraCurricularImageContent {
     @MapsId("programSeq")
     @ManyToOne(optional = false)
     @JoinColumn(name = "program_seq", nullable = false)
-    private ExtraCurricularProgram programSeq;
-
-    @Column(name = "name", nullable = false, length = 100)
-    private String name;
+    private ExtraCurricularProgram program;
 
 }

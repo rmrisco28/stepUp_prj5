@@ -19,9 +19,12 @@ public interface ExtraCurricularProgramRepository extends JpaRepository<ExtraCur
                     e.capacity,
                     e.createdAt,
                     e.status,
-                    e.useYn
+                    e.useYn,
+                                t.program.
                 )
                 FROM ExtraCurricularProgram e
+                LEFT JOIN ExtraCurricularImageThumb t
+                            ON e.seq = t.id.programSeq
                 WHERE (:keyword = '' OR e.title LIKE %:keyword%)
             """)
     Page<ETCListDto> findAllBy(PageRequest pageRequest, String keyword);
