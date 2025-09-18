@@ -31,10 +31,10 @@ DROP TABLE extra_curricular_program;
 
 CREATE TABLE `extra_curricular_image_thumb`
 (
-    program_seq INT          NULL,
-    name        VARCHAR(100) NULL,
-    PRIMARY KEY (program_seq, name),
-    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq)
+    program_seq INT          NOT NULL,
+    name        VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`program_seq`, `name`),
+    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq) ON DELETE CASCADE
 );
 
 DROP TABLE extra_curricular_image_thumb;
@@ -42,10 +42,13 @@ DROP TABLE extra_curricular_image_thumb;
 
 CREATE TABLE `extra_curricular_image_content`
 (
-    program_seq INT          NULL,
-    name        VARCHAR(100) NULL,
-    PRIMARY KEY (program_seq, name),
-    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq)
+    program_seq INT          NOT NULL,
+    name        VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`program_seq`, `name`),
+    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq) ON DELETE CASCADE
 );
 
 DROP TABLE extra_curricular_image_content;
+
+SHOW CREATE TABLE extra_curricular_image_thumb;
+SHOW CREATE TABLE extra_curricular_image_content;
