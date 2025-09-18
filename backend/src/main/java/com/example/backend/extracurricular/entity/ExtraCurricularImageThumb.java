@@ -16,7 +16,7 @@ public class ExtraCurricularImageThumb {
 
     @MapsId("programSeq")
     @ManyToOne(optional = false)
-    @JoinColumn(name = "program_seq", nullable = false)
+    @JoinColumn(name = "program_seq")
     private ExtraCurricularProgram program;
 
 }

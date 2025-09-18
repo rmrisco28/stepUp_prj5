@@ -31,8 +31,8 @@ DROP TABLE extra_curricular_program;
 
 CREATE TABLE `extra_curricular_image_thumb`
 (
-    program_seq INT          NOT NULL,
-    name        VARCHAR(100) NOT NULL,
+    program_seq INT          NULL,
+    name        VARCHAR(100) NULL,
     PRIMARY KEY (program_seq, name),
     FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq)
 );
@@ -42,8 +42,8 @@ DROP TABLE extra_curricular_image_thumb;
 
 CREATE TABLE `extra_curricular_image_content`
 (
-    program_seq INT          NOT NULL,
-    name        VARCHAR(100) NOT NULL,
+    program_seq INT          NULL,
+    name        VARCHAR(100) NULL,
     PRIMARY KEY (program_seq, name),
     FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq)
 );
