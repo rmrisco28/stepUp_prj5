@@ -24,6 +24,7 @@ import { CompetencyAssessmentAdminQuestionEdit } from "./feature/competency/comp
 import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricularProgram.jsx";
 import { MainLayout } from "./common/MainLayout.jsx";
 import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTest/CompetencyAssessmentTestReady.jsx";
+import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTest/CompetencyAssessmentTestStart.jsx";
 
 function App() {
   return (
@@ -66,7 +67,7 @@ function App() {
             <Route path="competency/subAdd" element={<CompetencySubAdd />} />
             <Route path="competency/subList" element={<CompetencySubList />} />
 
-            {/*------------------역량 진단----------------*/}
+            {/*------------------역량 진단 관리자용----------------*/}
             {/*진단 검사 목록*/}
             <Route
               path="competency/assessment"
@@ -98,10 +99,18 @@ function App() {
               element={<CompetencyAssessmentAdminQuestionEdit />}
             />
 
-            {/* 학생 페이지 */}
+            {/*------------------역량 진단 학생용----------------*/}
+
+            {/* 역량 진단 준비화면 */}
             <Route
               path="/competency/assessment/test/Ready/:assessmentSeq"
               element={<CompetencyAssessmentTestReady />}
+            />
+
+            {/* 역량 진단 진행화면 */}
+            <Route
+              path="/competency/assessment/test/start/:assessmentSeq"
+              element={<CompetencyAssessmentTestStart />}
             />
 
             {/*마일리지*/}

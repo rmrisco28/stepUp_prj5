@@ -263,6 +263,17 @@ public class AssessmentService {
         }
     }
 
+    public AssessmentDto testReady(int seq) {
+        AssessmentDto assessmentDto = assessmentRepository.findBySeq(seq);
+        return assessmentDto;
+    }
+
+    public List<?> choiceList(int seq) {
+        List<ChoiceListDto> choiceListDto = choiceRepository.findByQuestionSeqCaSeqSeq(seq);
+        System.out.println("choiceListDto = " + choiceListDto);
+        return choiceListDto;
+    }
+
 
     // 진단 목록 세부 관리
 //    public List<?> adminList(int seq) {

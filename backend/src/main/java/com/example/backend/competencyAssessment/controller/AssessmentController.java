@@ -118,9 +118,28 @@ public class AssessmentController {
         return assessmentService.choiceUpdate(num, dto);
     }
 
-    @DeleteMapping("/admin/choiceDelete/{choiceSeq}")
+    // 선택지 업데이트 + 삭제
+    @DeleteMapping("admin/choiceDelete/{choiceSeq}")
     public ResponseEntity<?> deleteChoice(@PathVariable int choiceSeq) {
         return assessmentService.choiceDelete(choiceSeq);
     }
+
+    /* --------------------- 테스트 ----------------------- */
+
+    // 학생 진단검사 시작 전 초기화면
+    @GetMapping("test/ready/{seq}")
+    public AssessmentDto testReady(@PathVariable int seq) {
+        return assessmentService.testReady(seq);
+    }
+
+    // 위의     " // 진단 목록 세부 관리 "로 문제 가져감
+
+    // 선택지 보내기
+    @GetMapping("test/choiceList/{seq}")
+    public List<?> choiceList(@PathVariable int seq) {
+        System.out.println("seq = " + seq);
+        return assessmentService.choiceList(seq);
+    }
+
 
 }
