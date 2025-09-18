@@ -30,15 +30,19 @@ export function ExtraCurricularRegister() {
     managerPhone: "",
     mileagePoints: 0,
     author: "",
+    thumbnail: null, // 썸네일 파일
+    contentImage: null, // 본문 이미지 파일
   });
 
   const navigate = useNavigate();
 
   // 입력값 변경 처리
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
 
-    if (type === "checkbox") {
+    if (type === "file") {
+      setFormData({ ...formData, [name]: files[0] });
+    } else if (type === "checkbox") {
       // 학년 체크박스 처리
       const gradeArr = formData.grades ? formData.grades.split(",") : [];
       if (checked) {
@@ -60,7 +64,7 @@ export function ExtraCurricularRegister() {
     e.preventDefault();
 
     axios
-      .post("/api/extracurricular/register", formData)
+      .postForm("/api/extracurricular/register", formData)
       .then(() => {
         alert("프로그램 등록이 완료되었습니다.");
         navigate("/extracurricular/manage");
@@ -82,6 +86,8 @@ export function ExtraCurricularRegister() {
           managerPhone: "",
           mileagePoints: 0,
           author: "",
+          thumbnail: null,
+          contentImage: null,
         });
       })
       .catch((error) => {
@@ -274,6 +280,28 @@ export function ExtraCurricularRegister() {
                 type="number"
                 name="mileagePoints"
                 value={formData.mileagePoints}
+                onChange={handleChange}
+              />
+            </FormGroup>
+
+            {/* 썸네일 업로드 */}
+            <FormGroup className="mb-3" controlId="thumbnail">
+              <FormLabel>썸네일 이미지</FormLabel>
+              <FormControl
+                type="file"
+                name="thumbnail"
+                accept="image/*"
+                onChange={handleChange}
+              />
+            </FormGroup>
+
+            {/* 본문 이미지 업로드 */}
+            <FormGroup className="mb-3" controlId="contentImage">
+              <FormLabel>본문 이미지</FormLabel>
+              <FormControl
+                type="file"
+                name="contentImage"
+                accept="image/*"
                 onChange={handleChange}
               />
             </FormGroup>
