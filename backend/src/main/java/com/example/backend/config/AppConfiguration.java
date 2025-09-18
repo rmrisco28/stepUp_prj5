@@ -29,7 +29,12 @@ public class AppConfiguration {
                         "/api/auth/**",
                         "/api/competency/**",
                         "/api/subCompetency/**",
-                        "/api/extracurricular/**"
+                        "/api/extracurricular/**",
+                        "/swagger-ui/**", // 필수
+//                        "/swagger-resources", // 구버전 경로
+//                        "/swagger-resources/**", // 구버전 경로
+//                        "/swagger-ui.html", // /swagger-ui/** 경로에 포함
+                        "/v3/api-docs/**" // 필수
                 ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session
