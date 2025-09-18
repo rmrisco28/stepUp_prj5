@@ -86,6 +86,7 @@ export function CompetencyAssessmentAdminQuestionAdd() {
               `/api/competency/assessment/admin/${assessmentSeq}/choiceAdd`,
               {
                 questionSeqSeq: questionSeq,
+                order: index + 1,
                 option: item,
                 point: point[index],
               },

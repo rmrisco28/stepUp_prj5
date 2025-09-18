@@ -121,7 +121,7 @@ export function CompetencyAssessment() {
                       </td>
                       <td align="center">
                         <Button
-                          onClick={() => navigate(`test/${data.seq}`)}
+                          onClick={() => navigate(`test/ready/${data.seq}`)}
                           disabled={inDisabled}
                           variant={inDisabled ? "secondary" : "primary"}
                         >

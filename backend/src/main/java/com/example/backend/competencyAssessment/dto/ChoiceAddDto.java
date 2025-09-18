@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class ChoiceAddDto implements Serializable {
     Integer seq;
     Integer questionSeqSeq;
-    //    Integer order;
+    Integer order;
     String option;
     Double point;
 }

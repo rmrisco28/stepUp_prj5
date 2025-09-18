@@ -16,6 +16,7 @@ public class ChoiceListDto implements Serializable {
     Integer questionSeqSeq;
     Integer questionSeqCaSeqSeq;
     Integer questionSeqQuestionNum;
+    Integer order;
     String option;
     Double point;
 

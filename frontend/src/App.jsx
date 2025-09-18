@@ -6,7 +6,6 @@ import { Career } from "./feature/career/Career.jsx";
 import { Mileage } from "./feature/mileage/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
-import { MenuBar } from "./common/MenuBar.jsx";
 import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
 import { CompetencyList } from "./feature/competency/competencyIntroduce/CompetencyList.jsx";
 import { CompetencySubAdd } from "./feature/competency/competencyIntroduce/CompetencySubAdd.jsx";
@@ -24,6 +23,7 @@ import { CompetencyAssessmentAdminEdit } from "./feature/competency/competencyAs
 import { CompetencyAssessmentAdminQuestionEdit } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionEdit.jsx";
 import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricularProgram.jsx";
 import { MainLayout } from "./common/MainLayout.jsx";
+import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTest/CompetencyAssessmentTestReady.jsx";
 
 function App() {
   return (
@@ -99,6 +99,10 @@ function App() {
             />
 
             {/* 학생 페이지 */}
+            <Route
+              path="/competency/assessment/test/Ready/:assessmentSeq"
+              element={<CompetencyAssessmentTestReady />}
+            />
 
             {/*마일리지*/}
             <Route path="mileage" element={<Mileage />} />

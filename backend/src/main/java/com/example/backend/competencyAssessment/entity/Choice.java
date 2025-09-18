@@ -20,13 +20,13 @@ public class Choice {
     @JoinColumn(name = "question_seq", nullable = false)
     private Question questionSeq;
 
-//    @Column(name = "`order`", nullable = false)
-//    private Integer order;
+    @Column(name = "`order`", nullable = false)
+    private Integer order;
 
     @Column(name = "`option`", nullable = false, length = 50)
     private String option;
 
-    @Column(name = "point")
+    @Column(name = "point", nullable = false)
     private Double point;
 
 

@@ -118,5 +118,9 @@ public class AssessmentController {
         return assessmentService.choiceUpdate(num, dto);
     }
 
+    @DeleteMapping("/admin/choiceDelete/{choiceSeq}")
+    public ResponseEntity<?> deleteChoice(@PathVariable int choiceSeq) {
+        return assessmentService.choiceDelete(choiceSeq);
+    }
 
 }

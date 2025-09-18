@@ -174,7 +174,7 @@ public class AssessmentService {
         Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
 
         choice.setQuestionSeq(question);
-//        choice.setOrder(dto.getOrder());
+        choice.setOrder(dto.getOrder());
         choice.setOption(dto.getOption());
         choice.setPoint(dto.getPoint());
 
@@ -214,6 +214,9 @@ public class AssessmentService {
 
     // 선택지 업데이트
     public ResponseEntity<?> choiceUpdate(int num, ChoiceListDto dto) {
+        System.out.println("num = " + num);
+        System.out.println("dto = " + dto);
+        System.out.println("num = " + num);
         if (dto.getSeq() == null) {
             Question newQuestion = questionRepository.findBySeq(dto.getQuestionSeqSeq());
             System.out.println("newQuestion = " + newQuestion);
@@ -222,9 +225,9 @@ public class AssessmentService {
                         .body(Map.of("message", "해당 문제를 찾을 수 없습니다."));
             }
 
-            System.out.println("newQuestion = " + newQuestion);
             Choice newChoice = new Choice();
             newChoice.setQuestionSeq(newQuestion);
+            newChoice.setOrder(dto.getOrder());
             newChoice.setOption(dto.getOption());
             newChoice.setPoint(dto.getPoint());
             choiceRepository.save(newChoice);
@@ -236,12 +239,28 @@ public class AssessmentService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("message", "해당 선택지를 찾을 수 없습니다."));
         }
-
+        choice.setOrder(dto.getOrder());
         choice.setOption(dto.getOption());
         choice.setPoint(dto.getPoint());
         choiceRepository.save(choice);
 
         return ResponseEntity.ok().body(Map.of("message", "선택지 수정이 완료되었습니다."));
+    }
+
+    public ResponseEntity<?> choiceDelete(int choiceSeq) {
+        try {
+            Choice choice = choiceRepository.findBySeq(choiceSeq);
+            if (choice == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "해당 선택지를 찾을 수 없습니다."));
+            }
+
+            choiceRepository.delete(choice);
+            return ResponseEntity.ok().body(Map.of("message", "선택지가 삭제되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "선택지 삭제 중 오류가 발생했습니다."));
+        }
     }
 
 
