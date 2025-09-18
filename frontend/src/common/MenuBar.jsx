@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/menubar.css";
@@ -71,13 +71,25 @@ export function MenuBar() {
             >
               {isAuthenticated ? (
                 <>
-                  <span className="me-2" style={{ cursor: "default" }}>
+                  <span className="me-3" style={{ cursor: "default" }}>
                     [ {name}({loginId}) ] 님 환영합니다.
                   </span>
-                  <span>로그아웃</span>
+                  <Button
+                    variant="outline-light"
+                    size="sm"
+                    className="px-3 rounded-pill shadow-sm"
+                  >
+                    <b>로그아웃</b>
+                  </Button>
                 </>
               ) : (
-                "로그인"
+                <Button
+                  variant="outline-light"
+                  size="sm"
+                  className="px-3 rounded-pill shadow-sm"
+                >
+                  <b>로그인</b>
+                </Button>
               )}
             </Nav.Link>
           </Nav>
