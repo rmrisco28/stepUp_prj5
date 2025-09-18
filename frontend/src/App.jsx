@@ -23,95 +23,92 @@ import { ExtraCurricularEdit } from "./feature/extracurricular/ExtraCurricularEd
 import { CompetencyAssessmentAdminEdit } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminEdit.jsx";
 import { CompetencyAssessmentAdminQuestionEdit } from "./feature/competency/competencyAssessment/CompetencyAssessmentAdminQuestionEdit.jsx";
 import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricularProgram.jsx";
-
+import { MainLayout } from "./common/MainLayout.jsx";
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        {/*상단바*/}
-        {/*<AppNavbar />*/}
-        {/*메뉴바*/}
-        <MenuBar />
-
-        {/*페이지 라우팅*/}
         <Routes>
-          {/*메인 페이지*/}
-          <Route index element={<MainPage />} />
-          {/*비교과*/}
-          <Route path="extracurricular" element={<ExtraCurricular />} />
-          <Route
-            path="extracurricular/register"
-            element={<ExtraCurricularRegister />}
-          />
-          <Route
-            path="extracurricular/manage"
-            element={<ExtraCurricularManage />}
-          />
-          {/*핵심역량 소개*/}
-          <Route
-            path="extracurricular/detail/:seq"
-            element={<ExtraCurricularDetail />}
-          />
-          <Route
-            path="extracurricular/edit/:seq"
-            element={<ExtraCurricularEdit />}
-          />
-          <Route
-            path="extracurricular/program/:seq"
-            element={<ExtraCurricularProgram />}
-          />
+          {/*전체 구조*/}
+          <Route path="/" element={<MainLayout />}>
+            {/*메인 페이지*/}
+            <Route index element={<MainPage />} />
+            {/*비교과*/}
+            <Route path="extracurricular" element={<ExtraCurricular />} />
+            <Route
+              path="extracurricular/register"
+              element={<ExtraCurricularRegister />}
+            />
+            <Route
+              path="extracurricular/manage"
+              element={<ExtraCurricularManage />}
+            />
+            {/*핵심역량 소개*/}
+            <Route
+              path="extracurricular/detail/:seq"
+              element={<ExtraCurricularDetail />}
+            />
+            <Route
+              path="extracurricular/edit/:seq"
+              element={<ExtraCurricularEdit />}
+            />
+            <Route
+              path="extracurricular/program/:seq"
+              element={<ExtraCurricularProgram />}
+            />
 
-          {/*------------------핵심역량----------------*/}
-          {/*핵심역량*/}
-          <Route path="competency" element={<Competency />} />
-          <Route path="competency/add" element={<CompetencyAdd />} />
-          <Route path="competency/list" element={<CompetencyList />} />
-          <Route path="competency/subAdd" element={<CompetencySubAdd />} />
-          <Route path="competency/subList" element={<CompetencySubList />} />
+            {/*------------------핵심역량----------------*/}
+            {/*핵심역량*/}
+            <Route path="competency" element={<Competency />} />
+            <Route path="competency/add" element={<CompetencyAdd />} />
+            <Route path="competency/list" element={<CompetencyList />} />
+            <Route path="competency/subAdd" element={<CompetencySubAdd />} />
+            <Route path="competency/subList" element={<CompetencySubList />} />
 
-          {/*------------------역량 진단----------------*/}
-          {/*진단 검사 목록*/}
-          <Route
-            path="competency/assessment"
-            element={<CompetencyAssessment />}
-          />
-          {/*진단 검사 추가*/}
-          <Route
-            path="competency/assessment/add"
-            element={<CompetencyAssessmentAdd />}
-          />
-          {/*진단 검사 문제 목록*/}
-          <Route
-            path="competency/assessment/admin/:assessmentSeq"
-            element={<CompetencyAssessmentAdmin />}
-          />
-          {/*진단 검사 수정*/}
-          <Route
-            path="/competency/assessment/admin/:assessmentSeq/edit"
-            element={<CompetencyAssessmentAdminEdit />}
-          />
-          {/*문제 추가*/}
-          <Route
-            path="competency/assessment/admin/:assessmentSeq/questionAdd"
-            element={<CompetencyAssessmentAdminQuestionAdd />}
-          />
-          {/*문제 수정*/}
-          <Route
-            path="/competency/assessment/admin/:assessmentSeq/questionEdit/:questionNum"
-            element={<CompetencyAssessmentAdminQuestionEdit />}
-          />
+            {/*------------------역량 진단----------------*/}
+            {/*진단 검사 목록*/}
+            <Route
+              path="competency/assessment"
+              element={<CompetencyAssessment />}
+            />
+            {/*진단 검사 추가*/}
+            <Route
+              path="competency/assessment/add"
+              element={<CompetencyAssessmentAdd />}
+            />
+            {/*진단 검사 문제 목록*/}
+            <Route
+              path="competency/assessment/admin/:assessmentSeq"
+              element={<CompetencyAssessmentAdmin />}
+            />
+            {/*진단 검사 수정*/}
+            <Route
+              path="/competency/assessment/admin/:assessmentSeq/edit"
+              element={<CompetencyAssessmentAdminEdit />}
+            />
+            {/*문제 추가*/}
+            <Route
+              path="competency/assessment/admin/:assessmentSeq/questionAdd"
+              element={<CompetencyAssessmentAdminQuestionAdd />}
+            />
+            {/*문제 수정*/}
+            <Route
+              path="/competency/assessment/admin/:assessmentSeq/questionEdit/:questionNum"
+              element={<CompetencyAssessmentAdminQuestionEdit />}
+            />
 
-          {/* 학생 페이지 */}
+            {/* 학생 페이지 */}
 
-          {/*마일리지*/}
-          <Route path="mileage" element={<Mileage />} />
-          {/*진로 설계*/}
-          <Route path="career" element={<Career />} />
-          {/*통합 상담*/}
-          <Route path="counseling" element={<Counseling />} />
-          {/*회원*/}
-          <Route path="login" element={<Login />} />
+            {/*마일리지*/}
+            <Route path="mileage" element={<Mileage />} />
+            {/*진로 설계*/}
+            <Route path="career" element={<Career />} />
+            {/*통합 상담*/}
+            <Route path="counseling" element={<Counseling />} />
+            {/*회원*/}
+            <Route path="login" element={<Login />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
