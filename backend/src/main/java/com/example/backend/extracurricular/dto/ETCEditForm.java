@@ -3,9 +3,11 @@ package com.example.backend.extracurricular.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -29,6 +31,11 @@ public class ETCEditForm {
     private String author;
     private LocalDateTime updatedAt;
     private Boolean useYn;
+
+    private List<MultipartFile> thumbnails;
+    private String[] deleteThumbnails;
+    private List<MultipartFile> contentImages;
+    private String[] deleteContentImages;
 
 
 }

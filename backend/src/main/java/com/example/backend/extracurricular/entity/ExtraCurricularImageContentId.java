@@ -15,25 +15,25 @@ import java.util.Objects;
 @ToString
 @Embeddable
 public class ExtraCurricularImageContentId implements Serializable {
-    private static final long serialVersionUID = -3974006847508381068L;
-    @Column(name = "image_seq", nullable = false)
-    private Integer imageSeq;
-
+    private static final long serialVersionUID = -966718437796468780L;
     @Column(name = "program_seq", nullable = false)
     private Integer programSeq;
+
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         ExtraCurricularImageContentId entity = (ExtraCurricularImageContentId) o;
-        return Objects.equals(this.imageSeq, entity.imageSeq) &&
+        return Objects.equals(this.name, entity.name) &&
                Objects.equals(this.programSeq, entity.programSeq);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(imageSeq, programSeq);
+        return Objects.hash(name, programSeq);
     }
 
 }

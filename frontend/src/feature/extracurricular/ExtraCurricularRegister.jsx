@@ -30,16 +30,24 @@ export function ExtraCurricularRegister() {
     managerPhone: "",
     mileagePoints: 0,
     author: "",
+    thumbnail: null, // 썸네일 파일
+    contentImages: [], // 본문 이미지 파일
   });
 
   const navigate = useNavigate();
 
   // 입력값 변경 처리
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
 
-    if (type === "checkbox") {
-      // 학년 체크박스 처리
+    if (type === "file") {
+      if (name === "contentImages") {
+        setFormData({ ...formData, contentImages: Array.from(files) });
+      } else {
+        setFormData({ ...formData, [name]: files[0] });
+      }
+      // 체크박스 처리
+    } else if (type === "checkbox") {
       const gradeArr = formData.grades ? formData.grades.split(",") : [];
       if (checked) {
         gradeArr.push(value);
@@ -59,8 +67,21 @@ export function ExtraCurricularRegister() {
   function handleSubmitButtonClick(e) {
     e.preventDefault();
 
+    const submitData = new FormData();
+    // 텍스트/단일 파일 필드
+    for (const key in formData) {
+      if (key !== "contentImages") {
+        submitData.append(key, formData[key]);
+      }
+    }
+
+    // 다중 파일 처리
+    formData.contentImages.forEach((file) => {
+      submitData.append("contentImages", file);
+    });
+
     axios
-      .post("/api/extracurricular/register", formData)
+      .postForm("/api/extracurricular/register", submitData)
       .then(() => {
         alert("프로그램 등록이 완료되었습니다.");
         navigate("/extracurricular/manage");
@@ -82,6 +103,8 @@ export function ExtraCurricularRegister() {
           managerPhone: "",
           mileagePoints: 0,
           author: "",
+          thumbnail: null,
+          contentImages: [],
         });
       })
       .catch((error) => {
@@ -274,6 +297,29 @@ export function ExtraCurricularRegister() {
                 type="number"
                 name="mileagePoints"
                 value={formData.mileagePoints}
+                onChange={handleChange}
+              />
+            </FormGroup>
+
+            {/* 썸네일 업로드 */}
+            <FormGroup className="mb-3" controlId="thumbnail">
+              <FormLabel>썸네일 이미지</FormLabel>
+              <FormControl
+                type="file"
+                name="thumbnail"
+                accept="image/*"
+                onChange={handleChange}
+              />
+            </FormGroup>
+
+            {/* 본문 이미지 업로드 */}
+            <FormGroup className="mb-3" controlId="contentImage">
+              <FormLabel>본문 이미지</FormLabel>
+              <FormControl
+                type="file"
+                name="contentImages"
+                accept="image/*"
+                multiple
                 onChange={handleChange}
               />
             </FormGroup>

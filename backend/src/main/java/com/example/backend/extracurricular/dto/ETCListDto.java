@@ -21,4 +21,5 @@ public class ETCListDto {
     private LocalDateTime createdAt;
     private String status;
     private Boolean useYn;
+    
 }
