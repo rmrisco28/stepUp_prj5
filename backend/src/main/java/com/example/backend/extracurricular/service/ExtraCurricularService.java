@@ -25,8 +25,10 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -276,12 +278,15 @@ public class ExtraCurricularService {
                 .orElseThrow(() -> new RuntimeException(seq + "번 프로그램이 없습니다."));
 
         // 썸네일 이미지 가져오기
-        String fileUrl = null;
+        String thumbnailUrl = null;
         if (data.getETCThumb() != null) {
-            fileUrl = imagePrefix + "prj5/ETC_Thumb/" + data.getSeq() + "/" + data.getETCThumb().getId().getName();
+            thumbnailUrl = imagePrefix + "prj5/ETC_Thumb/" + data.getSeq() + "/" + data.getETCThumb().getId().getName();
         }
 
         // 본문 이미지 가져오기
+        List<String> contentUrl = data.getETCContents().stream()
+                .map(cf -> imagePrefix + "prj5/ETC_Content/" + data.getSeq() + "/" + cf.getId().getName())
+                .collect(Collectors.toList());
 
         ETCDetailDto dto = new ETCDetailDto();
         dto.setSeq(data.getSeq());
@@ -306,7 +311,8 @@ public class ExtraCurricularService {
         dto.setCreatedAt(data.getCreatedAt());
         dto.setUpdatedAt(data.getUpdatedAt());
         dto.setUseYn(data.getUseYn());
-        dto.setThumbnails(fileUrl);
+        dto.setThumbnails(thumbnailUrl);
+        dto.setContentImages(contentUrl);
 
         return dto;
 

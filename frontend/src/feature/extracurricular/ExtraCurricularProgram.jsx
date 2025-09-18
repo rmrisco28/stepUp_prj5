@@ -59,6 +59,11 @@ export function ExtraCurricularProgram() {
     ? (program.waiting / 10) * 100 // 대기정원 있으면 DTO에 필드 추가
     : 0;
 
+  // 여러 이미지 가져왔을 때 배열로 저장해주기
+  const isImageFile = (url) =>
+    /\.(jpg|jpeg|png|gif|webp)$/i.test(url?.split("?")[0]);
+  const contentImages = program.contentImages?.filter(isImageFile) || [];
+
   return (
     <Container className="my-4">
       <Row className="mb-5">
@@ -168,16 +173,24 @@ export function ExtraCurricularProgram() {
           <Card.Body>
             <p>{program.content}</p>
             {/* 포스터 이미지 */}
-            <Card className="shadow-sm">
-              <Card.Img
-                variant="bottom"
-                src={
-                  program.Url ||
-                  "https://via.placeholder.com/600x800.png?text=프로그램+포스터"
-                }
-                alt="프로그램 포스터"
-              />
-            </Card>
+            {contentImages.length > 0 && (
+              <div className="d-flex flex-wrap gap-3 mt-3">
+                {contentImages.map((imgUrl, index) => (
+                  <Card
+                    key={index}
+                    className="shadow-sm"
+                    style={{ width: "250px" }}
+                  >
+                    <Card.Img
+                      variant="bottom"
+                      src={imgUrl}
+                      alt={`프로그램 이미지 ${index + 1}`}
+                      className="img-fluid rounded"
+                    />
+                  </Card>
+                ))}
+              </div>
+            )}
           </Card.Body>
         </Card>
       </div>

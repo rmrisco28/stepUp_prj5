@@ -102,6 +102,6 @@ public class ExtraCurricularProgram {
     private ExtraCurricularImageThumb ETCThumb;
 
     // 본문 이미지
-//    @OneToMany(mappedBy = "extraCurricularImageThumb", cascade = CascadeType.ALL)
-//    private List<ExtraCurricularImageContent> ETCContents;
+    @OneToMany(mappedBy = "program", cascade = CascadeType.ALL)
+    private List<ExtraCurricularImageContent> ETCContents;
 }
