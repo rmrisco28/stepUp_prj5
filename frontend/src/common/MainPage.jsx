@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { Button, Container, Spinner } from "react-bootstrap";
 import axios from "axios";
 import { ExtraCurricularCardList } from "../feature/extracurricular/ExtraCurricularCardList.jsx";
 
@@ -54,12 +54,14 @@ export function MainPage() {
   // }
 
   return (
-    <>
-      {/*<Button onClick={handleStatusButton}>로그인 상태 확인</Button>*/}
-      {/*<p>{loginStatus}</p>*/}
-      <div style={{ width: 100, height: 100 }}> 뭐 넣지 </div>
-      {/* 캐루셀로 뭐 보이게? 근데 이러면 세션 그거 해야함 !! 흠*/}
-      <ExtraCurricularCardList programs={programs} />
-    </>
+    <Container className="my-5">
+      <div className="mx-auto" style={{ maxWidth: "1000px" }}>
+        {/*<Button onClick={handleStatusButton}>로그인 상태 확인</Button>*/}
+        {/*<p>{loginStatus}</p>*/}
+        <div style={{ width: 100, height: 100 }}> 뭐 넣지 </div>
+        {/* 캐루셀로 뭐 보이게? 근데 이러면 세션 그거 해야함 !! 흠*/}
+        <ExtraCurricularCardList programs={programs} />
+      </div>
+    </Container>
   );
 }
