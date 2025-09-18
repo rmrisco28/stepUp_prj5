@@ -3,8 +3,10 @@ package com.example.backend.extracurricular.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -25,4 +27,7 @@ public class ETCAddForm {
     private String managerPhone;
     private Integer mileagePoints;
     private String author;
+
+    private List<MultipartFile> thumbnails;
+    private List<MultipartFile> contentImages;
 }
