@@ -125,7 +125,7 @@ export function MenuBar() {
                     className="px-3"
                     style={{ fontSize: "1.2rem" }}
                   >
-                    {menu.name}
+                    <b>{menu.name}</b>
                   </Nav.Link>
 
                   {/* 하위 메뉴 */}
