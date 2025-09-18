@@ -1,6 +1,7 @@
 package com.example.backend.extracurricular.controller;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,10 @@ public class ExtraCurricularController {
     private final ExtraCurricularService extraCurricularService;
 
     // 비교과 프로그램 등록(관리목록에 등록)
-    @PostMapping("add")
-    public ResponseEntity<?> add(@RequestBody ETCAddForm etcAddForm) {
+    @PostMapping("register")
+    public ResponseEntity<?> register(@RequestBody ETCAddForm etcAddForm) {
         try {
-            extraCurricularService.add(etcAddForm);
+            extraCurricularService.register(etcAddForm);
         } catch (Exception e) {
             // 콘솔에 예외 발생 정보 출력
             e.printStackTrace();
@@ -44,4 +45,46 @@ public class ExtraCurricularController {
     ) {
         return extraCurricularService.list(pageNumber, keyword);
     }
+
+    // 프로그램 상세 보기(관리자)
+    @GetMapping("detail/{seq}")
+    public ResponseEntity<?> detail(@PathVariable Integer seq) {
+        return ResponseEntity.ok().body(extraCurricularService.detail(seq));
+    }
+
+    // 프로그램 수정
+    @PutMapping("edit/{seq}")
+    public ResponseEntity<?> edit(@PathVariable Integer seq, @RequestBody ETCEditForm form) {
+        try {
+            extraCurricularService.edit(seq, form);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", seq + "번 프로그램이 수정되었습니다.")));
+    }
+
+    // 프로그램 삭제
+    @PutMapping("delete/{seq}")
+    public ResponseEntity<?> delete(@PathVariable Integer seq) {
+
+        try {
+            extraCurricularService.delete(seq);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String message = e.getMessage();
+            return ResponseEntity.badRequest().body(Map.of("message",
+                    Map.of("type", "error",
+                            "text", message)));
+        }
+        return ResponseEntity.ok().body(Map.of("message",
+                Map.of("type", "success",
+                        "text", seq + "번 프로그램이 삭제 되었습니다.")));
+    }
+
 }

@@ -7,6 +7,7 @@ import com.example.backend.competency.service.CompetencyService;
 import com.example.backend.competency.service.SubCompetencyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +41,22 @@ public class CompetencyController {
         return competencyService.update(seq, competencyDto);
     }
 
+    // 핵심역량 소개
+    @GetMapping("")
+    public List<?> intro() {
+        return subCompetencyService.intro();
+    }
+
+    // 핵심역량 삭제
+    @DeleteMapping("delete/{seq}")
+    public ResponseEntity<?> delete(@PathVariable int seq) {
+        return competencyService.delete(seq);
+    }
+
+
+
+    /* ~~~~~~~~~~~~~~~~~~~~~~~~~~ 하위 역량 ~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+
     // 하위역량 추가
     @PostMapping("subAdd")
     public ResponseEntity<?> subAdd(@RequestBody SubCompetencyDto dto) {
@@ -67,11 +84,13 @@ public class CompetencyController {
         return subCompetencyService.subUpdate(seq, subCompetencyListDto);
     }
 
-    // 핵심역량 소개
-    @GetMapping("")
-    public List<?> intro() {
-        return subCompetencyService.intro();
+    // 하위역량 삭제
+    @DeleteMapping("subDelete/{seq}")
+    public ResponseEntity<?> subDelete(@PathVariable int seq) {
+        subCompetencyService.delete(seq);
+        return ResponseEntity.ok().body(Map.of(
+                "message", "하위역량이 삭제되었습니다."
+        ));
     }
-
 
 }

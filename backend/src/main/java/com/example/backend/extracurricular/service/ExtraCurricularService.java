@@ -1,6 +1,8 @@
 package com.example.backend.extracurricular.service;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCDetailDto;
+import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.dto.ETCListDto;
 import com.example.backend.extracurricular.entity.ExtraCurricularProgram;
 import com.example.backend.extracurricular.enums.OperationType;
@@ -11,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -20,8 +24,8 @@ public class ExtraCurricularService {
 
     private final ExtraCurricularProgramRepository extraCurricularProgramRepository;
 
-    // 비교과 프로그램 등록(관리목록에 등록
-    public void add(ETCAddForm etcAddForm) {
+    // 비교과 프로그램 등록(관리목록에 등록)
+    public void register(ETCAddForm etcAddForm) {
 
         ExtraCurricularProgram ETCProgram = new ExtraCurricularProgram();
         ETCProgram.setTitle(etcAddForm.getTitle());
@@ -80,5 +84,89 @@ public class ExtraCurricularService {
                 "pageInfo", pageInfo,
                 "programList", programPage.getContent()
         );
+    }
+
+    // Enum -> 한글 매핑
+    private String mapToLabel(OperationType value) {
+        return switch (value) {
+            case OFFLINE -> "대면";
+            case ONLINE -> "비대면";
+            case HYBRID -> "혼합";
+        };
+    }
+
+
+    // 프로그램 상세 정보
+    public Object detail(Integer seq) {
+        ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException(seq + "번 프로그램이 없습니다."));
+
+        ETCDetailDto dto = new ETCDetailDto();
+        dto.setSeq(data.getSeq());
+        dto.setTitle(data.getTitle());
+        dto.setContent(data.getContent());
+        dto.setOperateStartDt(data.getOperateStartDt());
+        dto.setOperateEndDt(data.getOperateEndDt());
+        dto.setApplyStartDt(data.getApplyStartDt());
+        dto.setApplyEndDt(data.getApplyEndDt());
+        dto.setCompetency(data.getCompetency());
+        dto.setLocation(data.getLocation());
+        dto.setOperationType(mapToLabel(data.getOperationType()));
+        dto.setGrades(data.getGrades());
+        dto.setCapacity(data.getCapacity());
+        dto.setApplicants(data.getApplicants());
+        dto.setWaiting(data.getWaiting());
+        dto.setStatus(data.getStatus());
+        dto.setMileagePoints(data.getMileagePoints());
+        dto.setManager(data.getManager());
+        dto.setManagerPhone(data.getManagerPhone());
+        dto.setAuthor(data.getAuthor());
+        dto.setCreatedAt(data.getCreatedAt());
+        dto.setUpdatedAt(data.getUpdatedAt());
+        dto.setUseYn(data.getUseYn());
+
+        return dto;
+
+    }
+
+    // 프로그램 수정
+    public void edit(Integer seq, ETCEditForm form) {
+        ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("프로그램 수정 오류"));
+
+        data.setTitle(form.getTitle());
+        data.setContent(form.getContent());
+        data.setOperateStartDt(form.getOperateStartDt());
+        data.setOperateEndDt(form.getOperateEndDt());
+        data.setApplyStartDt(form.getApplyStartDt());
+        data.setApplyEndDt(form.getApplyEndDt());
+        data.setCompetency(form.getCompetency());
+        data.setLocation(form.getLocation());
+        data.setOperationType(mapToEnum(form.getOperationType()));
+        data.setGrades(form.getGrades());
+        data.setCapacity(form.getCapacity());
+        data.setStatus(form.getStatus());
+        data.setManager(form.getManager());
+        data.setManagerPhone(form.getManagerPhone());
+        data.setMileagePoints(form.getMileagePoints());
+        data.setAuthor(form.getAuthor());
+        data.setUseYn(form.getUseYn());
+
+        LocalDateTime now = LocalDateTime.now();
+        data.setUpdatedAt(now);
+
+        extraCurricularProgramRepository.save(data);
+    }
+
+    // 프로그램 삭제
+    public void delete(Integer seq) {
+        ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("프로그램 삭제 오류"));
+
+        data.setUseYn(false);
+        LocalDateTime now = LocalDateTime.now();
+        data.setUpdatedAt(now);
+
+        extraCurricularProgramRepository.save(data);
     }
 }

@@ -13,7 +13,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
-export function ExtraCurricularAdd() {
+export function ExtraCurricularRegister() {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -56,35 +56,43 @@ export function ExtraCurricularAdd() {
   };
 
   // 폼 제출
-  const handleSubmit = async (e) => {
+  function handleSubmitButtonClick(e) {
     e.preventDefault();
-    try {
-      await axios.post("/api/extracurricular/add", formData);
-      alert("프로그램 등록이 완료되었습니다.");
-      navigate("/extracurricular/manage");
-      // 필요시 초기화
-      setFormData({
-        title: "",
-        content: "",
-        operateStartDt: "",
-        operateEndDt: "",
-        applyStartDt: "",
-        applyEndDt: "",
-        competency: "",
-        location: "",
-        operationType: "대면",
-        grades: "",
-        capacity: 0,
-        manager: "",
-        managerPhone: "",
-        mileagePoints: 0,
-        author: "",
+
+    axios
+      .post("/api/extracurricular/register", formData)
+      .then(() => {
+        alert("프로그램 등록이 완료되었습니다.");
+        navigate("/extracurricular/manage");
+
+        // 필요시 초기화
+        setFormData({
+          title: "",
+          content: "",
+          operateStartDt: "",
+          operateEndDt: "",
+          applyStartDt: "",
+          applyEndDt: "",
+          competency: "",
+          location: "",
+          operationType: "대면",
+          grades: "",
+          capacity: 0,
+          manager: "",
+          managerPhone: "",
+          mileagePoints: 0,
+          author: "",
+        });
+      })
+      .catch((error) => {
+        console.error(error.response?.data || error.message);
+        alert("등록에 실패하였습니다.");
+      })
+      .finally(() => {
+        // 요청 완료 후 공통 처리 (예: 로딩 해제)
+        console.log("프로그램 등록 요청 완료");
       });
-    } catch (error) {
-      console.error(error.response.data);
-      alert("등록에 실패하였습니다. ");
-    }
-  };
+  }
 
   return (
     <Container className="mt-5 my-5">
@@ -93,9 +101,9 @@ export function ExtraCurricularAdd() {
           <h2 className="mb-4 text-center text-primary fw-bold">
             비교과 프로그램 등록
           </h2>
-          <Form onSubmit={handleSubmit}>
+          <Form>
             {/* 프로그램 제목 */}
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="title">
               <FormLabel>제목</FormLabel>
               <FormControl
                 type="text"
@@ -106,7 +114,7 @@ export function ExtraCurricularAdd() {
             </FormGroup>
 
             {/* 프로그램 내용 */}
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="content">
               <FormLabel>내용</FormLabel>
               <FormControl
                 as="textarea"
@@ -120,7 +128,7 @@ export function ExtraCurricularAdd() {
             {/* 운영기간 */}
             <Row>
               <Col>
-                <FormGroup className="mb-3">
+                <FormGroup className="mb-3" controlId="operateStartDt">
                   <FormLabel>운영 시작일</FormLabel>
                   <FormControl
                     type="datetime-local"
@@ -131,7 +139,7 @@ export function ExtraCurricularAdd() {
                 </FormGroup>
               </Col>
               <Col>
-                <FormGroup className="mb-3">
+                <FormGroup className="mb-3" controlId="operateEndDt">
                   <FormLabel>운영 종료일</FormLabel>
                   <FormControl
                     type="datetime-local"
@@ -146,7 +154,7 @@ export function ExtraCurricularAdd() {
             {/* 신청기간 */}
             <Row>
               <Col>
-                <FormGroup className="mb-3">
+                <FormGroup className="mb-3" controlId="applyStartDt">
                   <FormLabel>신청 시작일</FormLabel>
                   <FormControl
                     type="datetime-local"
@@ -157,7 +165,7 @@ export function ExtraCurricularAdd() {
                 </FormGroup>
               </Col>
               <Col>
-                <FormGroup className="mb-3">
+                <FormGroup className="mb-3" controlId="applyEndDt">
                   <FormLabel>신청 종료일</FormLabel>
                   <FormControl
                     type="datetime-local"
@@ -172,7 +180,7 @@ export function ExtraCurricularAdd() {
             <Row>
               <Col>
                 {/* 역량 */}
-                <FormGroup className="mb-3">
+                <FormGroup className="mb-3" controlId="competency">
                   <FormLabel>역량</FormLabel>
                   <FormControl
                     type="text"
@@ -184,7 +192,7 @@ export function ExtraCurricularAdd() {
               </Col>
               <Col>
                 {/* 장소 */}
-                <FormGroup className="mb-3">
+                <FormGroup className="mb-3" controlId="location">
                   <FormLabel>장소</FormLabel>
                   <FormControl
                     type="text"
@@ -197,7 +205,7 @@ export function ExtraCurricularAdd() {
             </Row>
 
             {/* 운영방식 */}
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="operationType">
               <FormLabel className="me-5">운영방식</FormLabel>
               {["대면", "비대면", "혼합"].map((type) => (
                 <FormCheck
@@ -214,7 +222,7 @@ export function ExtraCurricularAdd() {
             </FormGroup>
 
             {/* 신청 대상 학년 */}
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="grades">
               <FormLabel className="me-5">신청 대상 학년</FormLabel>
               {[1, 2, 3, 4].map((grade) => (
                 <FormCheck
@@ -230,7 +238,7 @@ export function ExtraCurricularAdd() {
             </FormGroup>
 
             {/* 기타 필드 */}
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="capacity">
               <FormLabel>모집 정원</FormLabel>
               <FormControl
                 type="number"
@@ -240,7 +248,7 @@ export function ExtraCurricularAdd() {
               />
             </FormGroup>
 
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="manager">
               <FormLabel>담당자</FormLabel>
               <FormControl
                 type="text"
@@ -250,7 +258,7 @@ export function ExtraCurricularAdd() {
               />
             </FormGroup>
 
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="managerPhone">
               <FormLabel>담당자 전화번호</FormLabel>
               <FormControl
                 type="text"
@@ -260,7 +268,7 @@ export function ExtraCurricularAdd() {
               />
             </FormGroup>
 
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="mileagePoints">
               <FormLabel>마일리지 점수</FormLabel>
               <FormControl
                 type="number"
@@ -270,7 +278,7 @@ export function ExtraCurricularAdd() {
               />
             </FormGroup>
 
-            <FormGroup className="mb-3">
+            <FormGroup className="mb-3" controlId="author">
               <FormLabel>작성자</FormLabel>
               <FormControl
                 type="text"
@@ -281,7 +289,11 @@ export function ExtraCurricularAdd() {
             </FormGroup>
 
             <div className="text-center">
-              <Button type="submit" variant="primary" className="me-2">
+              <Button
+                variant="primary"
+                className="me-2"
+                onClick={handleSubmitButtonClick}
+              >
                 등록
               </Button>
               <Button

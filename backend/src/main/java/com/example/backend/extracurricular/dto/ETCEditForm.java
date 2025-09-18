@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ETCDetailForm {
-    private Integer seq;
+public class ETCEditForm {
     private String title;
     private String content;
     private LocalDateTime operateStartDt;
@@ -23,13 +22,13 @@ public class ETCDetailForm {
     private String operationType;
     private String grades;
     private Integer capacity;
-    private Integer applicants;
-    private Integer waiting;
     private String status;
     private String manager;
     private String managerPhone;
     private Integer mileagePoints;
-    private Instant createdAt;
-    private Instant updatedAt;
     private String author;
+    private LocalDateTime updatedAt;
+    private Boolean useYn;
+
+
 }

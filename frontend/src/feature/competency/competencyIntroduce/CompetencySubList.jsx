@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Col, Row, Table } from "react-bootstrap";
+import { Button, Col, Modal, Row, Table } from "react-bootstrap";
 import { useNavigate } from "react-router";
 
 export function CompetencySubList() {
   const [competency, setCompetency] = useState([]);
+  const [modalShow, setModalShow] = useState(false);
+  const [selectedCompetency, setSelectedCompetency] = useState({}); // 선택된 항목의 정보
 
   const navigate = useNavigate();
 
@@ -61,6 +63,23 @@ export function CompetencySubList() {
       });
   };
 
+  function handleDeleteButton(seq) {
+    axios
+      .delete(`/api/competency/subDelete/${seq}`)
+      .then((res) => {
+        console.log(res);
+        alert(res.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        console.log("finally");
+        setModalShow(false);
+        fetchCompetencies();
+      });
+  }
+
   return (
     <>
       <Row className="justify-content-center">
@@ -69,12 +88,15 @@ export function CompetencySubList() {
           <h2 className="mb-3">하위역량 목록 </h2>
           <Table>
             <thead>
-              <tr>
+              <tr
+                style={{
+                  textAlign: "center",
+                  verticalAlign: "middle",
+                }}
+              >
                 <th
                   style={{
                     width: "6%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   번호
@@ -82,8 +104,6 @@ export function CompetencySubList() {
                 <th
                   style={{
                     width: "15%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   핵심역량
@@ -91,39 +111,39 @@ export function CompetencySubList() {
                 <th
                   style={{
                     width: "15%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
                   하위역량
                 </th>
+                <th>하위역량 정의</th>
                 <th
                   style={{
-                    textAlign: "center",
-                    verticalAlign: "middle",
+                    width: "15%",
                   }}
                 >
-                  하위역량 정의
+                  사용여부
                 </th>
                 <th
                   style={{
                     width: "10%",
-                    textAlign: "center",
-                    verticalAlign: "middle",
                   }}
                 >
-                  사용여부
+                  삭제
                 </th>
               </tr>
             </thead>
             <tbody>
               {competency && competency.length > 0 ? (
                 competency.map((data) => (
-                  <tr key={data.seq}>
+                  <tr
+                    key={data.seq}
+                    style={{
+                      verticalAlign: "middle",
+                    }}
+                  >
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {data.seq}
@@ -131,7 +151,6 @@ export function CompetencySubList() {
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {data.competencySeqCompetencyName}
@@ -139,22 +158,14 @@ export function CompetencySubList() {
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {data.subCompetencyName}
                     </td>
-                    <td
-                      style={{
-                        verticalAlign: "middle",
-                      }}
-                    >
-                      {data.subCompetencyExpln}
-                    </td>
+                    <td>{data.subCompetencyExpln}</td>
                     <td
                       style={{
                         textAlign: "center",
-                        verticalAlign: "middle",
                       }}
                     >
                       {/* 체크박스 추가, 클릭 시 handleUseYnChange 호출 */}
@@ -164,11 +175,25 @@ export function CompetencySubList() {
                         onChange={() => handleUseYnChange(data.seq, data.useYn)} // 체크박스 상태 변경 시 호출
                       />
                     </td>
+                    <td align="center" valign="middle">
+                      <Button
+                        variant="outline-danger"
+                        onClick={() => {
+                          setSelectedCompetency({
+                            seq: data.seq,
+                            subCompetencyName: data.subCompetencyName,
+                          });
+                          setModalShow(true);
+                        }}
+                      >
+                        삭제
+                      </Button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="4">데이터가 없습니다.</td>
+                  <td colSpan="5">데이터가 없습니다.</td>
                 </tr>
               )}
             </tbody>
@@ -185,6 +210,31 @@ export function CompetencySubList() {
             </Button>
           </div>
         </Col>
+        <Modal show={modalShow} onHide={() => setModalShow(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>하위역량 삭제 확인</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            하위역량 "{selectedCompetency.subCompetencyName}" 을
+            삭제하시겠습니까?
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="outline-dark" onClick={() => setModalShow(false)}>
+              취소
+            </Button>
+
+            <Button
+              variant="outline-danger"
+              onClick={() => {
+                if (selectedCompetency) {
+                  handleDeleteButton(selectedCompetency.seq); // 삭제 처리 함수 호출
+                }
+              }}
+            >
+              삭제
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Row>
     </>
   );

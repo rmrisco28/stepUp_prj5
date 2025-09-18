@@ -14,4 +14,6 @@ public class LoginResponse {
     private Integer memberSeq;
     private String loginId;
     private String name;
+
+    private String authName;
 }

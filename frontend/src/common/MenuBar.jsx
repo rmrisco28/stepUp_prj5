@@ -7,9 +7,11 @@ import { AuthProvider } from "./AuthContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
 
 export function MenuBar() {
-  // const [showSubMenu, setShowSubMenu] = useState(false);
-  const { user, logout, isAuthenticated } = useAuth();
+  const { user, isAdmin, logout, isAuthenticated } = useAuth();
   const [activeMenu, setActiveMenu] = useState(null);
+
+  const name = user?.name;
+  const loginId = user?.loginId;
 
   const menus = [
     {
@@ -25,7 +27,7 @@ export function MenuBar() {
       path: "/competency",
       subItems: [
         { name: "역량 소개", path: "/competency" },
-        { name: "진단 검사", path: "/competency/test" },
+        { name: "진단 검사", path: "/competency/assessment" },
         { name: "관리자 핵심역량 목록", path: "/competency/list" },
         { name: "관리자 하위역량 목록", path: "/competency/subList" },
       ],
@@ -57,40 +59,64 @@ export function MenuBar() {
   ];
 
   return (
-    <Navbar bg="light" expand="lg" className="mb-3 shadow-sm">
-      <Container>
-        {/* 로고 */}
-        <Navbar.Brand as={Link} to="/">
-          <img
-            src="../image/stepUp_logo_수정.png"
-            alt="logo"
-            className="logo"
-          />
-        </Navbar.Brand>
+    <>
+      <Navbar bg="success" className="py-0 border-bottom shadow-sm">
+        <Container className="justify-content-end">
+          <Nav>
+            <Nav.Link
+              as={Link}
+              to={isAuthenticated ? "#" : "/login"}
+              onClick={isAuthenticated ? logout : null}
+              className="text-white"
+            >
+              {isAuthenticated ? (
+                <>
+                  <span className="me-2" style={{ cursor: "default" }}>
+                    [ {name}({loginId}) ] 님 환영합니다.
+                  </span>
+                  <span>로그아웃</span>
+                </>
+              ) : (
+                "로그인"
+              )}
+            </Nav.Link>
+          </Nav>
+        </Container>
+      </Navbar>
 
-        <Navbar.Toggle aria-controls="main-nav" />
-        <Navbar.Collapse id="main-nav">
-          <Nav className="ms-auto">
-            {menus.map((menu, idx) => (
-              // 부모에 position-relative + hover 제어
-              <div
-                key={menu.name}
-                className="nav-item position-relative"
-                onMouseEnter={() => setActiveMenu(idx)}
-                onMouseLeave={() => setActiveMenu(null)}
-              >
-                {/* 대분류 */}
-                <Nav.Link
-                  as={Link}
-                  to={menu.path}
-                  className="px-3"
-                  style={{ fontSize: "1.2rem" }}
+      <Navbar bg="light" expand="lg" className="mb-3 shadow-sm">
+        <Container>
+          {/* 로고 */}
+          <Navbar.Brand as={Link} to="/">
+            <img
+              src="../image/stepUp_logo_수정.png"
+              alt="logo"
+              className="logo"
+            />
+          </Navbar.Brand>
+
+          <Navbar.Toggle aria-controls="main-nav" />
+          <Navbar.Collapse id="main-nav">
+            <Nav className="ms-auto">
+              {menus.map((menu, idx) => (
+                // 부모에 position-relative + hover 제어
+                <div
+                  key={menu.name}
+                  className="nav-item position-relative"
+                  onMouseEnter={() => setActiveMenu(idx)}
+                  onMouseLeave={() => setActiveMenu(null)}
                 >
-                  {menu.name}
-                </Nav.Link>
+                  {/* 대분류 */}
+                  <Nav.Link
+                    as={Link}
+                    to={menu.path}
+                    className="px-3"
+                    style={{ fontSize: "1.2rem" }}
+                  >
+                    {menu.name}
+                  </Nav.Link>
 
-                {/* 하위 메뉴 - 없는건 렌더링 안 되도록 */}
-                {menu.subItems.length > 0 && (
+                  {/* 하위 메뉴 */}
                   <div
                     className={`dropdown-menu border-0 border-top rounded-0 shadow-sm ${
                       activeMenu === idx ? "show" : ""
@@ -107,21 +133,12 @@ export function MenuBar() {
                       </Link>
                     ))}
                   </div>
-                )}
-              </div>
-            ))}
-            <Nav.Link
-              as={Link}
-              to={isAuthenticated ? "#" : "/login"} // Use '#' for logout since it doesn't navigate
-              onClick={isAuthenticated ? logout : null}
-              className="px-3"
-              style={{ fontSize: "1.2rem" }}
-            >
-              {isAuthenticated ? "로그아웃" : "로그인"}
-            </Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+                </div>
+              ))}
+            </Nav>
+          </Navbar.Collapse>
+        </Container>
+      </Navbar>
+    </>
   );
 }

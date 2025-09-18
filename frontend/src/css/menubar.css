@@ -6,5 +6,5 @@
 }
 
 .logo:hover {
-    transform: scale(1.1); /* 10% 확대 */
+    transform: scale(1.05); /* 10% 확대 */
 }

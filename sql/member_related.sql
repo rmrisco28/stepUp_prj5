@@ -11,6 +11,16 @@ CREATE TABLE member
     # user_yn CHAR(1)
 );
 DROP TABLE member;
+TRUNCATE TABLE member;
+SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS = 1;
+# 연습용으로 써볼까 근데 그럼 이름이 안 나올건데 그건 뭐 관리자라고 쓰면 되긴 할 듯
+INSERT INTO member(login_id, password)
+VALUES ('yyy', '1234');
+# 비밀번호 암호화 안 해서 그런지 로그인 안 되넹 그냥 관리자도 만들어야지 ..
+ALTER TABLE member
+    ADD COLUMN user_yn INT NOT NULL DEFAULT 0 COMMENT '0=로그아웃, 1=로그인';
+
 # -----------------------------------------------------------
 # student
 CREATE TABLE student
@@ -29,6 +39,7 @@ CREATE TABLE student
     # use_yn CHAR
 );
 DROP TABLE student;
+TRUNCATE TABLE student;
 # -----------------------------------------------------------
 # 외래키 제약사항 추가
 # -> student, member 만들 때 student에 추가해서 사용하면 됨(위에 주석처리 확인하기)
@@ -87,9 +98,9 @@ CREATE TABLE employee
     job_function VARCHAR(30) NOT NULL,
     hire_date    DATE        NOT NULL,
     phone        VARCHAR(20) NULL,
-    email        VARCHAR(50) NULL
-#     member_seq     INT NOT NULL,
-#     FOREIGN KEY (employee_seq) REFERENCES member (member_seq)
+    email        VARCHAR(50) NULL,
+    member_seq   INT         NULL,
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq)
     # use_yn CHAR
 );
 DROP TABLE employee;
@@ -112,6 +123,7 @@ VALUES ('CM', '역랑관리센터');
 
 # -----------------------------------------------------------
 # administrator
+# 흠 관리자 정보도 있어야 하나? 고민 ..
 CREATE TABLE administrator
 (
     administrator_seq INT AUTO_INCREMENT PRIMARY KEY,
@@ -119,9 +131,34 @@ CREATE TABLE administrator
     name              VARCHAR(20) NOT NULL,
     gender            VARCHAR(5)  NOT NULL,
     birth_date        DATE        NOT NULL,
-    admission_year    INT         NOT NULL,
+    hire_date         DATE        NOT NULL,
     phone             VARCHAR(20) NULL,
-    email             VARCHAR(50) NULL
+    email             VARCHAR(50) NULL,
+    member_seq        INT,
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq)
 );
 # -----------------------------------------------------------
 # auth
+CREATE TABLE auth
+(
+    auth_name  VARCHAR(20),
+    member_seq INT,
+    PRIMARY KEY (auth_name, member_seq),
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq) ON DELETE CASCADE
+);
+DROP TABLE auth;
+INSERT INTO auth
+VALUES ('extra', 108);
+INSERT INTO auth
+VALUES ('admin', 107);
+
+
+# 아무것도 안 됨 ;;
+SHOW CREATE TABLE member;
+SHOW INDEX FROM member;
+ALTER TABLE member
+    DROP INDEX UKngvxyco6he6s1ikscenee9b99;
+ALTER TABLE member
+    DROP FOREIGN KEY FKmj5jegh4c3g7n0vj0mryuwv67;
+ALTER TABLE member
+    DROP COLUMN student_student_seq;

@@ -28,6 +28,7 @@ public class AppConfiguration {
                         "/api/member/**",
                         "/api/auth/**",
                         "/api/competency/**",
+                        "/api/subCompetency/**",
                         "/api/extracurricular/**"
                 ).permitAll()
                 .anyRequest().authenticated());
