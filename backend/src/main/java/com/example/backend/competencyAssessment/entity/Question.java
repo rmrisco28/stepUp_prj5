@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "question", schema = "prj5", uniqueConstraints =
-@UniqueConstraint(columnNames = "question_num"))
+@UniqueConstraint(columnNames = {"ca_seq", "question_num"}))  // 복합 유니크 제약 설정
 
 public class Question {
     @Id

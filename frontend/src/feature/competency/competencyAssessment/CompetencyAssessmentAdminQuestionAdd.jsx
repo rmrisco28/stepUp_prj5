@@ -58,6 +58,15 @@ export function CompetencyAssessmentAdminQuestionAdd() {
 
   // 저장 버튼
   function handleQuestionSaveButton() {
+    if (
+      selectedCompetency === null ||
+      selectedSubCompetency === null ||
+      questionNum === null ||
+      question === null ||
+      score === null
+    ) {
+      alert("모든 항목을 체크해주세요.");
+    }
     axios
       .post(`/api/competency/assessment/admin/${assessmentSeq}/questionAdd`, {
         caSeqSeq: selectedCompetency,
@@ -99,12 +108,17 @@ export function CompetencyAssessmentAdminQuestionAdd() {
           })
           .catch((err) => {
             console.error("선택지 저장 중 오류 발생:", err);
-            alert(err);
+            alert(err, "두번째 에러");
           });
       })
       .catch((err) => {
         console.log("문제 저장 중 오류 발생", err);
-        alert(err.response.data.message);
+        if (err.response && err.response.data) {
+          alert(err.response.data.message);
+        } else {
+          alert("서버와의 통신에 문제가 발생했습니다.");
+        }
+        // alert(err.response.data.message);
       })
       .finally(() => {
         console.log("finally");

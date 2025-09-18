@@ -1,9 +1,6 @@
 package com.example.backend.competencyAssessment.controller;
 
-import com.example.backend.competencyAssessment.dto.AssessmentDto;
-import com.example.backend.competencyAssessment.dto.ChoiceAddDto;
-import com.example.backend.competencyAssessment.dto.QuestionAddDto;
-import com.example.backend.competencyAssessment.dto.QuestionListDto;
+import com.example.backend.competencyAssessment.dto.*;
 import com.example.backend.competencyAssessment.service.AssessmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +31,6 @@ public class AssessmentController {
         return assessmentService.list(pageNumber);
     }
 
-/*
-    // 역량 진단 삭제
-    @DeleteMapping("delete/{seq}")
-    public ResponseEntity<?> delete(@PathVariable int seq) {
-        return assessmentService.delete(seq);
-    }
-*/
 
     /*~~~~~~~~~~~~~~~~~~~~~~~ 목록 세부 관리 ~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -87,25 +77,45 @@ public class AssessmentController {
     // 진단 문제 저장
     @PostMapping("admin/{seq}/questionAdd")
     public ResponseEntity<?> questionAdd(@PathVariable int seq, @RequestBody QuestionAddDto dto) {
-        System.out.println("seq = " + seq);
-        System.out.println("dto = " + dto);
         return assessmentService.questionAdd(seq, dto);
     }
 
     // 진단 답안 저장
     @PostMapping("admin/{seq}/choiceAdd")
     public ResponseEntity<?> choiceAdd(@PathVariable int seq, @RequestBody ChoiceAddDto dto) {
-        System.out.println("seq = " + seq);
-        System.out.println("dto = " + dto);
         return assessmentService.choiceAdd(seq, dto);
     }
 
-    // 문제 수정 데이터 전달
+    // 문제 수정을 위한 문제 데이터 전달
     @GetMapping("admin/{seq}/questionEdit/{num}")
     public QuestionListDto questionEdit(@PathVariable int seq, @PathVariable int num) {
-        System.out.println("seq = " + seq);
-        System.out.println("num = " + num);
+
         return assessmentService.questionDetail(seq, num);
+    }
+
+    // 문제 수정을 위한 선택지 데이터 전달
+    @GetMapping("admin/{seq}/choiceEdit/{num}")
+    public List<?> choiceEdit(@PathVariable int seq, @PathVariable int num) {
+
+        return assessmentService.choiceDetail(seq, num);
+    }
+
+    // 문제 업데이트
+    @PutMapping("admin/{seq}/questionUpdate/{num}")
+    public ResponseEntity<?> questionUpdate(
+            @PathVariable int seq, @PathVariable int num,
+            @RequestBody QuestionAddDto dto) {
+        return assessmentService.questionUpdate(seq, num, dto);
+    }
+
+    // 선택지 업데이트
+    @PutMapping("admin/{seq}/choiceUpdate/{num}")
+    public ResponseEntity<?> choiceUpdate(
+            @PathVariable int num,
+            @RequestBody ChoiceListDto dto) {
+        System.out.println("num = " + num);
+        System.out.println("dto = " + dto);
+        return assessmentService.choiceUpdate(num, dto);
     }
 
 

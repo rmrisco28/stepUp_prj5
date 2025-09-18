@@ -12,10 +12,12 @@ import com.example.backend.competencyAssessment.entity.Question;
 import com.example.backend.competencyAssessment.repository.AssessmentRepository;
 import com.example.backend.competencyAssessment.repository.ChoiceRepository;
 import com.example.backend.competencyAssessment.repository.QuestionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -141,11 +143,12 @@ public class AssessmentService {
         return ResponseEntity.ok().body(assessmentDto);
     }
 
-
+    // 진단 문제 저장
     public ResponseEntity<?> questionAdd(int seq, QuestionAddDto dto) {
-        if (questionRepository.findByQuestionNum(dto.getQuestionNum()) != null) {
+        if (questionRepository.existsByCaSeq_SeqAndQuestionNum(dto.getCaSeqSeq(), dto.getQuestionNum())) {
             return ResponseEntity.badRequest().body(Map.of("message", "문항번호가 중복되어 저장에 실패하였습니다."));
         }
+
         Question question = new Question();
 
         Assessment assessment = assessmentRepository.findEntityBySeq(seq);
@@ -161,15 +164,17 @@ public class AssessmentService {
         question.setScore(dto.getScore());
         questionRepository.save(question);
 
-        return ResponseEntity.ok().body(Map.of("question", question));
+        return ResponseEntity.ok().body(Map.of("question", question, "message", "질문저장이 완료되었습니다."));
     }
 
+    // 진단 선택지 저장
     public ResponseEntity<?> choiceAdd(int seq, ChoiceAddDto dto) {
         Choice choice = new Choice();
 
         Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
 
         choice.setQuestionSeq(question);
+//        choice.setOrder(dto.getOrder());
         choice.setOption(dto.getOption());
         choice.setPoint(dto.getPoint());
 
@@ -179,9 +184,64 @@ public class AssessmentService {
 
     }
 
+    // 문제 수정을 위한 문제 데이터 전달
     public QuestionListDto questionDetail(int seq, int num) {
         QuestionListDto questionDetail = questionRepository.findByQuestionNum(seq, num);
         return questionDetail;
+    }
+    // 선택지 수정을 위한 선택지 데이터 전달
+
+    public List<?> choiceDetail(int seq, int num) {
+        List<ChoiceListDto> choiceListDto = choiceRepository.findByQuestionSeqNum(seq, num);
+        return choiceListDto;
+    }
+
+    // 문제 업데이트
+    public ResponseEntity<?> questionUpdate(int seq, int num, QuestionAddDto dto) {
+        Question question = questionRepository.findByCaSeqSeqAndQuestionNum(seq, num);
+        if (question == null) {
+            throw new EntityNotFoundException("문항번호를 찾을 수 없습니다.");
+        }
+        SubCompetency subCompetency = subCompetencyRepository.findBySeq(dto.getSubCompetencySeqSeq());
+        question.setSubCompetencySeq(subCompetency);
+        question.setQuestionNum(dto.getQuestionNum());
+        question.setQuestion(dto.getQuestion());
+        question.setScore(dto.getScore());
+        questionRepository.save(question);
+        return ResponseEntity.ok().body(Map.of("message", "문제 수정이 완료되었습니다."));
+
+    }
+
+    // 선택지 업데이트
+    public ResponseEntity<?> choiceUpdate(int num, ChoiceListDto dto) {
+        if (dto.getSeq() == null) {
+            Question newQuestion = questionRepository.findBySeq(dto.getQuestionSeqSeq());
+            System.out.println("newQuestion = " + newQuestion);
+            if (newQuestion == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "해당 문제를 찾을 수 없습니다."));
+            }
+
+            System.out.println("newQuestion = " + newQuestion);
+            Choice newChoice = new Choice();
+            newChoice.setQuestionSeq(newQuestion);
+            newChoice.setOption(dto.getOption());
+            newChoice.setPoint(dto.getPoint());
+            choiceRepository.save(newChoice);
+        }
+
+        // 기존 선택지 업데이트
+        Choice choice = choiceRepository.findBySeq(dto.getSeq());
+        if (choice == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "해당 선택지를 찾을 수 없습니다."));
+        }
+
+        choice.setOption(dto.getOption());
+        choice.setPoint(dto.getPoint());
+        choiceRepository.save(choice);
+
+        return ResponseEntity.ok().body(Map.of("message", "선택지 수정이 완료되었습니다."));
     }
 
 
