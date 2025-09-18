@@ -28,6 +28,7 @@ export function ExtraCurricularProgram() {
     axios
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
+        console.log(res.data);
         setProgram(res.data);
       })
       .catch((err) => {
@@ -65,10 +66,7 @@ export function ExtraCurricularProgram() {
         <Col md={4} className="me-4 border">
           <div className="position-relative">
             <img
-              src={
-                program.posterUrl ||
-                "https://via.placeholder.com/400x250.png?text=프로그램+포스터"
-              }
+              src={program.thumbnails}
               alt="프로그램 포스터"
               className="img-fluid rounded"
             />
@@ -174,7 +172,7 @@ export function ExtraCurricularProgram() {
               <Card.Img
                 variant="bottom"
                 src={
-                  program.posterUrl ||
+                  program.Url ||
                   "https://via.placeholder.com/600x800.png?text=프로그램+포스터"
                 }
                 alt="프로그램 포스터"

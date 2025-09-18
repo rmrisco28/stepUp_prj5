@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -96,4 +97,11 @@ public class ExtraCurricularProgram {
     @Column(name = "use_yn", nullable = false)
     private Boolean useYn = true;
 
+    // 썸네일 이미지
+    @OneToOne(mappedBy = "program", cascade = CascadeType.ALL)
+    private ExtraCurricularImageThumb ETCThumb;
+
+    // 본문 이미지
+//    @OneToMany(mappedBy = "extraCurricularImageThumb", cascade = CascadeType.ALL)
+//    private List<ExtraCurricularImageContent> ETCContents;
 }

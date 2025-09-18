@@ -3,6 +3,7 @@ package com.example.backend.extracurricular.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -35,8 +36,11 @@ public class ETCDetailDto {
     private LocalDateTime updatedAt;
     private Boolean useYn;
 
-    private List<ETCImageThumbDto> thumbnails;
-    private List<ETCImageContentDto> contentImages;
+    private String thumbnails;
+    private List<String> contentImages;
+
+//    private List<ETCImageThumbDto> thumbnails;
+//    private List<ETCImageContentDto> contentImages;
 
     public ETCDetailDto(Integer seq, String title, String content,
                         LocalDateTime operateStartDt, LocalDateTime operateEndDt,
