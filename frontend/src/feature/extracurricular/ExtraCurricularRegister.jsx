@@ -31,7 +31,7 @@ export function ExtraCurricularRegister() {
     mileagePoints: 0,
     author: "",
     thumbnail: null, // 썸네일 파일
-    contentImage: null, // 본문 이미지 파일
+    contentImages: [], // 본문 이미지 파일
   });
 
   const navigate = useNavigate();
@@ -41,9 +41,13 @@ export function ExtraCurricularRegister() {
     const { name, value, type, checked, files } = e.target;
 
     if (type === "file") {
-      setFormData({ ...formData, [name]: files[0] });
+      if (name === "contentImages") {
+        setFormData({ ...formData, contentImages: Array.from(files) });
+      } else {
+        setFormData({ ...formData, [name]: files[0] });
+      }
+      // 체크박스 처리
     } else if (type === "checkbox") {
-      // 학년 체크박스 처리
       const gradeArr = formData.grades ? formData.grades.split(",") : [];
       if (checked) {
         gradeArr.push(value);
@@ -63,8 +67,21 @@ export function ExtraCurricularRegister() {
   function handleSubmitButtonClick(e) {
     e.preventDefault();
 
+    const submitData = new FormData();
+    // 텍스트/단일 파일 필드
+    for (const key in formData) {
+      if (key !== "contentImages") {
+        submitData.append(key, formData[key]);
+      }
+    }
+
+    // 다중 파일 처리
+    formData.contentImages.forEach((file) => {
+      submitData.append("contentImages", file);
+    });
+
     axios
-      .postForm("/api/extracurricular/register", formData)
+      .postForm("/api/extracurricular/register", submitData)
       .then(() => {
         alert("프로그램 등록이 완료되었습니다.");
         navigate("/extracurricular/manage");
@@ -87,7 +104,7 @@ export function ExtraCurricularRegister() {
           mileagePoints: 0,
           author: "",
           thumbnail: null,
-          contentImage: null,
+          contentImages: [],
         });
       })
       .catch((error) => {
@@ -300,8 +317,9 @@ export function ExtraCurricularRegister() {
               <FormLabel>본문 이미지</FormLabel>
               <FormControl
                 type="file"
-                name="contentImage"
+                name="contentImages"
                 accept="image/*"
+                multiple
                 onChange={handleChange}
               />
             </FormGroup>

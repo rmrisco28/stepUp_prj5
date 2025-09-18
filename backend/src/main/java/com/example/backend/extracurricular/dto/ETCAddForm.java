@@ -28,6 +28,6 @@ public class ETCAddForm {
     private Integer mileagePoints;
     private String author;
 
-    private List<MultipartFile> thumbnails;
+    private MultipartFile thumbnail;
     private List<MultipartFile> contentImages;
 }

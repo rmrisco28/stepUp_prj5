@@ -18,7 +18,7 @@ public class ExtraCurricularController {
 
     // 비교과 프로그램 등록(관리목록에 등록)
     @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody ETCAddForm etcAddForm) {
+    public ResponseEntity<?> register(ETCAddForm etcAddForm) {
         try {
             extraCurricularService.register(etcAddForm);
         } catch (Exception e) {

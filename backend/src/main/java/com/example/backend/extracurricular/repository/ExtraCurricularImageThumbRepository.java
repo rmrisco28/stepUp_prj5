@@ -2,9 +2,7 @@ package com.example.backend.extracurricular.repository;
 
 import com.example.backend.extracurricular.entity.ExtraCurricularImageThumb;
 import com.example.backend.extracurricular.entity.ExtraCurricularImageThumbId;
-import org.springframework.data.repository.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
-public interface ExtraCurricularImageThumbRepository extends Repository<ExtraCurricularImageThumb, ExtraCurricularImageThumbId> {
+public interface ExtraCurricularImageThumbRepository extends JpaRepository<ExtraCurricularImageThumb, ExtraCurricularImageThumbId> {
 }
