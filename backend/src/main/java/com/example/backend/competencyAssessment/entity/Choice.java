@@ -14,16 +14,20 @@ public class Choice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "choice_seq", nullable = false)
-    private Integer id;
+    private Integer seq;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "question_seq", nullable = false)
     private Question questionSeq;
 
+//    @Column(name = "`order`", nullable = false)
+//    private Integer order;
+
     @Column(name = "`option`", nullable = false, length = 50)
     private String option;
 
     @Column(name = "point")
-    private Integer point;
+    private Double point;
+
 
 }

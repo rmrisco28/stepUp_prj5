@@ -1,20 +1,22 @@
 package com.example.backend.competencyAssessment.dto;
 
+import com.example.backend.competencyAssessment.entity.Choice;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Value;
 
 import java.io.Serializable;
 
 /**
- * DTO for {@link com.example.backend.competencyAssessment.entity.Choice}
+ * DTO for {@link Choice}
  */
 @Data
 @AllArgsConstructor
-public class ChoiceAddDto implements Serializable {
+public class ChoiceListDto implements Serializable {
     Integer seq;
     Integer questionSeqSeq;
-    //    Integer order;
+    Integer questionSeqCaSeqSeq;
+    Integer questionSeqQuestionNum;
     String option;
     Double point;
+
 }
