@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
 public class ExtraCurricularService {
 
     private final ExtraCurricularProgramRepository extraCurricularProgramRepository;
@@ -298,8 +297,6 @@ public class ExtraCurricularService {
         ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("프로그램 수정 오류"));
 
-        log.info("확인 1");
-
         // --- 1. 텍스트 정보 수정 ---
         data.setTitle(form.getTitle());
         data.setContent(form.getContent());
@@ -328,18 +325,15 @@ public class ExtraCurricularService {
                 deleteFile(oldObjectKey);
                 extraCurricularImageThumbRepository.delete(data.getETCThumb());
                 data.setETCThumb(null); // 🔑 반드시 null로 초기화
-                log.info("확인 2");
             }
             // 새 썸네일 저장
             saveThumbImages(data, form.getThumbnail()); // ✅ 이렇게 수정
-            log.info("확인 3");
         }
 
         // --- 3. 본문 이미지 추가 ---
         if (form.getNewContentImages() != null && !form.getNewContentImages().isEmpty()) {
             for (MultipartFile file : form.getNewContentImages()) {
                 if (file != null && file.getSize() > 0) {
-                    log.info("확인 4");
                     ExtraCurricularImageContent content = new ExtraCurricularImageContent();
                     ExtraCurricularImageContentId id = new ExtraCurricularImageContentId();
                     id.setProgramSeq(data.getSeq());
@@ -347,7 +341,6 @@ public class ExtraCurricularService {
                     content.setProgram(data);
                     content.setId(id);
                     extraCurricularImageContentRepository.save(content);
-                    log.info("확인 5");
 
                     String objectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + file.getOriginalFilename();
                     uploadFile(file, objectKey);
@@ -358,23 +351,15 @@ public class ExtraCurricularService {
         // --- 4. 본문 이미지 삭제 ---
         if (form.getDeleteContentImageNames() != null && !form.getDeleteContentImageNames().isEmpty()) {
             for (String fileName : form.getDeleteContentImageNames()) {
-                log.info("확인 6");
                 // DB에서 찾기
                 String fileNameOnly = fileName.substring(fileName.lastIndexOf("/") + 1);
                 ExtraCurricularImageContentId id = new ExtraCurricularImageContentId();
                 id.setProgramSeq(data.getSeq());
                 id.setName(fileNameOnly);
 
-                log.info("확인 7");
-                Optional<ExtraCurricularImageContent> opt = extraCurricularImageContentRepository.findById(id);
-                log.info("조회된 데이터 존재 여부: {}", opt.isPresent());
-                log.info("검색 키: programSeq={}, name={}", data.getSeq(), fileName);
                 extraCurricularImageContentRepository.findById(id).ifPresent(content -> {
                     // S3 삭제
-                    log.info("{}", data.getSeq() + "/" + fileNameOnly);
-                    log.info("{}", fileNameOnly);
                     String objectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + fileNameOnly;
-                    log.info("{}", objectKey);
                     deleteFile(objectKey);
                     // DB 삭제
                     extraCurricularImageContentRepository.delete(content);
