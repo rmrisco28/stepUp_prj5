@@ -16,10 +16,10 @@ import java.util.Objects;
 @Embeddable
 public class ExtraCurricularImageThumbId implements Serializable {
     private static final long serialVersionUID = -3497836960855134286L;
-    @Column(name = "program_seq")
+    @Column(name = "program_seq", nullable = false)
     private Integer programSeq;
 
-    @Column(name = "name", length = 100)
+    @Column(name = "name", nullable = false, length = 100)
     private String name;
 
     @Override

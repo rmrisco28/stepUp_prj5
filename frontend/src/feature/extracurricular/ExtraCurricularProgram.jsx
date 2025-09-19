@@ -198,7 +198,12 @@ export function ExtraCurricularProgram() {
 
       {/* 하단 버튼 */}
       <div className="d-flex justify-content-center gap-2 my-3">
-        <Button variant="primary">신청하기</Button>
+        <Button
+          variant="primary"
+          onClick={() => navigate(`/extracurricular/application/${seq}`)}
+        >
+          신청하기
+        </Button>
         <Button
           variant="secondary"
           onClick={() => navigate("/extracurricular")}

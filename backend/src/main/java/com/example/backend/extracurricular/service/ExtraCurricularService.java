@@ -1,11 +1,18 @@
 package com.example.backend.extracurricular.service;
 
-import com.example.backend.extracurricular.dto.*;
+import com.example.backend.batch.student.repository.StudentRepository;
+import com.example.backend.competency.repository.SubCompetencyRepository;
+import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCDetailDto;
+import com.example.backend.extracurricular.dto.ETCEditForm;
+import com.example.backend.extracurricular.dto.ETCListDto;
 import com.example.backend.extracurricular.entity.*;
 import com.example.backend.extracurricular.enums.OperationType;
+import com.example.backend.extracurricular.repository.ExtraCurricularApplicationRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularImageContentRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularImageThumbRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
+import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +42,11 @@ public class ExtraCurricularService {
     private final ExtraCurricularImageThumbRepository extraCurricularImageThumbRepository;
     private final ExtraCurricularImageContentRepository extraCurricularImageContentRepository;
     private final S3Client s3Client;
+    private final ExtraCurricularApplicationRepository extraCurricularApplicationRepository;
+
+    private final StudentRepository studentRepository;
+    private final MemberRepository memberRepository;
+    private final SubCompetencyRepository subCompetencyRepository;
 
     @Value("${image.prefix}")
     private String imagePrefix;
@@ -177,8 +189,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                        + t.getId().getProgramSeq() + "/"
-                                        + t.getId().getName(), // URL 조합
+                                     + t.getId().getProgramSeq() + "/"
+                                     + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
