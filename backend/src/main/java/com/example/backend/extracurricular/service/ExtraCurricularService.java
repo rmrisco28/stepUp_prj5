@@ -7,6 +7,7 @@ import com.example.backend.extracurricular.repository.ExtraCurricularImageConten
 import com.example.backend.extracurricular.repository.ExtraCurricularImageThumbRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class ExtraCurricularService {
 
     private final ExtraCurricularProgramRepository extraCurricularProgramRepository;
@@ -40,7 +42,6 @@ public class ExtraCurricularService {
 
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
-
 
     // 비교과 프로그램 등록(관리목록에 등록)
     public void register(ETCAddForm etcAddForm) {
@@ -69,15 +70,9 @@ public class ExtraCurricularService {
 
         // 2. 썸네일 저장 (단일 파일)
         saveThumbImages(ETCProgram, etcAddForm);
-//        if (etcAddForm.getThumbnail() != null && !etcAddForm.getThumbnail().isEmpty()) {
-//            saveSingleImage(ETCProgram, etcAddForm.getThumbnail(), "thumbnail");
-//        }
 
         // 3. 본문 이미지 저장 (다중 파일)
         saveContextImages(ETCProgram, etcAddForm);
-//        if (etcAddForm.getContentImages() != null && !etcAddForm.getContentImages().isEmpty()) {
-//            saveImages(ETCProgram, etcAddForm.getContentImages(), "contentImages");
-//        }
 
     }
 
@@ -161,75 +156,6 @@ public class ExtraCurricularService {
         }
     }
 
-    // 단일 파일 저장용 (기존 saveImages 재사용)
-//    private void saveSingleImage(ExtraCurricularProgram program, MultipartFile image, String target) {
-//        saveImages(program, List.of(image), target);
-//    }
-//
-//    // 다중 파일 저장
-//    private void saveImages(ExtraCurricularProgram program, List<MultipartFile> images, String target) {
-//        if (images == null || images.isEmpty()) return;
-//
-//        for (MultipartFile image : images) {
-//            if (image == null || image.isEmpty()) continue;
-//
-//            // 1) DB 저장
-//            if ("thumbnail".equals(target)) {
-//                ExtraCurricularImageThumb thumb = new ExtraCurricularImageThumb();
-//                ExtraCurricularImageThumbId id = new ExtraCurricularImageThumbId();
-//                id.setProgramSeq(program.getSeq());
-//                id.setName(image.getOriginalFilename());
-//                thumb.setProgram(program);
-//                thumb.setId(id);
-//                extraCurricularImageThumbRepository.save(thumb);
-//
-//            } else if ("contentImages".equals(target)) {
-//                ExtraCurricularImageContent content = new ExtraCurricularImageContent();
-//                ExtraCurricularImageContentId id = new ExtraCurricularImageContentId();
-//                id.setProgramSeq(program.getSeq());
-//                id.setName(image.getOriginalFilename());
-//                content.setProgram(program);
-//                content.setId(id);
-//                extraCurricularImageContentRepository.save(content);
-//            }
-//
-//            // 2) 로컬 디렉토리 저장
-//            String basePath = "C:/Users/admin/IdeaProjects/stepUp_prj5/frontend/public/ETCProgramImages/";
-//            basePath += "thumbnail".equals(target) ? "thumb/" : "content/";
-//
-//            File dir = new File(basePath + program.getSeq());
-//            if (!dir.exists()) dir.mkdirs();
-//
-//            try {
-//                File dest = new File(dir, image.getOriginalFilename());
-//                image.transferTo(dest);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                throw new RuntimeException("이미지 저장 실패: " + image.getOriginalFilename());
-//            }
-//        }
-//    }
-
-
-//    // 이미지 저장
-//    private void saveImages(ExtraCurricularProgram ETCProgram, List<MultipartFile> images, String target) {
-//        if (images != null && images.size() > 0) {
-//            for (MultipartFile image : images) {
-//                if (image != null && image.getSize() > 0) {
-//                    // image_thumb 테이블에 새 레코드 입력
-//                    ExtraCurricularImageThumb extraCurricularImageThumb = new ExtraCurricularImageThumb();
-//                    // entity 내용 채우기
-//                    ExtraCurricularImageThumbId id = new ExtraCurricularImageThumbId();
-//                    id.setProgramSeq(ETCProgram.getSeq());
-//                    id.setName(image.getOriginalFilename());
-//                    extraCurricularImageThumb.setProgram(ETCProgram);
-//                    extraCurricularImageThumb.setId(id);
-//
-//                }
-//            }
-//        }
-//    }
-
     // 프로그램 목록(관리자 화면)
     public Map<String, Object> list(Integer pageNumber, String keyword) {
 
@@ -252,8 +178,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                     + t.getId().getProgramSeq() + "/"
-                                     + t.getId().getName(), // URL 조합
+                                        + t.getId().getProgramSeq() + "/"
+                                        + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
@@ -348,6 +274,7 @@ public class ExtraCurricularService {
 
     }
 
+    // 새 썸네일 이미지 가져올 때 필요한 것. 위에 메소드랑 다르게 쓰임
     private void saveThumbImages(ExtraCurricularProgram program, MultipartFile file) {
         if (file != null && !file.isEmpty()) {
             ExtraCurricularImageThumb thumb = new ExtraCurricularImageThumb();
@@ -370,6 +297,8 @@ public class ExtraCurricularService {
     public void edit(Integer seq, ETCEditForm form) {
         ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("프로그램 수정 오류"));
+
+        log.info("확인 1");
 
         // --- 1. 텍스트 정보 수정 ---
         data.setTitle(form.getTitle());
@@ -399,15 +328,18 @@ public class ExtraCurricularService {
                 deleteFile(oldObjectKey);
                 extraCurricularImageThumbRepository.delete(data.getETCThumb());
                 data.setETCThumb(null); // 🔑 반드시 null로 초기화
+                log.info("확인 2");
             }
             // 새 썸네일 저장
             saveThumbImages(data, form.getThumbnail()); // ✅ 이렇게 수정
+            log.info("확인 3");
         }
 
         // --- 3. 본문 이미지 추가 ---
         if (form.getNewContentImages() != null && !form.getNewContentImages().isEmpty()) {
             for (MultipartFile file : form.getNewContentImages()) {
                 if (file != null && file.getSize() > 0) {
+                    log.info("확인 4");
                     ExtraCurricularImageContent content = new ExtraCurricularImageContent();
                     ExtraCurricularImageContentId id = new ExtraCurricularImageContentId();
                     id.setProgramSeq(data.getSeq());
@@ -415,6 +347,7 @@ public class ExtraCurricularService {
                     content.setProgram(data);
                     content.setId(id);
                     extraCurricularImageContentRepository.save(content);
+                    log.info("확인 5");
 
                     String objectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + file.getOriginalFilename();
                     uploadFile(file, objectKey);
@@ -425,13 +358,23 @@ public class ExtraCurricularService {
         // --- 4. 본문 이미지 삭제 ---
         if (form.getDeleteContentImageNames() != null && !form.getDeleteContentImageNames().isEmpty()) {
             for (String fileName : form.getDeleteContentImageNames()) {
+                log.info("확인 6");
                 // DB에서 찾기
+                String fileNameOnly = fileName.substring(fileName.lastIndexOf("/") + 1);
                 ExtraCurricularImageContentId id = new ExtraCurricularImageContentId();
                 id.setProgramSeq(data.getSeq());
-                id.setName(fileName);
+                id.setName(fileNameOnly);
+
+                log.info("확인 7");
+                Optional<ExtraCurricularImageContent> opt = extraCurricularImageContentRepository.findById(id);
+                log.info("조회된 데이터 존재 여부: {}", opt.isPresent());
+                log.info("검색 키: programSeq={}, name={}", data.getSeq(), fileName);
                 extraCurricularImageContentRepository.findById(id).ifPresent(content -> {
                     // S3 삭제
-                    String objectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + fileName;
+                    log.info("{}", data.getSeq() + "/" + fileNameOnly);
+                    log.info("{}", fileNameOnly);
+                    String objectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + fileNameOnly;
+                    log.info("{}", objectKey);
                     deleteFile(objectKey);
                     // DB 삭제
                     extraCurricularImageContentRepository.delete(content);
