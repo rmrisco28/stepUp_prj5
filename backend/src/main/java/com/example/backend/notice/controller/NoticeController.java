@@ -1,8 +1,7 @@
-package com.example.backend.board.controller;
+package com.example.backend.notice.controller;
 
-import com.example.backend.board.dto.NoticeAddForm;
-import com.example.backend.board.entity.Notice;
-import com.example.backend.board.service.NoticeService;
+import com.example.backend.notice.dto.NoticeAddForm;
+import com.example.backend.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/board/notice")
+@RequestMapping("/api/notice")
 public class NoticeController {
     private final NoticeService noticeService;
 

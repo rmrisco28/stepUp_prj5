@@ -1,8 +1,8 @@
-package com.example.backend.board.service;
+package com.example.backend.notice.service;
 
-import com.example.backend.board.dto.NoticeAddForm;
-import com.example.backend.board.entity.Notice;
-import com.example.backend.board.repository.NoticeRepository;
+import com.example.backend.notice.dto.NoticeAddForm;
+import com.example.backend.notice.entity.Notice;
+import com.example.backend.notice.repository.NoticeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

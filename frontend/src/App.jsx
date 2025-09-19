@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { Login } from "./feature/member/Login.jsx";
 import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
 import { Competency } from "./feature/competency/competencyIntroduce/Competency.jsx";
-import { Notice } from "./feature/board/Notice.jsx";
+import { Notice } from "./feature/notice/Notice.jsx";
 import { Mileage } from "./feature/activity/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
@@ -26,6 +26,7 @@ import { MainLayout } from "./common/MainLayout.jsx";
 import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTest/CompetencyAssessmentTestReady.jsx";
 import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTest/CompetencyAssessmentTestStart.jsx";
 import { MyETC } from "./feature/activity/MyETC.jsx";
+import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
 
 function App() {
   return (
@@ -122,6 +123,7 @@ function App() {
             {/*안내*/}
             <Route path="board" element={<Notice />} />
             <Route path="board/notice" element={<Notice />} />
+            <Route path="board/notice/add" element={<NoticeAdd />} />
             <Route path="board/faq" element={<Notice />} />
 
             {/*로그인*/}

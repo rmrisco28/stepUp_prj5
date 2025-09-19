@@ -1,6 +1,5 @@
-package com.example.backend.board.dto;
+package com.example.backend.notice.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
 @Data

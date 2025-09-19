@@ -1,6 +1,5 @@
-package com.example.backend.board.entity;
+package com.example.backend.notice.entity;
 
-import com.example.backend.batch.employee.entity.Employee;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +16,7 @@ import java.time.LocalDateTime;
 public class Notice {
     @Id
     @Column(name = "notice_seq", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "title", nullable = false)
@@ -26,8 +26,10 @@ public class Notice {
     private String content;
 
     @ColumnDefault("current_timestamp()")
-    @Column(name = "inserted_at", nullable = false)
+    @Column(name = "inserted_at", nullable = false, updatable = false, insertable = false)
     private LocalDateTime insertedAt;
+    // insertable false는 데이터 저장시 이 컬럼을 제외하겠다.
+    // 그러면 updatable 없애면 저장될때마다 시간 바뀜. 수정시간 넣고 싶으면 뭐 .. 컬럼 추가해서 insertable false랑 updatable true 하면 될 듯
 
     //    @ManyToOne(optional = false)
 //    @JoinColumn(name = "author_seq", nullable = false)

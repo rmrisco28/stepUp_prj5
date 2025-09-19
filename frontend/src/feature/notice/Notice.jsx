@@ -11,14 +11,14 @@ export function Notice() {
   const navigate = useNavigate();
 
   function NoticeAddButton() {
-    // setIsProcessing(true);
-    // axios.postForm()
+    navigate("/board/notice/add");
   }
 
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
-        <>공지사항</>
+        <div>공지사항</div>
+        {/*공지사항 리스트*/}
         <button onClick={NoticeAddButton}>공지사항 추가</button>
       </Col>
     </Row>
