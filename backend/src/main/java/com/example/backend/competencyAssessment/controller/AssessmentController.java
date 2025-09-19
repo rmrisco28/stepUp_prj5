@@ -3,6 +3,7 @@ package com.example.backend.competencyAssessment.controller;
 import com.example.backend.competencyAssessment.dto.*;
 import com.example.backend.competencyAssessment.service.AssessmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/competency/assessment")
@@ -156,4 +158,10 @@ public class AssessmentController {
         return assessmentService.responseSave(seq, dtoList);
     }
 
+    /* ------------------진단 결과 -----------------------*/
+
+    @PostMapping("test/complete/{seq}")
+    public ResponseEntity<?> complete(@PathVariable int seq, @RequestBody CompleteSaveDto dto) {
+        return assessmentService.complete(seq, dto);
+    }
 }

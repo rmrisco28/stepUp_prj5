@@ -28,6 +28,7 @@ export function MenuBar() {
       subItems: [
         { name: "역량 소개", path: "/competency" },
         { name: "진단 검사", path: "/competency/assessment" },
+        { name: "진단 검사 결과", path: "/competency/assessment/result" },
         { name: "관리자 핵심역량 목록", path: "/competency/list" },
         { name: "관리자 하위역량 목록", path: "/competency/subList" },
       ],

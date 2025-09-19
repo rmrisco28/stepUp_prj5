@@ -110,19 +110,19 @@ CREATE TABLE `response`
 DROP TABLE IF EXISTS `response`;
 
 # 결과 테이블
-CREATE TABLE `result`
+CREATE TABLE `complete`
 (
     `result_seq`     INT AUTO_INCREMENT NOT NULL,
     `student_seq`    INT                NOT NULL COMMENT '회원 ID',
     `ca_seq`         INT                NOT NULL COMMENT '역량 진단 제목',
-    `response_seq`   INT                NOT NULL,
-    `assessmentDttm` DateTime           NOT NULL,
+    `assessmentDttm` DateTime           NOT NULL DEFAULT NOW(),
     CONSTRAINT pk_result PRIMARY KEY (result_seq),
     FOREIGN KEY (student_seq) REFERENCES student (student_seq),
-    FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq),
-    FOREIGN KEY (response_seq) REFERENCES response (response_seq)
-
+    FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq)
 );
+
+DROP TABLE IF EXISTS `complete`;
+
 
 # 상세결과 테이블
 DROP TABLE IF EXISTS `result_detail`;

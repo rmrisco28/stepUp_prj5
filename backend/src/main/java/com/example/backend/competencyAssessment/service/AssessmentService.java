@@ -8,14 +8,8 @@ import com.example.backend.competency.repository.CompetencyRepository;
 import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.competencyAssessment.dto.*;
 import com.example.backend.competency.dto.MainCompetencyDto;
-import com.example.backend.competencyAssessment.entity.Assessment;
-import com.example.backend.competencyAssessment.entity.Choice;
-import com.example.backend.competencyAssessment.entity.Question;
-import com.example.backend.competencyAssessment.entity.Response;
-import com.example.backend.competencyAssessment.repository.AssessmentRepository;
-import com.example.backend.competencyAssessment.repository.ChoiceRepository;
-import com.example.backend.competencyAssessment.repository.QuestionRepository;
-import com.example.backend.competencyAssessment.repository.ResponseRepository;
+import com.example.backend.competencyAssessment.entity.*;
+import com.example.backend.competencyAssessment.repository.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,6 +37,7 @@ public class AssessmentService {
     private final ChoiceRepository choiceRepository;
     private final StudentRepository studentRepository;
     private final ResponseRepository responseRepository;
+    private final CompleteRepository completeRepository;
 
     /*----------------- 역량 진단 목록 ----------------*/
 
@@ -314,6 +309,22 @@ public class AssessmentService {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(result);
+
+    }
+
+    public ResponseEntity<?> complete(int seq, CompleteSaveDto dto) {
+        Complete complete = new Complete();
+
+        Student student = studentRepository.findById(dto.getStudentSeqId());
+        Assessment assessment = assessmentRepository.findByCaSeq(seq);
+
+
+        complete.setStudentSeq(student);
+        complete.setCaSeq(assessment);
+
+        completeRepository.save(complete);
+        return ResponseEntity.ok().build();
+
 
     }
 

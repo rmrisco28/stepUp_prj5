@@ -4,7 +4,6 @@ import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
 import { Competency } from "./feature/competency/competencyIntroduce/Competency.jsx";
 import { NoticeList } from "./feature/notice/NoticeList.jsx";
 import { Mileage } from "./feature/activity/Mileage.jsx";
-import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
 import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
 import { CompetencyList } from "./feature/competency/competencyIntroduce/CompetencyList.jsx";
@@ -28,6 +27,7 @@ import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTe
 import { MyETC } from "./feature/activity/MyETC.jsx";
 import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
 import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
+import { CompetencyAssessmentTestComplete } from "./feature/competency/competencyTest/CompetencyAssessmentTestComplete.jsx";
 
 function App() {
   return (
@@ -114,6 +114,12 @@ function App() {
             <Route
               path="/competency/assessment/test/start/:assessmentSeq"
               element={<CompetencyAssessmentTestStart />}
+            />
+
+            {/*------------------역량 진단  결과----------------*/}
+            <Route
+              path="/competency/assessment/test/complete/:assessmentSeq"
+              element={<CompetencyAssessmentTestComplete />}
             />
 
             {/*나의 활동*/}
