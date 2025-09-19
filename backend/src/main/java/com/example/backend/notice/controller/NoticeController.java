@@ -34,4 +34,13 @@ public class NoticeController {
     public ResponseEntity<?> getNoticeDetail(@PathVariable Integer id) {
         return ResponseEntity.ok().body(noticeService.getNoticeDetail(id));
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteNotice(@PathVariable Integer id) {
+        noticeService.deleteNotice(id);
+        return ResponseEntity.ok().body(
+                Map.of("message",
+                        Map.of("type", "success", "text", "공지사항이 삭제되었습니다.")
+                ));
+    }
 }

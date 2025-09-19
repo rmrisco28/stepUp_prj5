@@ -44,4 +44,11 @@ public class NoticeService {
                 .build();
     }
 
+    // 공지사항 삭제
+    public void deleteNotice(Integer id) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("공지사항이 존재하지 않습니다."));
+
+        noticeRepository.delete(notice);
+    }
 }

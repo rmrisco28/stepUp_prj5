@@ -26,21 +26,22 @@ export function NoticeDetail() {
       });
   }, [id, navigate]);
 
-  // 나중에 Delete 할 때 Update 버튼은 Edit으로 넘어가게
-  // function handleDeleteButtonClick() {
-  //   axios
-  //     .delete(`/api/board/${id}`)
-  //     .then((res) => {
-  //       const message = res.data.message;
-  //       if (message) {
-  //         toast(message.text, { type: message.type });
-  //       }
-  //       navigate("/board/list");
-  //     })
-  //     .catch(() => {
-  //       toast.warning("게시물이 삭제되지 않았습니다.");
-  //     });
-  // }
+  // Update 버튼은 Edit으로 넘어가게
+
+  function NoticeDeleteButton() {
+    axios
+      .delete(`/api/notice/${id}`)
+      .then((res) => {
+        const message = res.data.message;
+        if (message) {
+          toast(message.text, { type: message.type });
+        }
+        navigate("/board/notice");
+      })
+      .catch(() => {
+        toast.warning("공지사항이 삭제되지 않았습니다.");
+      });
+  }
 
   if (!notice) {
     return (
@@ -74,16 +75,22 @@ export function NoticeDetail() {
           </div>
         </div>
 
-        <div className="d-flex justify-content-between">
+        <div className="d-flex">
           <Button variant="outline-secondary" onClick={() => navigate(-1)}>
             목록
           </Button>
           <div>
             {/* 로그인한 사용자가 작성자와 일치할 경우 수정/삭제 버튼 표시 */}
             {/* <Button variant="outline-primary" className="me-2">
-              수정 또는 삭제
+              수정
+            </Button> */}
+            <Button
+              variant="outline-danger"
+              onClick={NoticeDeleteButton}
+              style={{ marginLeft: "5px" }}
+            >
+              삭제
             </Button>
-            <Button variant="outline-danger">삭제</Button> */}
           </div>
         </div>
       </Col>
