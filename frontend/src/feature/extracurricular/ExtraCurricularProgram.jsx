@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   Container,
   Row,
@@ -17,6 +17,7 @@ export function ExtraCurricularProgram() {
   const { seq } = useParams(); // URL에서 seq 받아오기
   const [program, setProgram] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const statusMap = {
     DRAFT: "임시저장",
@@ -198,7 +199,12 @@ export function ExtraCurricularProgram() {
       {/* 하단 버튼 */}
       <div className="d-flex justify-content-center gap-2 my-3">
         <Button variant="primary">신청하기</Button>
-        <Button variant="secondary">목록보기</Button>
+        <Button
+          variant="secondary"
+          onClick={() => navigate("/extracurricular")}
+        >
+          목록보기
+        </Button>
       </div>
     </Container>
   );
