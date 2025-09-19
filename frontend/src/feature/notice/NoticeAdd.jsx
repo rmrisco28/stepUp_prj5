@@ -58,6 +58,13 @@ export function NoticeAdd() {
         </div>
         {/* 추가 버튼 */}
         <Button
+          className="me-2"
+          variant="secondary"
+          onClick={() => navigate(-1)}
+        >
+          취소
+        </Button>
+        <Button
           variant="primary"
           onClick={NoticeAddButton}
           disabled={isProcessing}
