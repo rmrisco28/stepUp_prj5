@@ -7,12 +7,17 @@ import {
   FormControl,
   FormGroup,
   FormLabel,
+  ListGroup,
+  ListGroupItem,
   Row,
   Spinner,
+  Stack,
 } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams, useSearchParams } from "react-router";
+import { TfiTrash } from "react-icons/tfi";
+import { Image } from "react-bootstrap";
 
 export function ExtraCurricularEdit() {
   const [formData, setFormData] = useState({
@@ -33,6 +38,9 @@ export function ExtraCurricularEdit() {
     mileagePoints: 0,
     author: "",
     useYn: true,
+    thumbnail: null, // 새 썸네일
+    newContentImages: [], // 새 본문 이미지
+    deleteContentImageNames: [], // 삭제할 이미지
   });
 
   const [loading, setLoading] = useState(true);
@@ -40,6 +48,8 @@ export function ExtraCurricularEdit() {
   const { seq } = useParams();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [existingContentImages, setExistingContentImages] = useState([]);
+  const [existingThumbnail, setExistingThumbnail] = useState(null);
   const page = searchParams.get("page");
 
   // 초기 데이터 불러오기
@@ -49,7 +59,6 @@ export function ExtraCurricularEdit() {
       .then((res) => {
         const data = res.data;
         console.log("데이터 불러오기 성공");
-
         setFormData({
           title: data.title || "",
           content: data.content || "",
@@ -69,6 +78,12 @@ export function ExtraCurricularEdit() {
           author: data.author || "",
           useYn: data.useYn ?? true,
         });
+        setExistingThumbnail(data.thumbnail); // 기존 썸네일 URL
+        setExistingContentImages(
+          (data.contentImages || []).map((img) =>
+            typeof img === "string" ? { name: img, path: img } : img,
+          ),
+        );
       })
       .catch((err) => {
         console.error(err);
@@ -87,30 +102,56 @@ export function ExtraCurricularEdit() {
     setFormData({ ...formData, [name]: value });
   };
 
+  // 썸네일 선택
+  const handleThumbnailChange = (e) => {
+    setFormData({ ...formData, thumbnail: e.target.files[0] });
+  };
+
+  // 본문 이미지 추가
+  const handleNewImagesChange = (e) => {
+    setFormData({ ...formData, newContentImages: Array.from(e.target.files) });
+  };
+
+  // 기존 이미지 삭제 체크
+  const toggleDeleteImage = (fileName) => {
+    setFormData((prev) => {
+      const exists = prev.deleteContentImageNames.includes(fileName);
+      return {
+        ...prev,
+        deleteContentImageNames: exists
+          ? prev.deleteContentImageNames.filter((f) => f !== fileName)
+          : [...prev.deleteContentImageNames, fileName],
+      };
+    });
+  };
+
   // 폼 제출
   function handleEditButtonClick(e) {
     e.preventDefault();
 
+    const fd = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      if (key === "grades") {
+        fd.append("grades", Array.isArray(value) ? value.join(",") : value);
+      } else if (key === "newContentImages") {
+        value.forEach((file) => fd.append("newContentImages", file));
+      } else if (key === "deleteContentImageNames" && Array.isArray(value)) {
+        value.forEach((name) => fd.append("deleteContentImageNames", name));
+      } else if (value !== null) {
+        fd.append(key, value);
+      }
+    });
+
     axios
-      .put(`/api/extracurricular/edit/${seq}`, {
-        ...formData,
-        grades: Array.isArray(formData.grades)
-          ? formData.grades.join(",")
-          : formData.grades,
-      })
+      .putForm(`/api/extracurricular/edit/${seq}`, fd)
       .then((res) => {
         console.log("프로그램 수정 성공", res.data);
-
-        // page 쿼리 유지 후 상세 페이지 이동
         const page =
           new URLSearchParams(window.location.search).get("page") || 1;
         navigate(`/extracurricular/detail/${seq}?page=${page}`);
       })
       .catch((err) => {
-        console.error("프로그램 수정 오류", err.response.data);
-      })
-      .finally(() => {
-        console.log("수정 요청 완료");
+        console.error("프로그램 수정 오류", err);
       });
   }
 
@@ -342,6 +383,130 @@ export function ExtraCurricularEdit() {
                 onChange={(e) =>
                   setFormData({ ...formData, useYn: e.target.checked })
                 }
+              />
+            </FormGroup>
+
+            {existingThumbnail && (
+              <ListGroup className="mb-3">
+                <ListGroupItem>
+                  <Stack direction="horizontal" gap={3}>
+                    <div>
+                      <input
+                        type="checkbox"
+                        className="btn-check"
+                        id="btn-check-thumb"
+                        value={existingThumbnail.name}
+                        onChange={(e) => {
+                          const checked = e.target.checked;
+                          if (checked)
+                            setFormData({
+                              ...formData,
+                              deleteThumbnails: [existingThumbnail.name],
+                            });
+                          else
+                            setFormData({ ...formData, deleteThumbnails: [] });
+                        }}
+                      />
+                      <label
+                        className="btn btn-outline-danger btn-sm"
+                        htmlFor="btn-check-thumb"
+                      >
+                        <TfiTrash />
+                      </label>
+                    </div>
+                    <div>
+                      <Image
+                        fluid
+                        src={existingThumbnail.path}
+                        style={{
+                          filter: formData.deleteThumbnails?.includes(
+                            existingThumbnail.name,
+                          )
+                            ? "blur(3px)"
+                            : "none",
+                        }}
+                      />
+                    </div>
+                  </Stack>
+                </ListGroupItem>
+              </ListGroup>
+            )}
+
+            {/* 새 썸네일 업로드 */}
+            <FormGroup className="mb-3" controlId="thumbnail">
+              <FormLabel>새 썸네일</FormLabel>
+              <FormControl
+                type="file"
+                accept="image/*"
+                onChange={handleThumbnailChange}
+              />
+            </FormGroup>
+
+            {/* 기존 본문 이미지 표시 + 삭제 */}
+            {existingContentImages.length > 0 && (
+              <ListGroup className="mb-3">
+                {existingContentImages.map((img, idx) => (
+                  <ListGroupItem key={idx}>
+                    <Stack direction="horizontal" gap={3}>
+                      <div>
+                        <input
+                          type="checkbox"
+                          className="btn-check"
+                          id={"btn-check-" + idx}
+                          value={img.name}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setFormData((prev) => ({
+                              ...prev,
+                              deleteContentImageNames: checked
+                                ? [
+                                    ...(prev.deleteContentImageNames || []),
+                                    img.name,
+                                  ]
+                                : (prev.deleteContentImageNames || []).filter(
+                                    (f) => f !== img.name,
+                                  ),
+                            }));
+                          }}
+                        />
+                        <label
+                          className="btn btn-outline-danger btn-sm"
+                          htmlFor={"btn-check-" + idx}
+                        >
+                          <TfiTrash />
+                        </label>
+                      </div>
+                      <div>
+                        <Image
+                          src={img.path}
+                          alt={`content-${idx}`}
+                          fluid
+                          style={{
+                            width: "100px",
+                            height: "auto",
+                            objectFit: "cover",
+                            filter: formData.deleteContentImageNames?.includes(
+                              img.name,
+                            )
+                              ? "blur(3px)"
+                              : "none",
+                          }}
+                        />
+                      </div>
+                    </Stack>
+                  </ListGroupItem>
+                ))}
+              </ListGroup>
+            )}
+
+            {/* 새 본문 이미지 업로드 */}
+            <FormGroup className="mb-3" controlId="newContentImages">
+              <FormLabel>새 본문 이미지</FormLabel>
+              <FormControl
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleNewImagesChange}
               />
             </FormGroup>
 

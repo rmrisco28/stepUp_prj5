@@ -55,7 +55,7 @@ public class ExtraCurricularController {
 
     // 프로그램 수정
     @PutMapping("edit/{seq}")
-    public ResponseEntity<?> edit(@PathVariable Integer seq, @RequestBody ETCEditForm form) {
+    public ResponseEntity<?> edit(@PathVariable Integer seq, ETCEditForm form) {
         try {
             extraCurricularService.edit(seq, form);
         } catch (Exception e) {

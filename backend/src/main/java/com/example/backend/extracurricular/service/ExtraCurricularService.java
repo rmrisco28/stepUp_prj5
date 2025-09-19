@@ -19,10 +19,7 @@ import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -351,11 +348,30 @@ public class ExtraCurricularService {
 
     }
 
+    private void saveThumbImages(ExtraCurricularProgram program, MultipartFile file) {
+        if (file != null && !file.isEmpty()) {
+            ExtraCurricularImageThumb thumb = new ExtraCurricularImageThumb();
+            ExtraCurricularImageThumbId id = new ExtraCurricularImageThumbId();
+            id.setProgramSeq(program.getSeq());
+            id.setName(file.getOriginalFilename());
+            thumb.setProgram(program);
+            thumb.setId(id);
+
+            program.setETCThumb(thumb); // 🔑 프로그램 객체에 연관 설정
+
+            extraCurricularImageThumbRepository.save(thumb);
+
+            String objectKey = "prj5/ETC_Thumb/" + program.getSeq() + "/" + file.getOriginalFilename();
+            uploadFile(file, objectKey);
+        }
+    }
+
     // 프로그램 수정
     public void edit(Integer seq, ETCEditForm form) {
         ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("프로그램 수정 오류"));
 
+        // --- 1. 텍스트 정보 수정 ---
         data.setTitle(form.getTitle());
         data.setContent(form.getContent());
         data.setOperateStartDt(form.getOperateStartDt());
@@ -373,12 +389,60 @@ public class ExtraCurricularService {
         data.setMileagePoints(form.getMileagePoints());
         data.setAuthor(form.getAuthor());
         data.setUseYn(form.getUseYn());
+        data.setUpdatedAt(LocalDateTime.now());
 
-        LocalDateTime now = LocalDateTime.now();
-        data.setUpdatedAt(now);
+        // --- 2. 썸네일 교체 ---
+        if (form.getThumbnail() != null && !form.getThumbnail().isEmpty()) {
+            if (data.getETCThumb() != null) {
+                String oldFileName = data.getETCThumb().getId().getName();
+                String oldObjectKey = "prj5/ETC_Thumb/" + data.getSeq() + "/" + oldFileName;
+                deleteFile(oldObjectKey);
+                extraCurricularImageThumbRepository.delete(data.getETCThumb());
+                data.setETCThumb(null); // 🔑 반드시 null로 초기화
+            }
+            // 새 썸네일 저장
+            saveThumbImages(data, form.getThumbnail()); // ✅ 이렇게 수정
+        }
 
+        // --- 3. 본문 이미지 추가 ---
+        if (form.getNewContentImages() != null && !form.getNewContentImages().isEmpty()) {
+            for (MultipartFile file : form.getNewContentImages()) {
+                if (file != null && file.getSize() > 0) {
+                    ExtraCurricularImageContent content = new ExtraCurricularImageContent();
+                    ExtraCurricularImageContentId id = new ExtraCurricularImageContentId();
+                    id.setProgramSeq(data.getSeq());
+                    id.setName(file.getOriginalFilename());
+                    content.setProgram(data);
+                    content.setId(id);
+                    extraCurricularImageContentRepository.save(content);
+
+                    String objectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + file.getOriginalFilename();
+                    uploadFile(file, objectKey);
+                }
+            }
+        }
+
+        // --- 4. 본문 이미지 삭제 ---
+        if (form.getDeleteContentImageNames() != null && !form.getDeleteContentImageNames().isEmpty()) {
+            for (String fileName : form.getDeleteContentImageNames()) {
+                // DB에서 찾기
+                ExtraCurricularImageContentId id = new ExtraCurricularImageContentId();
+                id.setProgramSeq(data.getSeq());
+                id.setName(fileName);
+                extraCurricularImageContentRepository.findById(id).ifPresent(content -> {
+                    // S3 삭제
+                    String objectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + fileName;
+                    deleteFile(objectKey);
+                    // DB 삭제
+                    extraCurricularImageContentRepository.delete(content);
+                });
+            }
+        }
+
+        // --- 5. 최종 저장 ---
         extraCurricularProgramRepository.save(data);
     }
+
 
     // 프로그램 삭제 (DB + S3 이미지 삭제)
     public void delete(Integer seq) {
