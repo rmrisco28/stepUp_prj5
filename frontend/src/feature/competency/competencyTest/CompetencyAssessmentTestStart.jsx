@@ -1,7 +1,9 @@
 import {
   Col,
   Container,
+  FormCheck,
   FormControl,
+  FormFloating,
   FormGroup,
   FormLabel,
   Row,
@@ -9,11 +11,13 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router";
+import FormRange from "react-bootstrap/FormRange";
+import FormCheckInput from "react-bootstrap/FormCheckInput";
 
 export function CompetencyAssessmentTestStart() {
   const [title, setTitle] = useState("");
   const [questionList, setQuestionList] = useState([]);
-  const [question, setQuestion] = useState("");
+  const [choiceList, setChoiceList] = useState([]);
 
   const navigate = useNavigate();
 
@@ -34,6 +38,7 @@ export function CompetencyAssessmentTestStart() {
       .get(`/api/competency/assessment/test/choiceList/${assessmentSeq}`)
       .then((res) => {
         console.log(res.data);
+        setChoiceList(res.data);
       });
   }, []);
 
@@ -47,13 +52,33 @@ export function CompetencyAssessmentTestStart() {
         <Col xs={10} md={8} lg={6}>
           {/*문제*/}
           {questionList.map((item, index) => (
-            <div key={index}>
+            <div key={index} className="mb-5">
               {/*문제*/}
               <FormGroup className="mb-3" controlId="question">
                 <FormLabel style={{ fontSize: "1.5rem" }}>
-                  {item.question}
+                  {item.questionNum}. {item.question}
                 </FormLabel>
               </FormGroup>
+
+              {choiceList.map(
+                (choice, index) =>
+                  item.seq === choice.questionSeqSeq && (
+                    <FormGroup key={index} className="mb-3" controlId="choice">
+                      <FormCheck
+                        type="radio"
+                        id={`choice-${item.seq}-${index}`}
+                        className="mb-3"
+                      >
+                        <FormCheckInput
+                          type="radio"
+                          name={`question-${item.seq}`}
+                          value={choice.seq}
+                        ></FormCheckInput>
+                        <FormCheck.Label>{choice.option}</FormCheck.Label>
+                      </FormCheck>
+                    </FormGroup>
+                  ),
+              )}
             </div>
           ))}
         </Col>

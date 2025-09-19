@@ -110,7 +110,20 @@ export function CompetencyAssessment() {
               {assessment && assessment.length > 0 ? (
                 assessment.map((data) => {
                   const endDate = new Date(data.endDttm);
-                  const inDisabled = endDate < today;
+                  const endDateOnly = new Date(
+                    endDate.getFullYear(),
+                    endDate.getMonth(),
+                    endDate.getDate(),
+                  );
+
+                  const today = new Date();
+                  const todayOnly = new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    today.getDate(),
+                  );
+
+                  const inDisabled = endDateOnly < todayOnly;
 
                   return (
                     <tr key={data.seq} valign="middle">
