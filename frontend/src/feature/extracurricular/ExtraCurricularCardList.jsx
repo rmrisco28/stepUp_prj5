@@ -14,29 +14,42 @@ export function ExtraCurricularCardList({ programs }) {
     <Row className="g-4">
       {programs.map((p) => (
         <Col key={p.seq} md={6} lg={4}>
-          <Card className="h-100" style={{ borderRadius: "10px" }}>
-            <div
-              style={{
-                height: "150px",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <h6 className="fw-bold">썸네일</h6>
-            </div>
+          <Card
+            className="h-100"
+            style={{ borderRadius: "10px", cursor: "pointer" }}
+            onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
+          >
+            {p.thumbUrl ? (
+              <img
+                src={p.thumbUrl}
+                alt={p.title}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  height: "150px",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              ></div>
+            )}
 
             <Card.Body>
               <div className="d-flex justify-content-between align-items-start mb-3">
-                <Card.Title
-                  className="fw-bold flex-grow-1 me-2"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
-                >
+                <Card.Title className="fw-bold flex-grow-1 me-2">
                   {p.title}
                 </Card.Title>
                 <Badge bg="secondary">{statusMap[p.status] || p.status}</Badge>

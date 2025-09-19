@@ -1,9 +1,6 @@
 package com.example.backend.extracurricular.service;
 
-import com.example.backend.extracurricular.dto.ETCAddForm;
-import com.example.backend.extracurricular.dto.ETCDetailDto;
-import com.example.backend.extracurricular.dto.ETCEditForm;
-import com.example.backend.extracurricular.dto.ETCListDto;
+import com.example.backend.extracurricular.dto.*;
 import com.example.backend.extracurricular.entity.*;
 import com.example.backend.extracurricular.enums.OperationType;
 import com.example.backend.extracurricular.repository.ExtraCurricularImageContentRepository;
@@ -28,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -235,13 +233,49 @@ public class ExtraCurricularService {
 //        }
 //    }
 
-    // 프로그램 목록
+    // 프로그램 목록(관리자 화면)
     public Map<String, Object> list(Integer pageNumber, String keyword) {
 
         Page<ETCListDto> programPage = extraCurricularProgramRepository.findAllBy(
                 PageRequest.of(pageNumber - 1, 10),
                 keyword
         );
+
+        // 프로그램 seq 조회
+        List<Integer> seqList = programPage.getContent().stream()
+                .map(ETCListDto::getSeq)
+                .toList();
+
+        // 썸네일 조회
+        List<ExtraCurricularImageThumb> thumbs = extraCurricularImageThumbRepository.findByProgramSeqList(seqList);
+
+        // 썸네일 이미지 경로랑 그 이미지를 담고 있는 프로그램 seq 같이
+        Map<Integer, List<String>> thumbMap = thumbs.stream()
+                .collect(Collectors.groupingBy(
+                        t -> t.getId().getProgramSeq(),
+                        Collectors.mapping(
+                                t -> imagePrefix + "prj5/ETC_Thumb/"
+                                        + t.getId().getProgramSeq() + "/"
+                                        + t.getId().getName(), // URL 조합
+                                Collectors.toList()
+                        )
+                ));
+
+        // thumbUrl을 포함한 새로운 List 생성
+        List<ETCListDto> programsWithThumbs = programPage.getContent().stream()
+                .map(program -> {
+                    // 썸네일 URL 찾기
+                    String thumbUrl = Optional.ofNullable(thumbMap.get(program.getSeq()))
+                            .filter(urls -> !urls.isEmpty())
+                            .map(urls -> urls.get(0)) // 첫 번째 이미지만 사용: 근데 썸넬이미지는 항상 하나긴 함
+                            .orElse(null);
+
+                    // thumbUrl 설정
+                    program.setThumbUrl(thumbUrl);
+                    return program;
+                })
+                .toList();
+
 
         int totalPages = programPage.getTotalPages();
         int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
@@ -258,7 +292,7 @@ public class ExtraCurricularService {
 
         return Map.of(
                 "pageInfo", pageInfo,
-                "programList", programPage.getContent()
+                "programList", programsWithThumbs
         );
     }
 
@@ -270,7 +304,6 @@ public class ExtraCurricularService {
             case HYBRID -> "혼합";
         };
     }
-
 
     // 프로그램 상세 정보
     public Object detail(Integer seq) {
