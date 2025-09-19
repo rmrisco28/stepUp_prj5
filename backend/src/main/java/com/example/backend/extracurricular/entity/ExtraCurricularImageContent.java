@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -16,7 +18,8 @@ public class ExtraCurricularImageContent {
 
     @MapsId("programSeq")
     @ManyToOne(optional = false)
-    @JoinColumn(name = "program_seq")
-    private ExtraCurricularProgram program;
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "program_seq", nullable = false)
+    private ExtraCurricularProgram programSeq;
 
 }
