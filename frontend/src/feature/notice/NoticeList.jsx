@@ -28,6 +28,10 @@ export function NoticeList() {
     navigate("/board/notice/add");
   }
 
+  function NoticeDetailButton() {
+    // navigate("/board/notice/detail");
+  }
+
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
@@ -35,11 +39,12 @@ export function NoticeList() {
         <Table striped bordered hover className="mt-3">
           <thead>
             <tr>
+              <th>번호</th>
               <th>제목</th>
               <th>작성일</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody onClick={NoticeDetailButton} style={{ cursor: "pointer" }}>
             {isProcessing ? (
               <tr>
                 <td colSpan="2" className="text-center">
@@ -55,6 +60,7 @@ export function NoticeList() {
             ) : (
               noticeList.map((notice, index) => (
                 <tr key={index}>
+                  <td>{notice.id}</td>
                   <td>{notice.title}</td>
                   <td>{notice.insertedAt}</td>
                 </tr>

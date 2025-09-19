@@ -3,6 +3,8 @@ package com.example.backend.notice.dto;
 import java.time.LocalDateTime;
 
 public interface NoticeListInfo {
+    Integer getId();
+
     String getTitle();
 
     LocalDateTime getInsertedAt();
