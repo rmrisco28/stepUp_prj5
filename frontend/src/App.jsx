@@ -2,8 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import { Login } from "./feature/member/Login.jsx";
 import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
 import { Competency } from "./feature/competency/competencyIntroduce/Competency.jsx";
-import { Career } from "./feature/career/Career.jsx";
-import { Mileage } from "./feature/mileage/Mileage.jsx";
+import { NoticeList } from "./feature/notice/NoticeList.jsx";
+import { Mileage } from "./feature/activity/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
 import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
@@ -25,6 +25,9 @@ import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricula
 import { MainLayout } from "./common/MainLayout.jsx";
 import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTest/CompetencyAssessmentTestReady.jsx";
 import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTest/CompetencyAssessmentTestStart.jsx";
+import { MyETC } from "./feature/activity/MyETC.jsx";
+import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
+import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
 
 function App() {
   return (
@@ -113,13 +116,19 @@ function App() {
               element={<CompetencyAssessmentTestStart />}
             />
 
-            {/*마일리지*/}
-            <Route path="mileage" element={<Mileage />} />
-            {/*진로 설계*/}
-            <Route path="career" element={<Career />} />
-            {/*통합 상담*/}
-            <Route path="counseling" element={<Counseling />} />
-            {/*회원*/}
+            {/*나의 활동*/}
+            <Route path="activity" element={<MyETC />} />
+            <Route path="activity/mileage" element={<Mileage />} />
+            <Route path="activity/etclog" element={<MyETC />} />
+
+            {/*안내*/}
+            <Route path="board" element={<NoticeList />} />
+            <Route path="board/notice" element={<NoticeList />} />
+            <Route path="board/notice/add" element={<NoticeAdd />} />
+            <Route path="board/notice/:id" element={<NoticeDetail />} />
+            <Route path="board/faq" element={<NoticeList />} />
+
+            {/*로그인*/}
             <Route path="login" element={<Login />} />
           </Route>
         </Routes>

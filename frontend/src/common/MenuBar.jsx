@@ -33,27 +33,19 @@ export function MenuBar() {
       ],
     },
     {
-      name: "마일리지",
-      path: "/mileage",
+      name: "나의 활동",
+      path: "/activity",
       subItems: [
-        { name: "마일리지 현황", path: "/mileage/status" },
-        { name: "마일리지 사용", path: "/mileage/use" },
+        { name: "비교과 내역", path: "/activity/etclog" },
+        { name: "마일리지 내역", path: "/activity/mileage" },
       ],
     },
     {
-      name: "진로 설계",
-      path: "/career",
+      name: "안내",
+      path: "/board",
       subItems: [
-        { name: "진로 로드맵", path: "/career/roadmap" },
-        { name: "취업 자료실", path: "/career/resources" },
-      ],
-    },
-    {
-      name: "통합 상담",
-      path: "/counseling",
-      subItems: [
-        { name: "상담 신청", path: "/counseling/apply" },
-        { name: "상담 내역", path: "/counseling/history" },
+        { name: "공지사항", path: "/board/notice" },
+        { name: "FAQ", path: "/board/faq" },
       ],
     },
   ];
