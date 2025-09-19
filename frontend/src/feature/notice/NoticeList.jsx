@@ -31,7 +31,7 @@ export function NoticeList() {
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
-        <div>공지사항</div>
+        <h2>공지사항</h2>
         <Table striped bordered hover className="mt-3">
           <thead>
             <tr>
