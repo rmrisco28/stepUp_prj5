@@ -10,6 +10,18 @@ export function ExtraCurricularCardList({ programs }) {
     CLOSED: "모집마감",
   };
 
+  const isImageFile = (url) =>
+    /\.(jpg|jpeg|png|gif|webp)$/i.test(url?.split("?")[0]);
+
+  // 개별 프로그램의 썸네일 이미지를 가져오는 함수
+  const getProgramThumbnail = (programSeq) => {
+    const programThumbs = programs.thumbMap?.[programSeq];
+    if (!programThumbs || programThumbs.length === 0) return null;
+
+    const validImages = programThumbs.filter(isImageFile);
+    return validImages.length > 0 ? validImages[0] : null;
+  };
+
   return (
     <Row className="g-4">
       {programs.map((p) => (
@@ -32,6 +44,7 @@ export function ExtraCurricularCardList({ programs }) {
               }}
             >
               <h6 className="fw-bold">썸네일</h6>
+              <img src={getProgramThumbnail(p.seq)} alt="썸네일" />
             </div>
 
             <Card.Body>
