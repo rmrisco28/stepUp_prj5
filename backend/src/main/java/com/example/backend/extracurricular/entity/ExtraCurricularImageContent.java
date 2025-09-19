@@ -20,6 +20,6 @@ public class ExtraCurricularImageContent {
     @ManyToOne(optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "program_seq", nullable = false)
-    private ExtraCurricularProgram programSeq;
+    private ExtraCurricularProgram program;
 
 }
