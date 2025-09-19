@@ -32,10 +32,9 @@ public class ETCEditForm {
     private LocalDateTime updatedAt;
     private Boolean useYn;
 
-    private List<MultipartFile> thumbnails;
-    private String[] deleteThumbnails;
-    private List<MultipartFile> contentImages;
-    private String[] deleteContentImages;
+    private MultipartFile thumbnail; // 새 썸네일 (선택적)
+    private List<MultipartFile> newContentImages; // 새로 추가할 본문 이미지
+    private List<String> deleteContentImageNames; // 삭제할 본문 이미지 파일명
 
 
 }

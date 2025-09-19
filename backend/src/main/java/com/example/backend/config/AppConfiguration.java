@@ -56,7 +56,8 @@ public class AppConfiguration {
 //                        "/swagger-resources", // 구버전 경로
 //                        "/swagger-resources/**", // 구버전 경로
 //                        "/swagger-ui.html", // /swagger-ui/** 경로에 포함
-                        "/v3/api-docs/**" // 필수
+                        "/v3/api-docs/**", // 필수
+                        "/api/notice/**"
                 ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session

@@ -55,7 +55,7 @@ public class ExtraCurricularController {
 
     // 프로그램 수정
     @PutMapping("edit/{seq}")
-    public ResponseEntity<?> edit(@PathVariable Integer seq, @RequestBody ETCEditForm form) {
+    public ResponseEntity<?> edit(@PathVariable Integer seq, ETCEditForm form) {
         try {
             extraCurricularService.edit(seq, form);
         } catch (Exception e) {
@@ -71,9 +71,8 @@ public class ExtraCurricularController {
     }
 
     // 프로그램 삭제
-    @PutMapping("delete/{seq}")
+    @DeleteMapping("delete/{seq}")
     public ResponseEntity<?> delete(@PathVariable Integer seq) {
-
         try {
             extraCurricularService.delete(seq);
         } catch (Exception e) {
@@ -85,7 +84,8 @@ public class ExtraCurricularController {
         }
         return ResponseEntity.ok().body(Map.of("message",
                 Map.of("type", "success",
-                        "text", seq + "번 프로그램이 삭제 되었습니다.")));
+                        "text", seq + "번 프로그램이 삭제되었습니다.")));
     }
+
 
 }

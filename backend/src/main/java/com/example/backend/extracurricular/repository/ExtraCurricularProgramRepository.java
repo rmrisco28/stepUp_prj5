@@ -24,6 +24,7 @@ public interface ExtraCurricularProgramRepository extends JpaRepository<ExtraCur
             )
             FROM ExtraCurricularProgram e
             WHERE (:keyword = '' OR e.title LIKE %:keyword%)
+            ORDER BY e.createdAt DESC
             """)
     Page<ETCListDto> findAllBy(PageRequest pageRequest, String keyword);
 
