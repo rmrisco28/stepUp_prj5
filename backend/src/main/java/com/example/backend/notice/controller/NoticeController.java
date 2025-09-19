@@ -30,7 +30,7 @@ public class NoticeController {
         return noticeService.listNotice();
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getNoticeDetail(@PathVariable Integer id) {
         return ResponseEntity.ok().body(noticeService.getNoticeDetail(id));
     }

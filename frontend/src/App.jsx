@@ -125,7 +125,7 @@ function App() {
             <Route path="board" element={<NoticeList />} />
             <Route path="board/notice" element={<NoticeList />} />
             <Route path="board/notice/add" element={<NoticeAdd />} />
-            <Route path="board/notice/detail/:id" element={<NoticeDetail />} />
+            <Route path="board/notice/:id" element={<NoticeDetail />} />
             <Route path="board/faq" element={<NoticeList />} />
 
             {/*로그인*/}

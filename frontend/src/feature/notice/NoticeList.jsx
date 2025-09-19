@@ -58,9 +58,7 @@ export function NoticeList() {
                 <tr key={index}>
                   <td>{notice.id}</td>
                   <td
-                    onClick={() =>
-                      navigate(`/board/notice/detail/${notice.id}`)
-                    }
+                    onClick={() => navigate(`/board/notice/${notice.id}`)}
                     style={{ cursor: "pointer" }}
                   >
                     {notice.title}

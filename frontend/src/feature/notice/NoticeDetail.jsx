@@ -11,7 +11,7 @@ export function NoticeDetail() {
 
   useEffect(() => {
     axios
-      .get(`/api/notice/detail/${id}`)
+      .get(`/api/notice/${id}`)
       .then((res) => {
         console.log(res.data);
         setNotice(res.data);
