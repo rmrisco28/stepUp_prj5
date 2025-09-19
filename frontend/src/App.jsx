@@ -3,7 +3,7 @@ import { Login } from "./feature/member/Login.jsx";
 import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
 import { Competency } from "./feature/competency/competencyIntroduce/Competency.jsx";
 import { Career } from "./feature/career/Career.jsx";
-import { Mileage } from "./feature/mileage/Mileage.jsx";
+import { Mileage } from "./feature/activity/Mileage.jsx";
 import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
 import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
@@ -25,6 +25,7 @@ import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricula
 import { MainLayout } from "./common/MainLayout.jsx";
 import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTest/CompetencyAssessmentTestReady.jsx";
 import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTest/CompetencyAssessmentTestStart.jsx";
+import { MyETC } from "./feature/activity/MyETC.jsx";
 
 function App() {
   return (
@@ -113,9 +114,11 @@ function App() {
               element={<CompetencyAssessmentTestStart />}
             />
 
-            {/*마일리지*/}
-            <Route path="mileage" element={<Mileage />} />
-            {/*진로 설계*/}
+            {/*나의 활동*/}
+            <Route path="activity" element={<MyETC />} />
+            <Route path="activity/mileage" element={<Mileage />} />
+            <Route path="activity/etclog" element={<MyETC />} />
+            {/*안내*/}
             <Route path="career" element={<Career />} />
             {/*통합 상담*/}
             <Route path="counseling" element={<Counseling />} />
