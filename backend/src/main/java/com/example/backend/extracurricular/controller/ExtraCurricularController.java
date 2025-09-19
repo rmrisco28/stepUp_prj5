@@ -1,5 +1,6 @@
 package com.example.backend.extracurricular.controller;
 
+import com.example.backend.extracurricular.dto.ApplicationRequestDto;
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.service.ExtraCurricularService;

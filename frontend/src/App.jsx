@@ -25,6 +25,7 @@ import { ExtraCurricularProgram } from "./feature/extracurricular/ExtraCurricula
 import { MainLayout } from "./common/MainLayout.jsx";
 import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTest/CompetencyAssessmentTestReady.jsx";
 import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTest/CompetencyAssessmentTestStart.jsx";
+import { ExtraCurricularApplication } from "./feature/extracurricular/ExtraCurricularApplication.jsx";
 
 function App() {
   return (
@@ -45,7 +46,6 @@ function App() {
               path="extracurricular/manage"
               element={<ExtraCurricularManage />}
             />
-            {/*핵심역량 소개*/}
             <Route
               path="extracurricular/detail/:seq"
               element={<ExtraCurricularDetail />}
@@ -57,6 +57,10 @@ function App() {
             <Route
               path="extracurricular/program/:seq"
               element={<ExtraCurricularProgram />}
+            />
+            <Route
+              path="extracurricular/application/:seq"
+              element={<ExtraCurricularApplication />}
             />
 
             {/*------------------핵심역량----------------*/}
