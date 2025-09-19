@@ -1,6 +1,7 @@
 package com.example.backend.notice.service;
 
 import com.example.backend.notice.dto.NoticeAddForm;
+import com.example.backend.notice.dto.NoticeDto;
 import com.example.backend.notice.dto.NoticeListInfo;
 import com.example.backend.notice.entity.Notice;
 import com.example.backend.notice.repository.NoticeRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +32,16 @@ public class NoticeService {
     }
 
     // 공지사항 하나 보기
+    public NoticeDto getNoticeDetail(Integer seq) {
+        Notice notice = noticeRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("공지사항이 존재하지 않습니다."));
+
+        return NoticeDto.builder()
+                .seq(notice.getId())
+                .title(notice.getTitle())
+                .content(notice.getContent())
+                .insertedAt(notice.getInsertedAt())
+                .build();
+    }
 
 }

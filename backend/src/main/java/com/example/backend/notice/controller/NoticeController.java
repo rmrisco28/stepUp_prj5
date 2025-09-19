@@ -29,4 +29,9 @@ public class NoticeController {
     public List<NoticeListInfo> getNoticeList() {
         return noticeService.listNotice();
     }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getNoticeDetail(@PathVariable Integer id) {
+        return ResponseEntity.ok().body(noticeService.getNoticeDetail(id));
+    }
 }

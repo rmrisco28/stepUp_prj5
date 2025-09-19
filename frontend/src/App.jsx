@@ -27,6 +27,7 @@ import { CompetencyAssessmentTestReady } from "./feature/competency/competencyTe
 import { CompetencyAssessmentTestStart } from "./feature/competency/competencyTest/CompetencyAssessmentTestStart.jsx";
 import { MyETC } from "./feature/activity/MyETC.jsx";
 import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
+import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
 
 function App() {
   return (
@@ -124,6 +125,7 @@ function App() {
             <Route path="board" element={<NoticeList />} />
             <Route path="board/notice" element={<NoticeList />} />
             <Route path="board/notice/add" element={<NoticeAdd />} />
+            <Route path="board/notice/detail/:id" element={<NoticeDetail />} />
             <Route path="board/faq" element={<NoticeList />} />
 
             {/*로그인*/}

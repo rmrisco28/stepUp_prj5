@@ -28,10 +28,6 @@ export function NoticeList() {
     navigate("/board/notice/add");
   }
 
-  function NoticeDetailButton() {
-    // navigate("/board/notice/detail");
-  }
-
   return (
     <Row className="justify-content-center">
       <Col xs={12} md={8} lg={6}>
@@ -44,7 +40,7 @@ export function NoticeList() {
               <th>작성일</th>
             </tr>
           </thead>
-          <tbody onClick={NoticeDetailButton} style={{ cursor: "pointer" }}>
+          <tbody>
             {isProcessing ? (
               <tr>
                 <td colSpan="2" className="text-center">
@@ -61,7 +57,14 @@ export function NoticeList() {
               noticeList.map((notice, index) => (
                 <tr key={index}>
                   <td>{notice.id}</td>
-                  <td>{notice.title}</td>
+                  <td
+                    onClick={() =>
+                      navigate(`/board/notice/detail/${notice.id}`)
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    {notice.title}
+                  </td>
                   <td>{notice.insertedAt}</td>
                 </tr>
               ))
