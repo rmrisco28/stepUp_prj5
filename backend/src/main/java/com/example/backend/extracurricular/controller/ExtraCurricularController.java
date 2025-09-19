@@ -47,13 +47,6 @@ public class ExtraCurricularController {
         return extraCurricularService.list(pageNumber, keyword);
     }
 
-    // 프로그램 목록 신청 목록(학생 화면)
-    @GetMapping("listStudent")
-    public ResponseEntity<?> listStudent() {
-        extraCurricularService.listStudent();
-        return ResponseEntity.ok().body(Map.of());
-    }
-
     // 프로그램 상세 보기(관리자)
     @GetMapping("detail/{seq}")
     public ResponseEntity<?> detail(@PathVariable Integer seq) {

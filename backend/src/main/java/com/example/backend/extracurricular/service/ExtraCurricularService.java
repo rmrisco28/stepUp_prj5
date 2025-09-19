@@ -305,11 +305,6 @@ public class ExtraCurricularService {
         };
     }
 
-    // 프로그램 신청 목록(학생 화면)
-    public void listStudent() {
-    }
-
-
     // 프로그램 상세 정보
     public Object detail(Integer seq) {
         ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
