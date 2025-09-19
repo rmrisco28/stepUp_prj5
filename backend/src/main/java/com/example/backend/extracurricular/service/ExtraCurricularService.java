@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -247,7 +248,6 @@ public class ExtraCurricularService {
 
         // 썸네일 조회
         List<ExtraCurricularImageThumb> thumbs = extraCurricularImageThumbRepository.findByProgramSeqList(seqList);
-        System.out.println(thumbs.getFirst().getId());
 
         // 썸네일 이미지 경로랑 그 이미지를 담고 있는 프로그램 seq 같이
         Map<Integer, List<String>> thumbMap = thumbs.stream()
@@ -260,6 +260,21 @@ public class ExtraCurricularService {
                                 Collectors.toList()
                         )
                 ));
+
+        // thumbUrl을 포함한 새로운 List 생성
+        List<ETCListDto> programsWithThumbs = programPage.getContent().stream()
+                .map(program -> {
+                    // 썸네일 URL 찾기
+                    String thumbUrl = Optional.ofNullable(thumbMap.get(program.getSeq()))
+                            .filter(urls -> !urls.isEmpty())
+                            .map(urls -> urls.get(0)) // 첫 번째 이미지만 사용: 근데 썸넬이미지는 항상 하나긴 함
+                            .orElse(null);
+
+                    // thumbUrl 설정
+                    program.setThumbUrl(thumbUrl);
+                    return program;
+                })
+                .toList();
 
 
         int totalPages = programPage.getTotalPages();
@@ -277,8 +292,7 @@ public class ExtraCurricularService {
 
         return Map.of(
                 "pageInfo", pageInfo,
-                "programList", programPage.getContent(),
-                "thumbMap", thumbMap
+                "programList", programsWithThumbs
         );
     }
 

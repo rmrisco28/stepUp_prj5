@@ -10,18 +10,6 @@ export function ExtraCurricularCardList({ programs }) {
     CLOSED: "모집마감",
   };
 
-  const isImageFile = (url) =>
-    /\.(jpg|jpeg|png|gif|webp)$/i.test(url?.split("?")[0]);
-
-  // 개별 프로그램의 썸네일 이미지를 가져오는 함수
-  const getProgramThumbnail = (programSeq) => {
-    const programThumbs = programs.thumbMap?.[programSeq];
-    if (!programThumbs || programThumbs.length === 0) return null;
-
-    const validImages = programThumbs.filter(isImageFile);
-    return validImages.length > 0 ? validImages[0] : null;
-  };
-
   return (
     <Row className="g-4">
       {programs.map((p) => (
@@ -31,21 +19,33 @@ export function ExtraCurricularCardList({ programs }) {
             style={{ borderRadius: "10px", cursor: "pointer" }}
             onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
           >
-            <div
-              style={{
-                height: "150px",
-                borderTopLeftRadius: "10px",
-                borderTopRightRadius: "10px",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                color: "white",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <h6 className="fw-bold">썸네일</h6>
-              <img src={getProgramThumbnail(p.seq)} alt="썸네일" />
-            </div>
+            {p.thumbUrl ? (
+              <img
+                src={p.thumbUrl}
+                alt={p.title}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  height: "150px",
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              ></div>
+            )}
 
             <Card.Body>
               <div className="d-flex justify-content-between align-items-start mb-3">
