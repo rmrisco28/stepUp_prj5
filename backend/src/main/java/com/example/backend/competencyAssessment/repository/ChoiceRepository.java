@@ -33,5 +33,19 @@ public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
 
     Choice findBySeq(Integer seq);
 
+    @Query(value = """
+                SELECT new com.example.backend.competencyAssessment.dto.ChoiceListDto (
+                                c.seq,
+                                c.questionSeq.seq,
+                                c.questionSeq.caSeq.seq,
+                                c.questionSeq.questionNum,
+                                c.order,
+                                c.option,
+                                c.point
+                            )
+                            FROM Choice c
+                            WHERE c.questionSeq.caSeq.seq = :seq
+                            ORDER BY c.order
+            """)
     List<ChoiceListDto> findByQuestionSeqCaSeqSeq(int seq);
 }

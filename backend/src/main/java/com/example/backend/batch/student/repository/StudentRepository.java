@@ -25,4 +25,6 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     // 이름, 생년월일, 성별로 중복 체크
     boolean existsByNameAndBirthDateAndGender(String name, LocalDate birthDate, String gender);
+
+    Student findById(Integer id);
 }

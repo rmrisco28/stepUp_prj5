@@ -1,5 +1,7 @@
 package com.example.backend.competencyAssessment.service;
 
+import com.example.backend.batch.student.entity.Student;
+import com.example.backend.batch.student.repository.StudentRepository;
 import com.example.backend.competency.dto.CompetencyDto;
 import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.CompetencyRepository;
@@ -9,9 +11,11 @@ import com.example.backend.competency.dto.MainCompetencyDto;
 import com.example.backend.competencyAssessment.entity.Assessment;
 import com.example.backend.competencyAssessment.entity.Choice;
 import com.example.backend.competencyAssessment.entity.Question;
+import com.example.backend.competencyAssessment.entity.Response;
 import com.example.backend.competencyAssessment.repository.AssessmentRepository;
 import com.example.backend.competencyAssessment.repository.ChoiceRepository;
 import com.example.backend.competencyAssessment.repository.QuestionRepository;
+import com.example.backend.competencyAssessment.repository.ResponseRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,8 +26,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +41,8 @@ public class AssessmentService {
     private final SubCompetencyRepository subCompetencyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+    private final StudentRepository studentRepository;
+    private final ResponseRepository responseRepository;
 
     /*----------------- 역량 진단 목록 ----------------*/
 
@@ -123,7 +132,11 @@ public class AssessmentService {
         return ResponseEntity.ok().body(Map.of("message", "수정이 완료되었습니다."));
     }
 
-
+    // 총점 보내기
+    public Object totalScore(int seq) {
+        List<Question> questions = questionRepository.findAllByCaSeqSeq(seq);
+        return questions;
+    }
     /*------------------- 문제 추가 ------------------*/
 
     public List<?> competencyList() {
@@ -270,8 +283,38 @@ public class AssessmentService {
 
     public List<?> choiceList(int seq) {
         List<ChoiceListDto> choiceListDto = choiceRepository.findByQuestionSeqCaSeqSeq(seq);
-        System.out.println("choiceListDto = " + choiceListDto);
         return choiceListDto;
+    }
+
+    public ResponseEntity<?> responseSave(int seq, List<ResponseDto> responseDtos) {
+        List<Response> savedList = new ArrayList<>();
+
+        responseDtos.forEach(dto -> {
+            if (dto.getSeq() == null) {
+                Response response = new Response();
+                Student student = studentRepository.findById(dto.getStudentSeqId());
+                Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
+                Choice choice = choiceRepository.findBySeq(dto.getChoiceSeqSeq());
+
+                response.setStudentSeq(student);
+                response.setQuestionSeq(question);
+                response.setChoiceSeq(choice);
+
+                savedList.add(responseRepository.save(response));
+            }
+
+        });
+        List<Map<String, Object>> result = savedList.stream()
+                .map(r -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("responseSeq", r.getSeq());
+                    m.put("questionSeq", r.getQuestionSeq().getSeq());
+                    return m;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
+
     }
 
 

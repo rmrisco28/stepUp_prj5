@@ -14,7 +14,7 @@ export function CompetencyAssessment() {
 
   useEffect(() => {
     axios
-      .get("/api/competency/assessment")
+      .get(`/api/competency/assessment?${searchParams}`)
       .then((res) => {
         console.log("yes");
         setAssessment(res.data.assessmentList);
@@ -27,7 +27,7 @@ export function CompetencyAssessment() {
       .finally(() => {
         console.log("finally");
       });
-  }, []);
+  }, [searchParams]);
 
   if (!pageInfo) {
     return <div>Loading...</div>;

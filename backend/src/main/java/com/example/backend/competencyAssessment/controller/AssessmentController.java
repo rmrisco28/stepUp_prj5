@@ -27,7 +27,7 @@ public class AssessmentController {
     // 역량 진단 목록
     @GetMapping("")
     public Map<String, Object> list(
-            @RequestParam(defaultValue = "1") Integer pageNumber) {
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
         return assessmentService.list(pageNumber);
     }
 
@@ -38,12 +38,14 @@ public class AssessmentController {
     @GetMapping("admin/{seq}")
     public Map<String, Object> AdminList(
             @PathVariable int seq,
-            @RequestParam(defaultValue = "1") Integer pageNumber) {
+            @RequestParam(value = "p", defaultValue = "1") Integer pageNumber) {
         Object title = assessmentService.title(seq);
         Object questionList = assessmentService.questionList(seq, pageNumber);
+        Object totalScore = assessmentService.totalScore(seq);
         Map<String, Object> map = new HashMap<>();
         map.put("title", title);
         map.put("questionList", questionList);
+        map.put("totalScore", totalScore);
         return map;
     }
 
@@ -113,8 +115,8 @@ public class AssessmentController {
     public ResponseEntity<?> choiceUpdate(
             @PathVariable int num,
             @RequestBody ChoiceListDto dto) {
-        System.out.println("num = " + num);
-        System.out.println("dto = " + dto);
+//        System.out.println("num = " + num);
+//        System.out.println("dto = " + dto);
         return assessmentService.choiceUpdate(num, dto);
     }
 
@@ -141,5 +143,17 @@ public class AssessmentController {
         return assessmentService.choiceList(seq);
     }
 
+    // 응답 저장
+    @PutMapping("test/responseSave/{seq}")
+    public ResponseEntity<?> responseSave(@PathVariable int seq, @RequestBody List<ResponseDto> dtoList) {
+        dtoList.forEach(dto -> {
+            System.out.println("dto.getSeq() = " + dto.getSeq());
+            System.out.println("학생번호 = " + dto.getStudentSeqId());
+            System.out.println("문항번호 = " + dto.getQuestionSeqSeq());
+            System.out.println("선택지번호 = " + dto.getChoiceSeqSeq());
+        });
+
+        return assessmentService.responseSave(seq, dtoList);
+    }
 
 }

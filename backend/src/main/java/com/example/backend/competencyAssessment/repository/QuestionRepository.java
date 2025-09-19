@@ -75,6 +75,9 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     Question findByCaSeqSeqAndQuestionNum(int seq, int num);
 
 
+    List<Question> findAllByCaSeqSeq(int seq);
+
+
 //    List<QuestionDto> findByCaSeq(int seq);
 
 
