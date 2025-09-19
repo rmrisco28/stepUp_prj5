@@ -14,7 +14,11 @@ export function ExtraCurricularCardList({ programs }) {
     <Row className="g-4">
       {programs.map((p) => (
         <Col key={p.seq} md={6} lg={4}>
-          <Card className="h-100" style={{ borderRadius: "10px" }}>
+          <Card
+            className="h-100"
+            style={{ borderRadius: "10px", cursor: "pointer" }}
+            onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
+          >
             <div
               style={{
                 height: "150px",
@@ -32,11 +36,7 @@ export function ExtraCurricularCardList({ programs }) {
 
             <Card.Body>
               <div className="d-flex justify-content-between align-items-start mb-3">
-                <Card.Title
-                  className="fw-bold flex-grow-1 me-2"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
-                >
+                <Card.Title className="fw-bold flex-grow-1 me-2">
                   {p.title}
                 </Card.Title>
                 <Badge bg="secondary">{statusMap[p.status] || p.status}</Badge>
