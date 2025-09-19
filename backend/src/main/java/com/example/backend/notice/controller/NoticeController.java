@@ -1,14 +1,13 @@
 package com.example.backend.notice.controller;
 
 import com.example.backend.notice.dto.NoticeAddForm;
+import com.example.backend.notice.dto.NoticeListInfo;
 import com.example.backend.notice.service.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,5 +23,10 @@ public class NoticeController {
                 Map.of("message",
                         Map.of("type", "success", "text", "공지사항이 추가되었습니다.")
                 ));
+    }
+
+    @GetMapping("/list")
+    public List<NoticeListInfo> getNoticeList() {
+        return noticeService.listNotice();
     }
 }
