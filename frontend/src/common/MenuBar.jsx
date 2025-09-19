@@ -41,19 +41,11 @@ export function MenuBar() {
       ],
     },
     {
-      name: "진로 설계",
-      path: "/career",
+      name: "안내",
+      path: "/board",
       subItems: [
-        { name: "진로 로드맵", path: "/career/roadmap" },
-        { name: "취업 자료실", path: "/career/resources" },
-      ],
-    },
-    {
-      name: "통합 상담",
-      path: "/counseling",
-      subItems: [
-        { name: "상담 신청", path: "/counseling/apply" },
-        { name: "상담 내역", path: "/counseling/history" },
+        { name: "공지사항", path: "/board/notice" },
+        { name: "FAQ", path: "/board/faq" },
       ],
     },
   ];
