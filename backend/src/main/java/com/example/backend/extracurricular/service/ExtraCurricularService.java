@@ -44,6 +44,56 @@ public class ExtraCurricularService {
     @Value("${aws.s3.bucket.name}")
     private String bucketName;
 
+
+    // 비교과 프로그램 등록(관리목록에 등록)
+    public void register(ETCAddForm etcAddForm) {
+
+        ExtraCurricularProgram ETCProgram = new ExtraCurricularProgram();
+        ETCProgram.setTitle(etcAddForm.getTitle());
+        ETCProgram.setContent(etcAddForm.getContent());
+        ETCProgram.setOperateStartDt(etcAddForm.getOperateStartDt());
+        ETCProgram.setOperateEndDt(etcAddForm.getOperateEndDt());
+        ETCProgram.setApplyStartDt(etcAddForm.getApplyStartDt());
+        ETCProgram.setApplyEndDt(etcAddForm.getApplyEndDt());
+        ETCProgram.setCompetency(etcAddForm.getCompetency());
+        ETCProgram.setLocation(etcAddForm.getLocation());
+
+        ETCProgram.setOperationType(mapToEnum(etcAddForm.getOperationType()));
+
+        ETCProgram.setGrades(etcAddForm.getGrades());
+        ETCProgram.setCapacity(etcAddForm.getCapacity());
+        ETCProgram.setManager(etcAddForm.getManager());
+        ETCProgram.setManagerPhone(etcAddForm.getManagerPhone());
+        ETCProgram.setMileagePoints(etcAddForm.getMileagePoints());
+        ETCProgram.setAuthor(etcAddForm.getAuthor());
+
+        // 1. 프로그램 저장
+        extraCurricularProgramRepository.save(ETCProgram);
+
+        // 2. 썸네일 저장 (단일 파일)
+        saveThumbImages(ETCProgram, etcAddForm);
+//        if (etcAddForm.getThumbnail() != null && !etcAddForm.getThumbnail().isEmpty()) {
+//            saveSingleImage(ETCProgram, etcAddForm.getThumbnail(), "thumbnail");
+//        }
+
+        // 3. 본문 이미지 저장 (다중 파일)
+        saveContextImages(ETCProgram, etcAddForm);
+//        if (etcAddForm.getContentImages() != null && !etcAddForm.getContentImages().isEmpty()) {
+//            saveImages(ETCProgram, etcAddForm.getContentImages(), "contentImages");
+//        }
+
+    }
+
+    // 한글 -> Enum 매핑
+    private OperationType mapToEnum(String value) {
+        return switch (value) {
+            case "대면" -> OperationType.OFFLINE;
+            case "비대면" -> OperationType.ONLINE;
+            case "혼합" -> OperationType.HYBRID;
+            default -> throw new IllegalArgumentException("알 수 없는 운영방식: " + value);
+        };
+    }
+
     // S3에 파일 업로드
     private void uploadFile(MultipartFile file, String objectKey) {
         try {
@@ -113,56 +163,6 @@ public class ExtraCurricularService {
             }
         }
     }
-
-    // 비교과 프로그램 등록(관리목록에 등록)
-    public void register(ETCAddForm etcAddForm) {
-
-        ExtraCurricularProgram ETCProgram = new ExtraCurricularProgram();
-        ETCProgram.setTitle(etcAddForm.getTitle());
-        ETCProgram.setContent(etcAddForm.getContent());
-        ETCProgram.setOperateStartDt(etcAddForm.getOperateStartDt());
-        ETCProgram.setOperateEndDt(etcAddForm.getOperateEndDt());
-        ETCProgram.setApplyStartDt(etcAddForm.getApplyStartDt());
-        ETCProgram.setApplyEndDt(etcAddForm.getApplyEndDt());
-        ETCProgram.setCompetency(etcAddForm.getCompetency());
-        ETCProgram.setLocation(etcAddForm.getLocation());
-
-        ETCProgram.setOperationType(mapToEnum(etcAddForm.getOperationType()));
-
-        ETCProgram.setGrades(etcAddForm.getGrades());
-        ETCProgram.setCapacity(etcAddForm.getCapacity());
-        ETCProgram.setManager(etcAddForm.getManager());
-        ETCProgram.setManagerPhone(etcAddForm.getManagerPhone());
-        ETCProgram.setMileagePoints(etcAddForm.getMileagePoints());
-        ETCProgram.setAuthor(etcAddForm.getAuthor());
-
-        // 1. 프로그램 저장
-        extraCurricularProgramRepository.save(ETCProgram);
-
-        // 2. 썸네일 저장 (단일 파일)
-        saveThumbImages(ETCProgram, etcAddForm);
-//        if (etcAddForm.getThumbnail() != null && !etcAddForm.getThumbnail().isEmpty()) {
-//            saveSingleImage(ETCProgram, etcAddForm.getThumbnail(), "thumbnail");
-//        }
-
-        // 3. 본문 이미지 저장 (다중 파일)
-        saveContextImages(ETCProgram, etcAddForm);
-//        if (etcAddForm.getContentImages() != null && !etcAddForm.getContentImages().isEmpty()) {
-//            saveImages(ETCProgram, etcAddForm.getContentImages(), "contentImages");
-//        }
-
-    }
-
-    // 한글 -> Enum 매핑
-    private OperationType mapToEnum(String value) {
-        return switch (value) {
-            case "대면" -> OperationType.OFFLINE;
-            case "비대면" -> OperationType.ONLINE;
-            case "혼합" -> OperationType.HYBRID;
-            default -> throw new IllegalArgumentException("알 수 없는 운영방식: " + value);
-        };
-    }
-
 
     // 단일 파일 저장용 (기존 saveImages 재사용)
 //    private void saveSingleImage(ExtraCurricularProgram program, MultipartFile image, String target) {
@@ -255,8 +255,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                        + t.getId().getProgramSeq() + "/"
-                                        + t.getId().getName(), // URL 조합
+                                     + t.getId().getProgramSeq() + "/"
+                                     + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
@@ -380,15 +380,39 @@ public class ExtraCurricularService {
         extraCurricularProgramRepository.save(data);
     }
 
-    // 프로그램 삭제
+    // 프로그램 삭제 (DB + S3 이미지 삭제)
     public void delete(Integer seq) {
         ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("프로그램 삭제 오류"));
 
-        data.setUseYn(false);
-        LocalDateTime now = LocalDateTime.now();
-        data.setUpdatedAt(now);
+        // 1. 썸네일 이미지 삭제
+        if (data.getETCThumb() != null) {
+            String thumbFileName = data.getETCThumb().getId().getName();
+            String thumbObjectKey = "prj5/ETC_Thumb/" + data.getSeq() + "/" + thumbFileName;
 
-        extraCurricularProgramRepository.save(data);
+            // S3 파일 삭제
+            deleteFile(thumbObjectKey);
+
+            // DB 레코드 삭제
+            extraCurricularImageThumbRepository.delete(data.getETCThumb());
+        }
+
+        // 2. 본문 이미지 삭제
+        if (data.getETCContents() != null && !data.getETCContents().isEmpty()) {
+            for (ExtraCurricularImageContent content : data.getETCContents()) {
+                String contentFileName = content.getId().getName();
+                String contentObjectKey = "prj5/ETC_Content/" + data.getSeq() + "/" + contentFileName;
+
+                // S3 파일 삭제
+                deleteFile(contentObjectKey);
+
+                // DB 레코드 삭제
+                extraCurricularImageContentRepository.delete(content);
+            }
+        }
+
+        // 3. 프로그램 삭제
+        extraCurricularProgramRepository.delete(data);
     }
+
 }

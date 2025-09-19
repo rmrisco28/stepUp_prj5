@@ -59,7 +59,7 @@ export function ExtraCurricularDetail() {
 
     // 삭제 요청
     axios
-      .put(`/api/extracurricular/delete/${program.seq}`)
+      .delete(`/api/extracurricular/delete/${program.seq}`)
       .then((res) => {
         alert("삭제가 완료되었습니다.");
         // 삭제 후 목록으로 이동 (페이지 유지)
