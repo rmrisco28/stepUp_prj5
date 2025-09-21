@@ -43,4 +43,10 @@ public class NoticeController {
                         Map.of("type", "success", "text", "공지사항이 삭제되었습니다.")
                 ));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateNotice(@PathVariable Integer id, @ModelAttribute NoticeAddForm dto) {
+        noticeService.updateNotice(id, dto);
+        return ResponseEntity.ok(Map.of("message", Map.of("type", "success", "text", id + "번 게시물이 수정되었습니다.")));
+    }
 }

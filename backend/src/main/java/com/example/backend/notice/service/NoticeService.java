@@ -51,4 +51,13 @@ public class NoticeService {
 
         noticeRepository.delete(notice);
     }
+
+    // 공지사항 수정
+    public void updateNotice(Integer id, NoticeAddForm dto) {
+        Notice notice = noticeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("공지사항이 존재하지 않습니다."));
+        notice.setTitle(dto.getTitle());
+        notice.setContent(dto.getContent());
+        noticeRepository.save(notice);
+    }
 }
