@@ -15,6 +15,7 @@ export function CompetencyAssessmentAdmin() {
   const [assessment, setAssessment] = useState("");
   const [pageInfo, setPageInfo] = useState(null);
   const [questionList, setQuestionList] = useState([]);
+  const [totalScore, setTotalScore] = useState([]);
   const [modalShow, setModalShow] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -24,17 +25,15 @@ export function CompetencyAssessmentAdmin() {
 
   useEffect(() => {
     axios
-      .get(`/api/competency/assessment/admin/${assessmentSeq}`)
+      .get(`/api/competency/assessment/admin/${assessmentSeq}?${searchParams}`)
       .then((res) => {
-        console.log("yes");
-        console.log("받아온 값", res.data);
-        console.log("title값", res.data.title);
         setAssessment(res.data.title[0]);
         console.log("문제 목록", res.data.questionList);
-
         setQuestionList(res.data.questionList.questionList);
         console.log("페이지", res.data.questionList.pageInfo);
         setPageInfo(res.data.questionList.pageInfo);
+        console.log("총점", res.data.totalScore);
+        setTotalScore(res.data.totalScore);
       })
       .catch((err) => {
         console.log("no");
@@ -42,16 +41,16 @@ export function CompetencyAssessmentAdmin() {
       .finally(() => {
         console.log("finally");
       });
-  }, [assessmentSeq]);
-
-  // 총점 계산기
-  const totalScore = questionList.reduce((sum, data) => {
-    return sum + (data.score || 0);
-  }, 0);
+  }, [assessmentSeq, searchParams]);
 
   if (!assessment) {
     return <Spinner />;
   }
+  // 총점 계산기
+  const totalScoreSum = totalScore.reduce(
+    (acc, question) => acc + question.score,
+    0,
+  );
 
   function handleQuestionEditButton(questionNum) {
     navigate(`questionEdit/${questionNum}`);
@@ -166,9 +165,13 @@ export function CompetencyAssessmentAdmin() {
           </Table>
           <Row>
             <Col>
-              <h3 style={{ margin: "10px", marginLeft: "30px" }}>
-                총점: {totalScore}점
-              </h3>
+              {totalScore && totalScore.length > 0 ? (
+                <h3 style={{ margin: "10px", marginLeft: "30px" }}>
+                  총점: {totalScoreSum}점
+                </h3>
+              ) : (
+                <h3> 총점 정보가 없습니다.</h3>
+              )}
             </Col>
             <Col>
               <div

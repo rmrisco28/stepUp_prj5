@@ -29,9 +29,26 @@ CREATE TABLE `extra_curricular_program`
 
 DROP TABLE extra_curricular_program;
 
-ALTER TABLE extra_curricular_program
-    ALTER COLUMN status SET DEFAULT 'DRAFT';
+CREATE TABLE `extra_curricular_image_thumb`
+(
+    program_seq INT          NOT NULL,
+    name        VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`program_seq`, `name`),
+    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq) ON DELETE CASCADE
+);
 
-ALTER TABLE extra_curricular_program
-    MODIFY COLUMN author VARCHAR(100) NOT NULL;
+DROP TABLE extra_curricular_image_thumb;
 
+
+CREATE TABLE `extra_curricular_image_content`
+(
+    program_seq INT          NOT NULL,
+    name        VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`program_seq`, `name`),
+    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq) ON DELETE CASCADE
+);
+
+DROP TABLE extra_curricular_image_content;
+
+SHOW CREATE TABLE extra_curricular_image_thumb;
+SHOW CREATE TABLE extra_curricular_image_content;

@@ -14,7 +14,7 @@ export function CompetencyAssessment() {
 
   useEffect(() => {
     axios
-      .get("/api/competency/assessment")
+      .get(`/api/competency/assessment?${searchParams}`)
       .then((res) => {
         console.log("yes");
         setAssessment(res.data.assessmentList);
@@ -27,7 +27,7 @@ export function CompetencyAssessment() {
       .finally(() => {
         console.log("finally");
       });
-  }, []);
+  }, [searchParams]);
 
   if (!pageInfo) {
     return <div>Loading...</div>;
@@ -110,7 +110,20 @@ export function CompetencyAssessment() {
               {assessment && assessment.length > 0 ? (
                 assessment.map((data) => {
                   const endDate = new Date(data.endDttm);
-                  const inDisabled = endDate < today;
+                  const endDateOnly = new Date(
+                    endDate.getFullYear(),
+                    endDate.getMonth(),
+                    endDate.getDate(),
+                  );
+
+                  const today = new Date();
+                  const todayOnly = new Date(
+                    today.getFullYear(),
+                    today.getMonth(),
+                    today.getDate(),
+                  );
+
+                  const inDisabled = endDateOnly < todayOnly;
 
                   return (
                     <tr key={data.seq} valign="middle">
@@ -121,7 +134,7 @@ export function CompetencyAssessment() {
                       </td>
                       <td align="center">
                         <Button
-                          onClick={() => navigate(`test/${data.seq}`)}
+                          onClick={() => navigate(`test/ready/${data.seq}`)}
                           disabled={inDisabled}
                           variant={inDisabled ? "secondary" : "primary"}
                         >

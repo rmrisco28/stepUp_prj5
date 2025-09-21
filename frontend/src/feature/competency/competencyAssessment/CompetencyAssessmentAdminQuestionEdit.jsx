@@ -21,10 +21,14 @@ export function CompetencyAssessmentAdminQuestionEdit() {
   const [selectedSubCompetency, setSelectedSubCompetency] = useState(null);
   const [choice, setChoice] = useState([``]);
   const [score, setScore] = useState(1);
-  const [point, setPoint] = useState([0.0]);
+  const [point, setPoint] = useState([0.0, 0.0, 0.0]);
   const [caSeqSeq, setCaSeqSeq] = useState("");
   const { questionNum } = useParams();
   const [questionNumState, setQuestionNumState] = useState("");
+  const [order, setOrder] = useState([``]);
+  const [choiceSeq, setChoiceSeq] = useState([``]);
+  const [seq, setSeq] = useState("");
+  const [originalChoiceSeq, setOriginalChoiceSeq] = useState([]);
 
   const navigate = useNavigate();
   const { assessmentSeq } = useParams();
@@ -34,22 +38,6 @@ export function CompetencyAssessmentAdminQuestionEdit() {
       setQuestionNumState(questionNum);
     }
   }, [questionNum]);
-
-  useEffect(() => {
-    axios
-      .get(
-        `/api/competency/assessment/admin/${assessmentSeq}/questionEdit/${questionNum}`,
-      )
-      .then((res) => {
-        console.log(res.data);
-        setCaSeqSeq(res.data.caSeqSeq);
-        setQuestion(res.data.question);
-        setQuestionNumState(res.data.questionNum);
-        setScore(res.data.score);
-        setSelectedCompetency(res.data.subCompetencySeqCompetencySeqSeq);
-        setSelectedSubCompetency(res.data.subCompetencySeqSeq);
-      });
-  }, []);
 
   useEffect(() => {
     // 핵심역량 불러오기
@@ -76,12 +64,45 @@ export function CompetencyAssessmentAdminQuestionEdit() {
       .catch((err) => {
         console.log("sub no");
       });
-  }, []);
+    // 문제 정보 가져오기
+    axios
+      .get(
+        `/api/competency/assessment/admin/${assessmentSeq}/questionEdit/${questionNum}`,
+      )
+      .then((res) => {
+        console.log(res.data);
+        setSeq(res.data.seq);
+        setCaSeqSeq(res.data.caSeqSeq);
+        setQuestion(res.data.question);
+        setQuestionNumState(res.data.questionNum);
+        setScore(res.data.score);
+        setSelectedCompetency(res.data.subCompetencySeqCompetencySeqSeq);
+        setSelectedSubCompetency(res.data.subCompetencySeqSeq);
+      });
+
+    // 선택지 정보 가져오기
+    axios
+      .get(
+        `/api/competency/assessment/admin/${assessmentSeq}/choiceEdit/${questionNum}`,
+      )
+      .then((res) => {
+        console.log(res.data);
+        const choices = res.data;
+        const choiceSeqArray = choices.map((choice) => choice.seq);
+
+        setChoiceSeq(choices.map((choice) => choice.seq));
+        setOriginalChoiceSeq([...choiceSeqArray]); // 원본 저장!
+        setOrder(choices.map((choice) => choice.order));
+        setChoice(choices.map((choice) => choice.option));
+        setPoint(choices.map((choice) => choice.point));
+      });
+  }, [assessmentSeq, questionNum]);
 
   // 보기 추가 함수
   const addAnswer = () => {
     setChoice([...choice, ""]); // 보기 추가
     setPoint([...point, 0.0]); // 배점 추가
+    setOrder([...order, order.length + 1]);
   };
 
   // 보기 값 변경 함수
@@ -105,11 +126,134 @@ export function CompetencyAssessmentAdminQuestionEdit() {
       setPoint(point.slice(0, -1)); // 마지막 배점 항목 삭제
     }
   };
+
   const filteredSubCompetency = subCompetency.filter(
     (item) => item.competencySeqSeq === selectedCompetency,
   );
 
-  function handleQuestionSaveButton() {}
+  // 문제 업데이트 저장
+  function handleQuestionSaveButton() {
+    const validChoices = choice.filter((item) => item.trim() !== ""); // 빈 값 제외
+    const validPoints = point.filter((item) => item !== null && item !== 0.0); // 배점 값도 0.0 또는 null인 값 제외
+
+    // 보기에 맞춰서 점수 업데이트
+    while (validChoices.length < validPoints.length) {
+      validPoints.pop(); // 배점 항목을 줄임
+    }
+
+    // 점수에 맞춰서 보기 항목을 줄임
+    while (validChoices.length > validPoints.length) {
+      validChoices.pop(); // 보기 항목을 줄임
+    }
+
+    // 문제 업데이트
+    axios
+      .put(
+        `/api/competency/assessment/admin/${assessmentSeq}/questionUpdate/${questionNum}`,
+        {
+          caSeqSeq: caSeqSeq,
+          subCompetencySeqSeq: selectedSubCompetency,
+          questionNum: questionNumState,
+          question: question,
+          score: score,
+        },
+      )
+      // 성공했을 경우,
+      .then((res) => {
+        alert(questionNumState);
+        const choicePromises = choice.map((item, index) => {
+          const validOption = item.trim() === "" ? null : item;
+
+          // 선택지 업데이트
+          return axios
+            .put(
+              `/api/competency/assessment/admin/${assessmentSeq}/choiceUpdate/${questionNum}`,
+              {
+                seq: choiceSeq[index],
+                questionSeqSeq: seq,
+                questionSeqQuestionNum: questionNumState,
+                order: order[index],
+                option: validOption,
+                point: point[index],
+              },
+            )
+            .then((res) => {
+              console.log("선택지 업데이트 성공");
+              console.log(order);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+
+        // 삭제 처리: 원본 choiceSeq와 현재 choice 길이 비교
+        const deletePromises = [];
+        console.log(
+          "originalChoiceSeq.length:",
+          originalChoiceSeq.length,
+          "choice.length:",
+          choice.length,
+        );
+
+        if (originalChoiceSeq.length > choice.length) {
+          console.log("삭제할 선택지가 있습니다.");
+          for (let i = choice.length; i < originalChoiceSeq.length; i++) {
+            console.log(
+              `인덱스 ${i}의 originalChoiceSeq[${i}]:`,
+              originalChoiceSeq[i],
+            );
+            if (originalChoiceSeq[i]) {
+              console.log(`선택지 ${originalChoiceSeq[i]} 삭제 요청 중...`);
+              deletePromises.push(
+                axios
+                  .delete(
+                    `/api/competency/assessment/admin/choiceDelete/${originalChoiceSeq[i]}`,
+                  )
+                  .then((res) => {
+                    console.log(
+                      `선택지 ${originalChoiceSeq[i]} 삭제 성공:`,
+                      res,
+                    );
+                  })
+                  .catch((err) => {
+                    console.error(
+                      `선택지 ${originalChoiceSeq[i]} 삭제 실패:`,
+                      err,
+                    );
+                  }),
+              );
+            }
+          }
+        } else {
+          console.log("삭제할 선택지가 없습니다.");
+        }
+
+        // 모든 업데이트와 삭제를 함께 처리
+        Promise.all([...choicePromises, ...deletePromises])
+          .then(() => {
+            console.log("모든 선택지 처리 완료");
+            alert("성공적으로 문제가 저장되었습니다.");
+            navigate(`/competency/assessment/admin/${assessmentSeq}`);
+          })
+          .catch((err) => {
+            console.error("선택지 처리 중 오류 발생:", err);
+            alert("선택지 처리 중 오류가 발생했습니다.");
+          });
+      })
+
+      .catch((err) => {
+        console.log("문제 저장 중 오류 발생", err);
+        if (err.response && err.response.data) {
+          alert(err.response.data.message);
+        } else {
+          alert("서버와의 통신에 문제가 발생했습니다.");
+        }
+        // alert(err.response.data.message);
+      })
+      .finally(() => {
+        console.log("finally");
+      });
+  }
 
   return (
     <>

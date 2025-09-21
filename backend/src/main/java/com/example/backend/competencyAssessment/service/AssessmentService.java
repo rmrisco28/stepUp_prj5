@@ -1,5 +1,7 @@
 package com.example.backend.competencyAssessment.service;
 
+import com.example.backend.batch.student.entity.Student;
+import com.example.backend.batch.student.repository.StudentRepository;
 import com.example.backend.competency.dto.CompetencyDto;
 import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.CompetencyRepository;
@@ -9,19 +11,26 @@ import com.example.backend.competency.dto.MainCompetencyDto;
 import com.example.backend.competencyAssessment.entity.Assessment;
 import com.example.backend.competencyAssessment.entity.Choice;
 import com.example.backend.competencyAssessment.entity.Question;
+import com.example.backend.competencyAssessment.entity.Response;
 import com.example.backend.competencyAssessment.repository.AssessmentRepository;
 import com.example.backend.competencyAssessment.repository.ChoiceRepository;
 import com.example.backend.competencyAssessment.repository.QuestionRepository;
+import com.example.backend.competencyAssessment.repository.ResponseRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +41,8 @@ public class AssessmentService {
     private final SubCompetencyRepository subCompetencyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
+    private final StudentRepository studentRepository;
+    private final ResponseRepository responseRepository;
 
     /*----------------- 역량 진단 목록 ----------------*/
 
@@ -121,7 +132,11 @@ public class AssessmentService {
         return ResponseEntity.ok().body(Map.of("message", "수정이 완료되었습니다."));
     }
 
-
+    // 총점 보내기
+    public Object totalScore(int seq) {
+        List<Question> questions = questionRepository.findAllByCaSeqSeq(seq);
+        return questions;
+    }
     /*------------------- 문제 추가 ------------------*/
 
     public List<?> competencyList() {
@@ -141,11 +156,12 @@ public class AssessmentService {
         return ResponseEntity.ok().body(assessmentDto);
     }
 
-
+    // 진단 문제 저장
     public ResponseEntity<?> questionAdd(int seq, QuestionAddDto dto) {
-        if (questionRepository.findByQuestionNum(dto.getQuestionNum()) != null) {
+        if (questionRepository.existsByCaSeq_SeqAndQuestionNum(dto.getCaSeqSeq(), dto.getQuestionNum())) {
             return ResponseEntity.badRequest().body(Map.of("message", "문항번호가 중복되어 저장에 실패하였습니다."));
         }
+
         Question question = new Question();
 
         Assessment assessment = assessmentRepository.findEntityBySeq(seq);
@@ -161,15 +177,17 @@ public class AssessmentService {
         question.setScore(dto.getScore());
         questionRepository.save(question);
 
-        return ResponseEntity.ok().body(Map.of("question", question));
+        return ResponseEntity.ok().body(Map.of("question", question, "message", "질문저장이 완료되었습니다."));
     }
 
+    // 진단 선택지 저장
     public ResponseEntity<?> choiceAdd(int seq, ChoiceAddDto dto) {
         Choice choice = new Choice();
 
         Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
 
         choice.setQuestionSeq(question);
+        choice.setOrder(dto.getOrder());
         choice.setOption(dto.getOption());
         choice.setPoint(dto.getPoint());
 
@@ -179,9 +197,124 @@ public class AssessmentService {
 
     }
 
+    // 문제 수정을 위한 문제 데이터 전달
     public QuestionListDto questionDetail(int seq, int num) {
         QuestionListDto questionDetail = questionRepository.findByQuestionNum(seq, num);
         return questionDetail;
+    }
+    // 선택지 수정을 위한 선택지 데이터 전달
+
+    public List<?> choiceDetail(int seq, int num) {
+        List<ChoiceListDto> choiceListDto = choiceRepository.findByQuestionSeqNum(seq, num);
+        return choiceListDto;
+    }
+
+    // 문제 업데이트
+    public ResponseEntity<?> questionUpdate(int seq, int num, QuestionAddDto dto) {
+        Question question = questionRepository.findByCaSeqSeqAndQuestionNum(seq, num);
+        if (question == null) {
+            throw new EntityNotFoundException("문항번호를 찾을 수 없습니다.");
+        }
+        SubCompetency subCompetency = subCompetencyRepository.findBySeq(dto.getSubCompetencySeqSeq());
+        question.setSubCompetencySeq(subCompetency);
+        question.setQuestionNum(dto.getQuestionNum());
+        question.setQuestion(dto.getQuestion());
+        question.setScore(dto.getScore());
+        questionRepository.save(question);
+        return ResponseEntity.ok().body(Map.of("message", "문제 수정이 완료되었습니다."));
+
+    }
+
+    // 선택지 업데이트
+    public ResponseEntity<?> choiceUpdate(int num, ChoiceListDto dto) {
+        System.out.println("num = " + num);
+        System.out.println("dto = " + dto);
+        System.out.println("num = " + num);
+        if (dto.getSeq() == null) {
+            Question newQuestion = questionRepository.findBySeq(dto.getQuestionSeqSeq());
+            System.out.println("newQuestion = " + newQuestion);
+            if (newQuestion == null) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(Map.of("message", "해당 문제를 찾을 수 없습니다."));
+            }
+
+            Choice newChoice = new Choice();
+            newChoice.setQuestionSeq(newQuestion);
+            newChoice.setOrder(dto.getOrder());
+            newChoice.setOption(dto.getOption());
+            newChoice.setPoint(dto.getPoint());
+            choiceRepository.save(newChoice);
+        }
+
+        // 기존 선택지 업데이트
+        Choice choice = choiceRepository.findBySeq(dto.getSeq());
+        if (choice == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("message", "해당 선택지를 찾을 수 없습니다."));
+        }
+        choice.setOrder(dto.getOrder());
+        choice.setOption(dto.getOption());
+        choice.setPoint(dto.getPoint());
+        choiceRepository.save(choice);
+
+        return ResponseEntity.ok().body(Map.of("message", "선택지 수정이 완료되었습니다."));
+    }
+
+    public ResponseEntity<?> choiceDelete(int choiceSeq) {
+        try {
+            Choice choice = choiceRepository.findBySeq(choiceSeq);
+            if (choice == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(Map.of("message", "해당 선택지를 찾을 수 없습니다."));
+            }
+
+            choiceRepository.delete(choice);
+            return ResponseEntity.ok().body(Map.of("message", "선택지가 삭제되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("message", "선택지 삭제 중 오류가 발생했습니다."));
+        }
+    }
+
+    public AssessmentDto testReady(int seq) {
+        AssessmentDto assessmentDto = assessmentRepository.findBySeq(seq);
+        return assessmentDto;
+    }
+
+    public List<?> choiceList(int seq) {
+        List<ChoiceListDto> choiceListDto = choiceRepository.findByQuestionSeqCaSeqSeq(seq);
+        return choiceListDto;
+    }
+
+    public ResponseEntity<?> responseSave(int seq, List<ResponseDto> responseDtos) {
+        List<Response> savedList = new ArrayList<>();
+
+        responseDtos.forEach(dto -> {
+            if (dto.getSeq() == null) {
+                Response response = new Response();
+                Student student = studentRepository.findById(dto.getStudentSeqId());
+                Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
+                Choice choice = choiceRepository.findBySeq(dto.getChoiceSeqSeq());
+
+                response.setStudentSeq(student);
+                response.setQuestionSeq(question);
+                response.setChoiceSeq(choice);
+
+                savedList.add(responseRepository.save(response));
+            }
+
+        });
+        List<Map<String, Object>> result = savedList.stream()
+                .map(r -> {
+                    Map<String, Object> m = new HashMap<>();
+                    m.put("responseSeq", r.getSeq());
+                    m.put("questionSeq", r.getQuestionSeq().getSeq());
+                    return m;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(result);
+
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.backend.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -9,12 +10,33 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
 
 import java.util.List;
 
 @Configuration
 @EnableMethodSecurity
 public class AppConfiguration {
+
+    @Value("${aws.access.key}")
+    private String accessKey;
+
+    @Value("${aws.secret.Key}")
+    private String secretKey;
+
+    @Bean
+    public S3Client s3Client() {
+        AwsBasicCredentials credentials = AwsBasicCredentials.create(accessKey, secretKey);
+        AwsCredentialsProvider provider = StaticCredentialsProvider.create(credentials);
+        return S3Client.builder()
+                .region(Region.AP_NORTHEAST_2)
+                .credentialsProvider(provider)
+                .build();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -29,7 +51,13 @@ public class AppConfiguration {
                         "/api/auth/**",
                         "/api/competency/**",
                         "/api/subCompetency/**",
-                        "/api/extracurricular/**"
+                        "/api/extracurricular/**",
+                        "/swagger-ui/**", // 필수
+//                        "/swagger-resources", // 구버전 경로
+//                        "/swagger-resources/**", // 구버전 경로
+//                        "/swagger-ui.html", // /swagger-ui/** 경로에 포함
+                        "/v3/api-docs/**", // 필수
+                        "/api/notice/**"
                 ).permitAll()
                 .anyRequest().authenticated());
         http.sessionManagement(session -> session

@@ -2,7 +2,9 @@ package com.example.backend.competencyAssessment.repository;
 
 import com.example.backend.competencyAssessment.dto.AssessmentDto;
 import com.example.backend.competencyAssessment.dto.AssessmentTitleDto;
+import com.example.backend.competencyAssessment.dto.ChoiceListDto;
 import com.example.backend.competencyAssessment.entity.Assessment;
+import com.example.backend.competencyAssessment.entity.Question;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -31,4 +33,6 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Integer>
     List<AssessmentTitleDto> findAssessmentBySeq(Integer seq);
 
     Assessment findEntityBySeq(int seq);
+
+
 }

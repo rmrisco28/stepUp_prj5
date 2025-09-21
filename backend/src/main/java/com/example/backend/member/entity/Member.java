@@ -25,7 +25,7 @@ public class Member {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "user_yn")
+    @Column(name = "user_yn", insertable = false)
     private Integer userYn;
 
     @OneToOne(mappedBy = "memberSeq")

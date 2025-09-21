@@ -12,8 +12,9 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 public class ChoiceAddDto implements Serializable {
-    Integer id;
+    Integer seq;
     Integer questionSeqSeq;
+    Integer order;
     String option;
-    Integer point;
+    Double point;
 }

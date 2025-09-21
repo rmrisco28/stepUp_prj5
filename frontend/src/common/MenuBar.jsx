@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/menubar.css";
@@ -33,30 +33,24 @@ export function MenuBar() {
       ],
     },
     {
-      name: "마일리지",
-      path: "/mileage",
+      name: "나의 활동",
+      path: "/activity",
       subItems: [
-        { name: "마일리지 현황", path: "/mileage/status" },
-        { name: "마일리지 사용", path: "/mileage/use" },
+        { name: "비교과 내역", path: "/activity/etclog" },
+        { name: "마일리지 내역", path: "/activity/mileage" },
       ],
     },
     {
-      name: "진로 설계",
-      path: "/career",
+      name: "안내",
+      path: "/board",
       subItems: [
-        { name: "진로 로드맵", path: "/career/roadmap" },
-        { name: "취업 자료실", path: "/career/resources" },
-      ],
-    },
-    {
-      name: "통합 상담",
-      path: "/counseling",
-      subItems: [
-        { name: "상담 신청", path: "/counseling/apply" },
-        { name: "상담 내역", path: "/counseling/history" },
+        { name: "공지사항", path: "/board/notice" },
+        { name: "FAQ", path: "/board/faq" },
       ],
     },
   ];
+
+  // const logo = "../image/stepUp_logo_수정.png";
 
   return (
     <>
@@ -71,13 +65,25 @@ export function MenuBar() {
             >
               {isAuthenticated ? (
                 <>
-                  <span className="me-2" style={{ cursor: "default" }}>
+                  <span className="me-3" style={{ cursor: "default" }}>
                     [ {name}({loginId}) ] 님 환영합니다.
                   </span>
-                  <span>로그아웃</span>
+                  <Button
+                    variant="outline-light"
+                    size="sm"
+                    className="px-3 rounded-pill shadow-sm"
+                  >
+                    <b>로그아웃</b>
+                  </Button>
                 </>
               ) : (
-                "로그인"
+                <Button
+                  variant="outline-light"
+                  size="sm"
+                  className="px-3 rounded-pill shadow-sm"
+                >
+                  <b>로그인</b>
+                </Button>
               )}
             </Nav.Link>
           </Nav>
@@ -113,7 +119,7 @@ export function MenuBar() {
                     className="px-3"
                     style={{ fontSize: "1.2rem" }}
                   >
-                    {menu.name}
+                    <b>{menu.name}</b>
                   </Nav.Link>
 
                   {/* 하위 메뉴 */}

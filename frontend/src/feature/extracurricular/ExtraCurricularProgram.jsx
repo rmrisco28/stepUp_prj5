@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import {
   Container,
   Row,
@@ -17,6 +17,7 @@ export function ExtraCurricularProgram() {
   const { seq } = useParams(); // URL에서 seq 받아오기
   const [program, setProgram] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const statusMap = {
     DRAFT: "임시저장",
@@ -28,6 +29,7 @@ export function ExtraCurricularProgram() {
     axios
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
+        console.log(res.data);
         setProgram(res.data);
       })
       .catch((err) => {
@@ -58,6 +60,11 @@ export function ExtraCurricularProgram() {
     ? (program.waiting / 10) * 100 // 대기정원 있으면 DTO에 필드 추가
     : 0;
 
+  // 여러 이미지 가져왔을 때 배열로 저장해주기
+  const isImageFile = (url) =>
+    /\.(jpg|jpeg|png|gif|webp)$/i.test(url?.split("?")[0]);
+  const contentImages = program.contentImages?.filter(isImageFile) || [];
+
   return (
     <Container className="my-4">
       <Row className="mb-5">
@@ -65,10 +72,7 @@ export function ExtraCurricularProgram() {
         <Col md={4} className="me-4 border">
           <div className="position-relative">
             <img
-              src={
-                program.posterUrl ||
-                "https://via.placeholder.com/400x250.png?text=프로그램+포스터"
-              }
+              src={program.thumbnails}
               alt="프로그램 포스터"
               className="img-fluid rounded"
             />
@@ -170,16 +174,24 @@ export function ExtraCurricularProgram() {
           <Card.Body>
             <p>{program.content}</p>
             {/* 포스터 이미지 */}
-            <Card className="shadow-sm">
-              <Card.Img
-                variant="bottom"
-                src={
-                  program.posterUrl ||
-                  "https://via.placeholder.com/600x800.png?text=프로그램+포스터"
-                }
-                alt="프로그램 포스터"
-              />
-            </Card>
+            {contentImages.length > 0 && (
+              <div className="d-flex flex-wrap gap-3 mt-3">
+                {contentImages.map((imgUrl, index) => (
+                  <Card
+                    key={index}
+                    className="shadow-sm"
+                    style={{ width: "250px" }}
+                  >
+                    <Card.Img
+                      variant="bottom"
+                      src={imgUrl}
+                      alt={`프로그램 이미지 ${index + 1}`}
+                      className="img-fluid rounded"
+                    />
+                  </Card>
+                ))}
+              </div>
+            )}
           </Card.Body>
         </Card>
       </div>
@@ -187,7 +199,12 @@ export function ExtraCurricularProgram() {
       {/* 하단 버튼 */}
       <div className="d-flex justify-content-center gap-2 my-3">
         <Button variant="primary">신청하기</Button>
-        <Button variant="secondary">목록보기</Button>
+        <Button
+          variant="secondary"
+          onClick={() => navigate("/extracurricular")}
+        >
+          목록보기
+        </Button>
       </div>
     </Container>
   );
