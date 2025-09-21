@@ -71,7 +71,12 @@ export function ExtraCurricularRegister() {
     // 텍스트/단일 파일 필드
     for (const key in formData) {
       if (key !== "contentImages") {
-        submitData.append(key, formData[key]);
+        // thumbnail 필드가 존재하고 유효한 경우에만 FormData에 추가
+        if (key === "thumbnail" && formData[key] instanceof File) {
+          submitData.append(key, formData[key]);
+        } else if (key !== "thumbnail") {
+          submitData.append(key, formData[key]);
+        }
       }
     }
 
