@@ -9,7 +9,7 @@ import {
   FormLabel,
   Row,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -33,8 +33,22 @@ export function ExtraCurricularRegister() {
     thumbnail: null, // 썸네일 파일
     contentImages: [], // 본문 이미지 파일
   });
+  const [competencies, setCompetencies] = useState([]); // 역량 목록을 저장할 상태
 
   const navigate = useNavigate();
+
+  // 역량 목록 가져옴. 추후 작성자도 가져오게 하면 될 듯!
+  useEffect(() => {
+    axios
+      .get("/api/competency/list")
+      .then((response) => {
+        console.log(response.data);
+        setCompetencies(response.data);
+      })
+      .catch((error) => {
+        console.error("역량 목록을 불러오는 데 실패했습니다.", error);
+      });
+  }, []);
 
   // 입력값 변경 처리
   const handleChange = (e) => {
@@ -211,11 +225,19 @@ export function ExtraCurricularRegister() {
                 <FormGroup className="mb-3" controlId="competency">
                   <FormLabel>역량</FormLabel>
                   <FormControl
-                    type="text"
+                    as="select" // select 태그로 변경
                     name="competency"
                     value={formData.competency}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">역량을 선택하세요</option>
+                    {competencies.map((comp) => (
+                      <option key={comp.seq} value={comp.seq}>
+                        {/* 이거 지금 이름으로 가져오면 오류나서 내일 테이블 어쩔지 상의 후 바꾸기. */}
+                        {comp.seq}
+                      </option>
+                    ))}
+                  </FormControl>
                 </FormGroup>
               </Col>
               <Col>
