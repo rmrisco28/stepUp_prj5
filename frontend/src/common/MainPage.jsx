@@ -60,7 +60,11 @@ export function MainPage() {
         {/*<p>{loginStatus}</p>*/}
         <div style={{ width: 100, height: 100 }}> 뭐 넣지 </div>
         {/* 캐루셀로 뭐 보이게? 근데 이러면 세션 그거 해야함 !! 흠*/}
-        <ExtraCurricularCardList programs={programs} />
+        {programs.length > 0 ? (
+          <ExtraCurricularCardList programs={programs} />
+        ) : (
+          <div>프로그램이 없습니다.</div>
+        )}
       </div>
     </Container>
   );

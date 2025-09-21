@@ -123,7 +123,11 @@ export function ExtraCurricular() {
         </section>
 
         {/* 프로그램 카드 리스트 */}
-        <ExtraCurricularCardList programs={programs} />
+        {programs.length > 0 ? (
+          <ExtraCurricularCardList programs={programs} />
+        ) : (
+          <div>프로그램이 없습니다.</div>
+        )}
       </div>
     </Container>
   );
