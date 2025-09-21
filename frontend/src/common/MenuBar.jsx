@@ -50,6 +50,8 @@ export function MenuBar() {
     },
   ];
 
+  const logo = "../image/stepUp_logo_수정.png";
+
   return (
     <>
       <Navbar bg="success" className="py-0 border-bottom shadow-sm">
@@ -92,11 +94,7 @@ export function MenuBar() {
         <Container>
           {/* 로고 */}
           <Navbar.Brand as={Link} to="/">
-            <img
-              src="../image/stepUp_logo_수정.png"
-              alt="logo"
-              className="logo"
-            />
+            <img src={logo} alt="logo" className="logo" />
           </Navbar.Brand>
 
           <Navbar.Toggle aria-controls="main-nav" />
