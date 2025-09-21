@@ -19,14 +19,12 @@ export function NoticeDetail() {
       .catch((err) => {
         if (err.response?.status === 404) {
           toast.warning("해당 공지사항이 없습니다.");
-          navigate("/api/notice");
+          navigate("/board/notice");
         } else {
           toast.error("공지사항을 불러오는 중 오류가 발생했습니다.");
         }
       });
   }, [id, navigate]);
-
-  // Update 버튼은 Edit으로 넘어가게
 
   function NoticeDeleteButton() {
     axios
@@ -76,18 +74,26 @@ export function NoticeDetail() {
         </div>
 
         <div className="d-flex">
-          <Button variant="outline-secondary" onClick={() => navigate(-1)}>
+          <Button
+            variant="outline-secondary"
+            onClick={() => navigate(-1)}
+            className="me-2"
+          >
             목록
           </Button>
           <div>
             {/* 로그인한 사용자가 작성자와 일치할 경우 수정/삭제 버튼 표시 */}
-            {/* <Button variant="outline-primary" className="me-2">
+            <Button
+              variant="outline-warning"
+              onClick={() => navigate(`/board/notice/edit/${notice.seq}`)}
+              className="me-2"
+            >
               수정
-            </Button> */}
+            </Button>
             <Button
               variant="outline-danger"
               onClick={NoticeDeleteButton}
-              style={{ marginLeft: "5px" }}
+              className="me-2"
             >
               삭제
             </Button>
