@@ -10,8 +10,11 @@ import {
   Badge,
   ProgressBar,
   Spinner,
+  CardBody,
 } from "react-bootstrap";
 import axios from "axios";
+import { FaUserCheck } from "react-icons/fa6";
+import { FaUserClock } from "react-icons/fa6";
 
 // 비교과 카드 누르면 나오는 컴포넌트
 export function ExtraCurricularProgram() {
@@ -67,151 +70,199 @@ export function ExtraCurricularProgram() {
   const contentImages = program.contentImages?.filter(isImageFile) || [];
 
   return (
-    <Container className="my-4">
-      <Row className="mb-5">
-        {/* 프로그램 포스터 이미지 */}
-        <Col md={4} className="me-4 border">
-          <div className="position-relative">
-            <img
-              src={program.thumbnails}
-              alt="프로그램 포스터"
-              className="img-fluid rounded"
-            />
-            {/* 왼쪽 상단 배지 */}
-            <Badge
-              bg="light"
-              text="dark"
-              className="position-absolute top-0 start-0 m-2"
-            ></Badge>
-            {/* 오른쪽 상단 배지 */}
-            <Badge bg="info" className="position-absolute top-0 end-0 m-2">
-              {statusMap[program.status] || program.status}
-            </Badge>
-          </div>
-        </Col>
-
-        {/* 프로그램 기본 정보 */}
-        <Col md={7} className="mb-5">
-          <div className="me-1 text-danger fw-bold text-end">3 🤍</div>
-          <h4 className="fw-bold mb-2">{program.title}</h4>
-          <p className="text-muted">{program.author}</p>
-          <Table borderless size="sm" className="align-middle">
-            <tbody>
-              <tr>
-                <th style={{ width: "20%" }}>모집기간</th>
-                <td>
-                  {program.applyStartDt} ~ {program.applyEndDt}
-                </td>
-              </tr>
-              <tr>
-                <th>활동기간</th>
-                <td>
-                  {program.operateStartDt} ~ {program.operateEndDt}
-                </td>
-              </tr>
-              <tr>
-                <th>핵심역량</th>
-                <td>{program.competency}</td>
-              </tr>
-              <tr>
-                <th>참여학년</th>
-                <td>{program.grades}</td>
-              </tr>
-              <tr>
-                <th>장소</th>
-                <td>{program.location}</td>
-              </tr>
-              <tr>
-                <th>운영방식</th>
-                <td>{program.operationType}</td>
-              </tr>
-              <tr>
-                <th>마일리지점수</th>
-                <td>{program.mileagePoints}</td>
-              </tr>
-            </tbody>
-          </Table>
-        </Col>
-      </Row>
-
-      {/* 신청인원 현황 */}
-      <div className="mb-5">
-        <h5 className="fw-bold mb-3">👥 신청인원 현황</h5>
-        <Row className="align-items-center mb-3 bg-light p-3 rounded">
-          {/* 모집인원 */}
-          <Col md={6}>
-            <div className="d-flex align-items-center mb-2">
-              <span style={{ fontSize: "1.2rem", marginRight: "8px" }}>👤</span>
-              <span className="fw-semibold me-2">모집인원</span>
-              <span>
-                {program.applicants}명 / {program.capacity}명
-              </span>
+    <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
+      <Container className="my-5">
+        <Row className="mb-5">
+          {/* 프로그램 포스터 이미지 */}
+          <Col md={5} className="me-4">
+            <div className="position-relative">
+              <img
+                src={program.thumbnails}
+                alt="프로그램 포스터"
+                className="img-fluid rounded"
+              />
+              {/* 왼쪽 상단 배지 */}
+              <Badge
+                bg="light"
+                text="dark"
+                className="position-absolute top-0 start-0 m-2"
+              ></Badge>
+              {/* 오른쪽 상단 배지 */}
+              <Badge bg="info" className="position-absolute top-0 end-0 m-2">
+                {statusMap[program.status] || program.status}
+              </Badge>
             </div>
-            <ProgressBar
-              now={applicantPercent}
-              label={`${program.applicants}/${program.capacity}`}
-            />
           </Col>
-          {/* 대기인원 */}
-          <Col md={6}>
-            <div className="d-flex align-items-center mb-2">
-              <span style={{ fontSize: "1.2rem", marginRight: "8px" }}>🕒</span>
-              <span className="fw-semibold me-2">대기인원</span>
-              <span>{program.waiting}명 / 10명</span>
-            </div>
-            <ProgressBar
-              variant="warning"
-              now={waitingPercent}
-              label={`${program.waiting}/10`}
-            />
+
+          {/* 프로그램 기본 정보 */}
+          <Col md={6} className="mb-5">
+            <h4 className="fw-bold mb-2">{program.title}</h4>
+            <p className="text-muted">{program.author}</p>
+            <hr />
+            <Table borderless size="sm">
+              <tbody>
+                <tr>
+                  <th style={{ width: "20%" }}>모집기간</th>
+                  <td>
+                    {program.applyStartDt} ~ {program.applyEndDt}
+                  </td>
+                </tr>
+                <tr>
+                  <th>활동기간</th>
+                  <td>
+                    {program.operateStartDt} ~ {program.operateEndDt}
+                  </td>
+                </tr>
+                <tr>
+                  <th>핵심역량</th>
+                  <td>{program.competency}</td>
+                </tr>
+                <tr>
+                  <th>참여학년</th>
+                  <td>{program.grades}</td>
+                </tr>
+                <tr>
+                  <th>장소</th>
+                  <td>{program.location}</td>
+                </tr>
+                <tr>
+                  <th>운영방식</th>
+                  <td>{program.operationType}</td>
+                </tr>
+                <tr>
+                  <th>마일리지점수</th>
+                  <td>{program.mileagePoints}</td>
+                </tr>
+              </tbody>
+            </Table>
           </Col>
         </Row>
-      </div>
 
-      {/* 프로그램 내용 */}
-      <div>
-        <h5 className="fw-bold mb-3">프로그램 내용</h5>
-        <Card className="mb-4 shadow-sm">
-          <Card.Body>
-            <p>{program.content}</p>
-            {/* 포스터 이미지 */}
-            {contentImages.length > 0 && (
-              <div className="d-flex flex-wrap gap-3 mt-3">
-                {contentImages.map((imgUrl, index) => (
-                  <Card
-                    key={index}
-                    className="shadow-sm"
-                    style={{ width: "250px" }}
-                  >
-                    <Card.Img
-                      variant="bottom"
-                      src={imgUrl}
-                      alt={`프로그램 이미지 ${index + 1}`}
-                      className="img-fluid rounded"
-                    />
-                  </Card>
-                ))}
+        {/* 신청인원 현황 */}
+        <div className="mb-5">
+          <h4 className="fw-bold mb-3">👥 신청인원 현황</h4>
+          <Row className="align-items-center mb-3 bg-light p-3 rounded">
+            {/* 모집인원 */}
+            <Col md={6} className="d-flex align-items-center">
+              <div
+                className="d-flex align-items-center me-2"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                <FaUserCheck
+                  style={{
+                    fontSize: "1.7rem",
+                    marginRight: "7px",
+                    color: "#057e97",
+                  }}
+                />
+                <span className="fw-semibold">모집인원</span>
               </div>
-            )}
-          </Card.Body>
-        </Card>
-      </div>
+              <div className="position-relative flex-grow-1">
+                <ProgressBar
+                  variant="info"
+                  now={applicantPercent}
+                  className="custom-progress"
+                />
+                <span className="position-absolute top-50 start-50 translate-middle fw-bold">
+                  {program.applicants}명 / {program.capacity}명
+                </span>
+              </div>
+            </Col>
+            {/* 대기인원 */}
+            <Col md={6} className="d-flex align-items-center">
+              <div
+                className="d-flex align-items-center me-2"
+                style={{ whiteSpace: "nowrap" }}
+              >
+                <FaUserClock
+                  style={{
+                    fontSize: "1.6rem",
+                    marginRight: "7px",
+                    color: "#f8be06",
+                  }}
+                />
+                <span className="fw-semibold">대기인원</span>
+              </div>
+              <div className="position-relative flex-grow-1">
+                <ProgressBar
+                  variant="warning"
+                  now={waitingPercent}
+                  className="custom-progress"
+                />
+                <span className="position-absolute top-50 start-50 translate-middle fw-bold">
+                  {program.waiting}명 / 10명
+                </span>
+              </div>
+            </Col>
+          </Row>
+        </div>
+        {/* 담당자 정보 */}
+        <div className="mb-5">
+          <h4 className="fw-bold mb-3">프로그램 담당자</h4>
+          <Card className="shadow-sm">
+            <Card.Body className="d-flex justify-content-center flex-wrap gap-4">
+              {/* 담당자 */}
+              <div className="d-flex align-items-center">
+                <div className="fw-bold me-3" style={{ fontSize: "1.2rem" }}>
+                  담당자 l
+                </div>
+                <div>{program.manager}</div>
+              </div>
 
-      {/* 하단 버튼 */}
-      <div className="d-flex justify-content-center gap-2 my-3">
-        <Button
-          variant="primary"
-          onClick={() => navigate(`/extracurricular/application/${seq}`)}
-        >
-          신청하기
-        </Button>
-        <Button
-          variant="secondary"
-          onClick={() => navigate("/extracurricular")}
-        >
-          목록보기
-        </Button>
-      </div>
-    </Container>
+              {/* 문의 */}
+              <div className="d-flex align-items-center">
+                <div className="fw-bold me-3" style={{ fontSize: "1.2rem" }}>
+                  문의 l
+                </div>
+                <div>{program.managerPhone}</div>
+              </div>
+            </Card.Body>
+          </Card>
+        </div>
+
+        {/* 프로그램 내용 */}
+        <div>
+          <h4 className="fw-bold mb-3">프로그램 내용</h4>
+          <Card className="mb-4 shadow-sm">
+            <Card.Body>
+              {/* 줄바꿈 반영 */}
+              <div style={{ whiteSpace: "pre-line" }}>{program.content}</div>
+
+              {/* 포스터 이미지 */}
+              {contentImages.length > 0 && (
+                <div className="d-flex flex-wrap gap-3 mt-3">
+                  {contentImages.map((imgUrl, index) => (
+                    <Card key={index} className="shadow-sm">
+                      <Card.Img
+                        variant="bottom"
+                        src={imgUrl}
+                        alt={`프로그램 이미지 ${index + 1}`}
+                        className="img-fluid rounded"
+                      />
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </Card.Body>
+          </Card>
+        </div>
+
+        {/* 하단 버튼 */}
+        <div className="d-flex justify-content-center gap-2 my-3">
+          <Button
+            variant="primary"
+            onClick={() => navigate(`/extracurricular/application/${seq}`)}
+          >
+            신청하기
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={() => navigate("/extracurricular")}
+          >
+            목록보기
+          </Button>
+        </div>
+      </Container>
+    </div>
   );
 }
