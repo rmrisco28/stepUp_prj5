@@ -57,6 +57,8 @@ export function ExtraCurricularApplication() {
 
   // 이중에서도 학생만 접근 되도록?
   if (!user) {
+    // alert("로그인이 필요합니다.");
+    // navigate("/login");
     return (
       <Container>
         <Row className="justify-content-center">
