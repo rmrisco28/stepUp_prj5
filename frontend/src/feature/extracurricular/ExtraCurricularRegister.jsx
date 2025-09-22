@@ -40,7 +40,7 @@ export function ExtraCurricularRegister() {
   // 역량 목록 가져옴. 추후 작성자도 가져오게 하면 될 듯!
   useEffect(() => {
     axios
-      .get("/api/competency/list")
+      .get("/api/competency/subList")
       .then((response) => {
         console.log(response.data);
         setCompetencies(response.data);
