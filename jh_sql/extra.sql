@@ -11,7 +11,7 @@ CREATE TABLE `extra_curricular_program`
     apply_start_dt   DATETIME                       NOT NULL,
     apply_end_dt     DATETIME                       NOT NULL,
     location         VARCHAR(250)                   NULL,
-    competency                                   NOT NULL,
+    competency                                      NOT NULL,
     operation_type   VARCHAR(100)                   NOT NULL,
     grades           VARCHAR(100)                   NULL,
     capacity         INT                            NOT NULL DEFAULT 0,
@@ -66,3 +66,14 @@ CREATE TABLE `extra_curricular_application`
 );
 
 DROP TABLE extra_curricular_application;
+
+CREATE TABLE faq
+(
+    faq_seq     INT AUTO_INCREMENT PRIMARY KEY,
+    question    VARCHAR(255)  NOT NULL,
+    answer      VARCHAR(1000) NOT NULL,
+    inserted_at DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE faq;
+
