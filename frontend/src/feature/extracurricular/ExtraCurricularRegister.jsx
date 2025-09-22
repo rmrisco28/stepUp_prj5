@@ -233,8 +233,8 @@ export function ExtraCurricularRegister() {
                     <option value="">역량을 선택하세요</option>
                     {competencies.map((comp) => (
                       <option key={comp.seq} value={comp.seq}>
-                        {/* 이거 지금 이름으로 가져오면 오류나서 내일 테이블 어쩔지 상의 후 바꾸기. */}
-                        {comp.seq}
+                        {/* 보이는 건 이름인데, 실제론 시퀀스 값이 넘어감 */}
+                        {comp.subCompetencyName}
                       </option>
                     ))}
                   </FormControl>

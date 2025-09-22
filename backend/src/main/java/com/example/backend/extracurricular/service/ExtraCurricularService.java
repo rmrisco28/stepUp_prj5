@@ -1,6 +1,8 @@
 package com.example.backend.extracurricular.service;
 
 import com.example.backend.batch.student.repository.StudentRepository;
+import com.example.backend.competency.entity.Competency;
+import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCDetailDto;
@@ -57,6 +59,9 @@ public class ExtraCurricularService {
     // 비교과 프로그램 등록(관리목록에 등록)
     public void register(ETCAddForm etcAddForm) {
 
+        SubCompetency subCompetencyId = subCompetencyRepository.findById(etcAddForm.getCompetency())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid competency ID"));
+
         ExtraCurricularProgram ETCProgram = new ExtraCurricularProgram();
         ETCProgram.setTitle(etcAddForm.getTitle());
         ETCProgram.setContent(etcAddForm.getContent());
@@ -64,7 +69,7 @@ public class ExtraCurricularService {
         ETCProgram.setOperateEndDt(etcAddForm.getOperateEndDt());
         ETCProgram.setApplyStartDt(etcAddForm.getApplyStartDt());
         ETCProgram.setApplyEndDt(etcAddForm.getApplyEndDt());
-        ETCProgram.setCompetency(etcAddForm.getCompetency());
+        ETCProgram.setSubCompetency(subCompetencyId);
         ETCProgram.setLocation(etcAddForm.getLocation());
 
         ETCProgram.setOperationType(mapToEnum(etcAddForm.getOperationType()));
@@ -189,8 +194,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                     + t.getId().getProgramSeq() + "/"
-                                     + t.getId().getName(), // URL 조합
+                                        + t.getId().getProgramSeq() + "/"
+                                        + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
@@ -263,7 +268,7 @@ public class ExtraCurricularService {
         dto.setOperateEndDt(data.getOperateEndDt());
         dto.setApplyStartDt(data.getApplyStartDt());
         dto.setApplyEndDt(data.getApplyEndDt());
-        dto.setCompetency(data.getCompetency());
+        dto.setCompetency(data.getSubCompetency().getSeq());
         dto.setLocation(data.getLocation());
         dto.setOperationType(mapToLabel(data.getOperationType()));
         dto.setGrades(data.getGrades());
@@ -306,6 +311,10 @@ public class ExtraCurricularService {
 
     // 프로그램 수정
     public void edit(Integer seq, ETCEditForm form) {
+
+        SubCompetency subCompetency = subCompetencyRepository.findById(form.getCompetency())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid competency ID"));
+
         ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("프로그램 수정 오류"));
 
@@ -316,7 +325,7 @@ public class ExtraCurricularService {
         data.setOperateEndDt(form.getOperateEndDt());
         data.setApplyStartDt(form.getApplyStartDt());
         data.setApplyEndDt(form.getApplyEndDt());
-        data.setCompetency(form.getCompetency());
+        data.setSubCompetency(subCompetency);
         data.setLocation(form.getLocation());
         data.setOperationType(mapToEnum(form.getOperationType()));
         data.setGrades(form.getGrades());
