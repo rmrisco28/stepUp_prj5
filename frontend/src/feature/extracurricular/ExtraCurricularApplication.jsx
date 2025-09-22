@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
 import { useAuth } from "../../common/AuthContext.jsx";
+import { FaArrowLeft } from "react-icons/fa";
 
 export function ExtraCurricularApplication() {
   const { user, loading } = useAuth(); // loading 상태 추가 -> 비동기적으로 처리 되므로 필요
@@ -94,10 +95,29 @@ export function ExtraCurricularApplication() {
       });
   }
 
+  function ETCDeleteButton() {
+    // 신청 취소 버튼, db에서 사라지게 하기
+  }
+
   return (
     <Container>
       <Row className="justify-content-center">
         <Col sm={8}>
+          <button
+            type="button"
+            onClick={() => navigate(-1)}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "4px",
+              display: "flex",
+              alignItems: "center",
+            }}
+            aria-label="뒤로 가기"
+          >
+            <FaArrowLeft size={20} color="#555" />
+          </button>
           <h3 className="mb-4 text-center text-success fw-bold">
             프로그램 신청
           </h3>
@@ -201,8 +221,8 @@ export function ExtraCurricularApplication() {
                 </Button>
                 <Button
                   type="button"
-                  variant="secondary"
-                  onClick={() => navigate(-1)}
+                  variant="outline-dark"
+                  onClick={ETCDeleteButton}
                 >
                   신청취소
                 </Button>
