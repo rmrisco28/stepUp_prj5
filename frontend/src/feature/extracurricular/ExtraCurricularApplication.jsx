@@ -23,7 +23,7 @@ export function ExtraCurricularApplication() {
     <Container>
       <Row className="justify-content-center">
         <Col sm={8}>
-          <h3 className="mb-4 text-center text-primary fw-bold">
+          <h3 className="mb-4 text-center text-success fw-bold">
             프로그램 신청
           </h3>
 

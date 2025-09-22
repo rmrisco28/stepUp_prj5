@@ -46,7 +46,7 @@ export function ExtraCurricular() {
         {/* 헤더 */}
         <Row className="justify-content-between align-items-center mb-4">
           <Col>
-            <h3 className="text-primary fw-bold">비교과 프로그램</h3>
+            <h3 className="text-success fw-bold">비교과 프로그램</h3>
           </Col>
           <Col xs="auto">
             <Badge bg="secondary">총 {programs.length}개 프로그램</Badge>
