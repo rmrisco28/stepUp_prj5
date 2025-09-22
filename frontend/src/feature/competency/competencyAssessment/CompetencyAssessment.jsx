@@ -7,12 +7,24 @@ export function CompetencyAssessment() {
   const [assessment, setAssessment] = useState(null);
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isAdmin, setIsAdmin] = useState(false);
   const [modalShow, setModalShow] = useState(false);
   const [selectAssment, setSelectAssment] = useState({});
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    // 사용자 여부
+    axios
+      .get("/api/auth/status") // 로그인 상태 확인 API
+      .then((res) => {
+        console.log("로그인된 사용자 정보:", res.data);
+        setIsAdmin(res.data.authName === "admin"); // authName이 'admin'이면 관리자
+      })
+      .catch((err) => {
+        console.log("로그인 상태 확인 실패");
+      });
+
     axios
       .get(`/api/competency/assessment?${searchParams}`)
       .then((res) => {
@@ -46,27 +58,6 @@ export function CompetencyAssessment() {
     pageNumbers.push(i);
   }
 
-  function handleDeleteButton(seq) {
-    axios
-      .delete(`/api/competency/assessment/delete/${seq}`)
-      .then((res) => {
-        console.log(res);
-        alert(res.data.message);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response) {
-          alert(err.response.data.message);
-        } else {
-          alert("삭제에 실패했습니다.");
-        }
-      })
-      .finally(() => {});
-  }
-
-  const today = new Date();
-
   return (
     <>
       <Row className="justify-content-center">
@@ -98,12 +89,19 @@ export function CompetencyAssessment() {
                 </th>
                 <th
                   style={{
-                    width: "20%",
+                    width: "12%",
                   }}
                 >
                   진단하기
                 </th>
-                <th style={{ width: "10%" }}>관리자만</th>
+                <th
+                  style={{
+                    width: "12%",
+                  }}
+                >
+                  결과보기
+                </th>
+                {isAdmin && <th style={{ width: "10%" }}>관리</th>}
               </tr>
             </thead>
             <tbody>
@@ -143,14 +141,28 @@ export function CompetencyAssessment() {
                       </td>
                       <td align="center">
                         <Button
-                          variant="warning"
-                          onClick={() => {
-                            navigate(`admin/${data.seq}`);
-                          }}
+                          variant="outline-danger"
+                          onClick={() =>
+                            navigate(
+                              `/competency/assessment/test/result/${data.seq}`,
+                            )
+                          }
                         >
-                          관리
+                          결과보기
                         </Button>
                       </td>
+                      {isAdmin && (
+                        <td align="center">
+                          <Button
+                            variant="warning"
+                            onClick={() => {
+                              navigate(`admin/${data.seq}`);
+                            }}
+                          >
+                            관리
+                          </Button>
+                        </td>
+                      )}
                     </tr>
                   );
                 })
@@ -162,15 +174,17 @@ export function CompetencyAssessment() {
             </tbody>
           </Table>
 
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="outline-success"
-              className="me-3"
-              onClick={() => navigate("/competency/assessment/add")}
-            >
-              역량 진단 추가
-            </Button>
-          </div>
+          {isAdmin && (
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="outline-success"
+                className="me-3"
+                onClick={() => navigate("/competency/assessment/add")}
+              >
+                역량 진단 추가
+              </Button>
+            </div>
+          )}
         </Col>
       </Row>
 
