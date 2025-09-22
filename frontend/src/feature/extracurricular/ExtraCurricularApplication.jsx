@@ -80,6 +80,7 @@ export function ExtraCurricularApplication() {
       memberSeq: user.memberSeq,
       motive: motive,
     };
+    console.log(submitData);
 
     axios
       .post("/api/extracurricular/apply", submitData)

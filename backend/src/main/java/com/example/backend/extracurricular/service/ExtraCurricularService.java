@@ -11,6 +11,7 @@ import com.example.backend.extracurricular.repository.ExtraCurricularApplication
 import com.example.backend.extracurricular.repository.ExtraCurricularImageContentRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularImageThumbRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
+import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -436,5 +437,21 @@ public class ExtraCurricularService {
                 .operateEndDt(etc.getOperateEndDt())
                 .operationType(mapToLabel(etc.getOperationType()))
                 .build();
+    }
+
+    public void apply(ETCApplyForm dto) {
+        // 회원 시퀀스
+        // 프로그램 시퀀스
+        // 신청 테이블에 저장하기
+        ExtraCurricularProgram ecp = extraCurricularProgramRepository.findById(dto.getProgramSeq())
+                .orElseThrow(() -> new RuntimeException("프로그램 정보가 없습니다."));
+        Member mb = memberRepository.findById(dto.getMemberSeq())
+                .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다."));
+
+        ExtraCurricularApplication eca = new ExtraCurricularApplication();
+        eca.setProgramSeq(ecp);
+        eca.setMemberSeq(mb);
+        eca.setMotive(dto.getMotive());
+        extraCurricularApplicationRepository.save(eca);
     }
 }

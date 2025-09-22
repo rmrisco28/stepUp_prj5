@@ -2,6 +2,7 @@ package com.example.backend.extracurricular.controller;
 
 import com.example.backend.extracurricular.dto.ApplicationRequestDto;
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCApplyForm;
 import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +92,12 @@ public class ExtraCurricularController {
     @GetMapping("/applicationList/{seq}")
     public ResponseEntity<?> AppList(@PathVariable Integer seq) {
         return ResponseEntity.ok().body(extraCurricularService.appList(seq));
+    }
+
+    @PostMapping("/apply")
+    public ResponseEntity<?> apply(@RequestBody ETCApplyForm dto) {
+        extraCurricularService.apply(dto);
+        return ResponseEntity.ok().body(Map.of("message", "신청완료"));
     }
 
 }

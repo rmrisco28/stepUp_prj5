@@ -1,6 +1,7 @@
 package com.example.backend.extracurricular.entity;
 
 import com.example.backend.member.entity.Member;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"programSeq", "memberSeq"})
 @Entity
 @Table(name = "extra_curricular_application", schema = "prj5")
 public class ExtraCurricularApplication {
@@ -36,7 +37,7 @@ public class ExtraCurricularApplication {
     @Column(name = "apply_dt", nullable = false, insertable = false, updatable = false)
     private LocalDateTime applyDt;
 
-    @Column(name = "status")
+    @Column(name = "status", insertable = false)
     private Integer status;
 
     @Column(name = "motive", length = 500)

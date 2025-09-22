@@ -151,7 +151,8 @@ INSERT INTO auth
 VALUES ('extra', 108);
 INSERT INTO auth
 VALUES ('admin', 107);
-
+INSERT INTO auth
+VALUES ('admin', 115);
 
 # 아무것도 안 됨 ;;
 SHOW CREATE TABLE member;

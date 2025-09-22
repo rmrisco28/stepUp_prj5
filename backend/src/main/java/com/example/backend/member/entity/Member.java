@@ -7,7 +7,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"student", "employee"})
 @Entity
 @Table(name = "member", schema = "prj5")
 @AllArgsConstructor
