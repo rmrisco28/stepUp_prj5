@@ -18,12 +18,8 @@ import { useAuth } from "../../common/AuthContext.jsx";
 
 export function ExtraCurricularApplication() {
   const { user, loading } = useAuth(); // loading 상태 추가 -> 비동기적으로 처리 되므로 필요
-  const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    motive: "",
-    privacyAgreed: false,
-  });
+  const [motive, setMotive] = useState("");
+  const [privacyAgreed, setPrivacyAgreed] = useState(false);
   const [ApplicationInfo, setApplicationInfo] = useState();
   const { seq } = useParams();
   const navigate = useNavigate();
@@ -41,20 +37,6 @@ export function ExtraCurricularApplication() {
         })
         .catch((err) => {
           console.log("신청 프로그램 정보를 불러오는데 실패했습니다.", err);
-        });
-      // 2. 학생 정보 가져오기
-
-      axios
-        .get(`/api/member/studentInfo/${user.memberSeq}`)
-        .then((res) => {
-          setFormData((prev) => ({
-            ...prev,
-            name: user.name,
-            phone: res.data.phone,
-          }));
-        })
-        .catch((err) => {
-          console.log(err);
         });
     }
   }, [loading, user, seq]);
@@ -83,6 +65,32 @@ export function ExtraCurricularApplication() {
         </Row>
       </Container>
     );
+  }
+
+  function ETCApplicationButton() {
+    // 개인정보 동의 체크 여부 확인
+    if (!privacyAgreed) {
+      alert("개인정보 수집 및 이용에 동의해야 신청할 수 있습니다.");
+      return;
+    }
+
+    // 서버로 보낼 데이터 구성
+    const submitData = {
+      programSeq: ApplicationInfo.seq,
+      memberSeq: user.memberSeq,
+      motive: motive,
+    };
+
+    axios
+      .post("/api/extracurricular/apply", submitData)
+      .then(() => {
+        alert("신청이 완료되었습니다.");
+        navigate(-1); // 이전 페이지로 이동
+      })
+      .catch((err) => {
+        console.error(err.response?.data || err.message);
+        alert("신청에 실패했습니다.");
+      });
   }
 
   return (
@@ -128,27 +136,12 @@ export function ExtraCurricularApplication() {
                   <FormControl
                     name="name"
                     type="text"
-                    value={formData.name}
+                    value={user.name}
                     readOnly
                   />
                 </Col>
               </FormGroup>
             </div>
-
-            {/* 전화번호 */}
-            <FormGroup as={Row} className="mb-3">
-              <FormLabel column sm={3}>
-                전화번호
-              </FormLabel>
-              <Col md={9}>
-                <FormControl
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  required
-                />
-              </Col>
-            </FormGroup>
 
             {/* 신청 동기 */}
             <FormGroup as={Row} className="mb-3">
@@ -159,7 +152,8 @@ export function ExtraCurricularApplication() {
                 <FormControl
                   as="textarea"
                   name="motivation"
-                  // value={formData.motive}
+                  value={motive}
+                  onChange={(e) => setMotive(e.target.value)}
                   rows={4}
                   placeholder="신청 동기를 입력하세요"
                 />
@@ -174,7 +168,7 @@ export function ExtraCurricularApplication() {
               <Col md={9}>
                 <FormControl
                   as="textarea"
-                  rows={12}
+                  rows={5}
                   value="- 법령에 따라 개인을 고유하게 구별하기 위하여 부여된 모든 식별정보(성명, 소속, 휴대폰, 이메일 등)의수집, 이용에 대한 동의를 받고 있습니다.
 - 신청시 기재되는 모든 개인정보는 사업진행을 위하여 수집 및 이용될 수 있습니다.또한 대학평가관련 자료 요청시 교내 관련부서에 자료가 제공될 수 있으며, 철저하게 관리될 예정입니다.
 - 수집된 개인정보는 5년 경과(대학 평가 관련 자료 요청 기간) 후 즉시 파기됩니다.
@@ -186,7 +180,10 @@ export function ExtraCurricularApplication() {
                   id="privacy-agree"
                   name="privacyAgreed"
                   label="개인정보 수집 및 이용에 동의합니다."
-                  required
+                  checked={privacyAgreed}
+                  onChange={(e) => {
+                    setPrivacyAgreed(e.target.checked);
+                  }}
                 />
               </Col>
             </FormGroup>
@@ -194,7 +191,11 @@ export function ExtraCurricularApplication() {
             {/* 버튼 */}
             <Row className="mt-4">
               <Col className="d-flex justify-content-center">
-                <Button variant="primary" className="me-2">
+                <Button
+                  variant="primary"
+                  className="me-2"
+                  onClick={ETCApplicationButton}
+                >
                   신청하기
                 </Button>
                 <Button
