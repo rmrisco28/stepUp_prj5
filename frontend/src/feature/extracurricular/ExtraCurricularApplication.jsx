@@ -19,6 +19,7 @@ import { useAuth } from "../../common/AuthContext.jsx";
 export function ExtraCurricularApplication() {
   const { user, loading } = useAuth(); // loading 상태 추가 -> 비동기적으로 처리 되므로 필요
   const [formData, setFormData] = useState({
+    name: "",
     phone: "",
     motive: "",
     privacyAgreed: false,
@@ -30,6 +31,7 @@ export function ExtraCurricularApplication() {
   useEffect(() => {
     // loading이 완료되고 user가 있을 때만 API 호출
     if (!loading && user) {
+      // 1. 프로그램 정보 가져오기
       axios
         .get(`/api/extracurricular/applicationList/${seq}`)
         .then((res) => {
@@ -39,6 +41,20 @@ export function ExtraCurricularApplication() {
         })
         .catch((err) => {
           console.log("신청 프로그램 정보를 불러오는데 실패했습니다.", err);
+        });
+      // 2. 학생 정보 가져오기
+
+      axios
+        .get(`/api/member/studentInfo/${user.memberSeq}`)
+        .then((res) => {
+          setFormData((prev) => ({
+            ...prev,
+            name: user.name,
+            phone: res.data.phone,
+          }));
+        })
+        .catch((err) => {
+          console.log(err);
         });
     }
   }, [loading, user, seq]);
@@ -106,10 +122,15 @@ export function ExtraCurricularApplication() {
             <div>
               <FormGroup as={Row} className="mb-3" controlId="name">
                 <FormLabel column sm={3}>
-                  신청자 정보
+                  이름
                 </FormLabel>
                 <Col md={9}>
-                  <FormControl name="name" type="text" placeholder="홍길동" />
+                  <FormControl
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    readOnly
+                  />
                 </Col>
               </FormGroup>
             </div>
@@ -123,7 +144,7 @@ export function ExtraCurricularApplication() {
                 <FormControl
                   type="tel"
                   name="phone"
-                  placeholder="010-1234-5678"
+                  value={formData.phone}
                   required
                 />
               </Col>
@@ -138,6 +159,7 @@ export function ExtraCurricularApplication() {
                 <FormControl
                   as="textarea"
                   name="motivation"
+                  // value={formData.motive}
                   rows={4}
                   placeholder="신청 동기를 입력하세요"
                 />

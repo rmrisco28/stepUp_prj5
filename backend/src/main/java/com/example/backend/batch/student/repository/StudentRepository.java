@@ -1,6 +1,7 @@
 package com.example.backend.batch.student.repository;
 
 import com.example.backend.batch.student.entity.Student;
+import com.example.backend.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -27,4 +28,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     boolean existsByNameAndBirthDateAndGender(String name, LocalDate birthDate, String gender);
 
     Student findById(Integer id);
+
+    // member로 해당 학생 찾기
+    Optional<Student> findByMemberSeq(Member memberSeq);
 }
