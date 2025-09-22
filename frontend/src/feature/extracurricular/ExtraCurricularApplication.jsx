@@ -14,8 +14,10 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import axios from "axios";
+import { useAuth } from "../../common/AuthContext.jsx";
 
 export function ExtraCurricularApplication() {
+  const { user, loading } = useAuth(); // loading 상태 추가 -> 비동기적으로 처리 되므로 필요
   const [formData, setFormData] = useState({
     phone: "",
     motive: "",
@@ -26,16 +28,46 @@ export function ExtraCurricularApplication() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(`/api/extracurricular/applicationList/${seq}`)
-      .then((res) => {
-        console.log(res.data);
-        setApplicationInfo(res.data);
-      })
-      .catch((err) => {
-        console.log("신청 프로그램 정보를 불러오는데 실패했습니다.", err);
-      });
-  }, []);
+    // loading이 완료되고 user가 있을 때만 API 호출
+    if (!loading && user) {
+      axios
+        .get(`/api/extracurricular/applicationList/${seq}`)
+        .then((res) => {
+          console.log(res.data);
+          setApplicationInfo(res.data);
+          console.log(user);
+        })
+        .catch((err) => {
+          console.log("신청 프로그램 정보를 불러오는데 실패했습니다.", err);
+        });
+    }
+  }, [loading, user, seq]);
+
+  // 로딩 중이거나 사용자 정보가 없으면 로딩 표시
+  if (loading) {
+    return (
+      <Container>
+        <Row className="justify-content-center">
+          <Col sm={8}>
+            <div className="text-center">로딩 중...</div>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
+
+  // 이중에서도 학생만 접근 되도록?
+  if (!user) {
+    return (
+      <Container>
+        <Row className="justify-content-center">
+          <Col sm={8}>
+            <div className="text-center">로그인이 필요합니다.</div>
+          </Col>
+        </Row>
+      </Container>
+    );
+  }
 
   return (
     <Container>
@@ -120,11 +152,12 @@ export function ExtraCurricularApplication() {
               <Col md={9}>
                 <FormControl
                   as="textarea"
-                  rows={8}
+                  rows={12}
                   value="- 법령에 따라 개인을 고유하게 구별하기 위하여 부여된 모든 식별정보(성명, 소속, 휴대폰, 이메일 등)의수집, 이용에 대한 동의를 받고 있습니다.
 - 신청시 기재되는 모든 개인정보는 사업진행을 위하여 수집 및 이용될 수 있습니다.또한 대학평가관련 자료 요청시 교내 관련부서에 자료가 제공될 수 있으며, 철저하게 관리될 예정입니다.
 - 수집된 개인정보는 5년 경과(대학 평가 관련 자료 요청 기간) 후 즉시 파기됩니다.
 - 위와 관련하여 본인의 개인고유식별정보 수집, 이용에 관한 내용을 숙지하였고 이에 동의한다면 해당란에체크해 주십시오."
+                  readOnly
                 ></FormControl>
                 <FormCheck
                   type="checkbox"
