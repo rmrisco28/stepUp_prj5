@@ -84,13 +84,13 @@ export function ExtraCurricularApplication() {
 
     axios
       .post("/api/extracurricular/apply", submitData)
-      .then(() => {
-        alert("신청이 완료되었습니다.");
+      .then((res) => {
+        alert(res.data.message); // 성공시 신청이 완료되었습니다. 출력
         navigate(-1); // 이전 페이지로 이동
       })
       .catch((err) => {
+        alert(err.response?.data.message || err.message);
         console.error(err.response?.data || err.message);
-        alert("신청에 실패했습니다.");
       });
   }
 

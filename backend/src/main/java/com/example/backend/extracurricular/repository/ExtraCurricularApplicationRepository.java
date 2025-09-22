@@ -12,4 +12,6 @@ import java.util.List;
 @Repository
 public interface ExtraCurricularApplicationRepository extends JpaRepository<ExtraCurricularApplication, Integer> {
 
+    // 비교과 중복 신청 방지
+    boolean existsByMemberSeq_IdAndProgramSeq_SeqAndStatus(Integer memberSeq, Integer programSeq, int i);
 }

@@ -96,8 +96,19 @@ public class ExtraCurricularController {
 
     @PostMapping("/apply")
     public ResponseEntity<?> apply(@RequestBody ETCApplyForm dto) {
-        extraCurricularService.apply(dto);
-        return ResponseEntity.ok().body(Map.of("message", "신청완료"));
+        try {
+            extraCurricularService.apply(dto);
+            return ResponseEntity.ok().body(Map.of(
+                    "success", true,
+                    "message", "신청이 완료되었습니다."
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "이미 신청한 상태입니다."
+            ));
+            // 추후 마감 지남 등의 예외 추가하기
+        }
     }
 
 }

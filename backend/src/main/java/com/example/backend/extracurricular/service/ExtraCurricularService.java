@@ -440,15 +440,24 @@ public class ExtraCurricularService {
     }
 
     public void apply(ETCApplyForm dto) {
+        // 이미 신청했는지 확인
+        boolean alreadyApplied = extraCurricularApplicationRepository
+                .existsByMemberSeq_IdAndProgramSeq_SeqAndStatus(dto.getMemberSeq(), dto.getProgramSeq(), 1);
+
+        if (alreadyApplied) {
+            throw new RuntimeException("이미 신청한 프로그램입니다.");
+        }
+
         // 회원 시퀀스
         // 프로그램 시퀀스
         // 신청 테이블에 저장하기
+        ExtraCurricularApplication eca = new ExtraCurricularApplication();
+
         ExtraCurricularProgram ecp = extraCurricularProgramRepository.findById(dto.getProgramSeq())
                 .orElseThrow(() -> new RuntimeException("프로그램 정보가 없습니다."));
         Member mb = memberRepository.findById(dto.getMemberSeq())
                 .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다."));
 
-        ExtraCurricularApplication eca = new ExtraCurricularApplication();
         eca.setProgramSeq(ecp);
         eca.setMemberSeq(mb);
         eca.setMotive(dto.getMotive());
