@@ -162,3 +162,20 @@ ALTER TABLE member
     DROP FOREIGN KEY FKmj5jegh4c3g7n0vj0mryuwv67;
 ALTER TABLE member
     DROP COLUMN student_student_seq;
+
+# 전화번호들은 그냥 sql로 추가,
+
+-- 'student_seq'가 1부터 100까지인 학생들의 'phone' 컬럼을 업데이트합니다.
+-- CONCAT() 함수로 '010'과 8자리의 임의의 숫자를 결합하여 11자리 번호를 만듭니다.
+-- LPAD() 함수는 생성된 숫자가 8자리보다 짧을 경우 앞에 0을 채워줍니다.
+UPDATE student
+SET phone = CONCAT('010', LPAD(FLOOR(RAND() * 90000000) + 10000000, 8, '0'))
+WHERE student_seq BETWEEN 1 AND 100;
+
+-- 'employee_seq'가 1부터 13까지인 직원들의 'phone' 컬럼을 업데이트합니다.
+-- 생성된 번호가 'student' 테이블에 이미 존재하는 번호와 겹치지 않을 경우에만 업데이트를 진행합니다.
+UPDATE employee
+SET phone = CONCAT('010', LPAD(FLOOR(RAND() * 90000000) + 10000000, 8, '0'))
+WHERE employee_seq BETWEEN 1 AND 13
+  AND CONCAT('010', LPAD(FLOOR(RAND() * 90000000) + 10000000, 8, '0')) NOT IN (SELECT phone
+                                                                               FROM student);
