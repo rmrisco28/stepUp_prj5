@@ -1,5 +1,6 @@
 import {
   Button,
+  Card,
   Col,
   Container,
   Form,
@@ -10,7 +11,9 @@ import {
   Row,
   Table,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import axios from "axios";
 
 export function ExtraCurricularApplication() {
   const [formData, setFormData] = useState({
@@ -18,6 +21,21 @@ export function ExtraCurricularApplication() {
     motive: "",
     privacyAgreed: false,
   });
+  const [ApplicationInfo, setApplicationInfo] = useState();
+  const { seq } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(`/api/extracurricular/applicationList/${seq}`)
+      .then((res) => {
+        console.log(res.data);
+        setApplicationInfo(res.data);
+      })
+      .catch((err) => {
+        console.log("신청 프로그램 정보를 불러오는데 실패했습니다.", err);
+      });
+  }, []);
 
   return (
     <Container>
@@ -30,22 +48,24 @@ export function ExtraCurricularApplication() {
           {/* 신청 프로그램 정보 */}
           <h4 className="mb-3">신청 프로그램</h4>
           <hr />
-          <Table bordered className="mb-5">
-            <thead>
-              <tr className="text-center">
-                <th className="bg-light">프로그램명</th>
-                <th className="bg-light">일정</th>
-                <th className="bg-light">운영 방식</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>몰러</td>
-                <td>몰러</td>
-                <td>몰러</td>
-              </tr>
-            </tbody>
-          </Table>
+          {ApplicationInfo && (
+            <Card className="mb-4 shadow-sm">
+              <Card.Body>
+                <Card.Title className="text-primary fw-bold">
+                  프로그램명: {ApplicationInfo.title}
+                </Card.Title>
+                <Card.Text>
+                  <strong>일정:</strong>{" "}
+                  {`${new Date(ApplicationInfo.operateStartDt).toLocaleString()} ~ ${new Date(
+                    ApplicationInfo.operateEndDt,
+                  ).toLocaleString()}`}
+                </Card.Text>
+                <Card.Text>
+                  <strong>운영 방식:</strong> {ApplicationInfo.operationType}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          )}
 
           <Form>
             <h4 className="mb-4">신청서</h4>
@@ -122,7 +142,11 @@ export function ExtraCurricularApplication() {
                 <Button variant="primary" className="me-2">
                   신청하기
                 </Button>
-                <Button type="button" variant="secondary">
+                <Button
+                  type="button"
+                  variant="secondary"
+                  onClick={() => navigate(-1)}
+                >
                   신청취소
                 </Button>
               </Col>

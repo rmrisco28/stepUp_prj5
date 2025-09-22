@@ -4,10 +4,7 @@ import com.example.backend.batch.student.repository.StudentRepository;
 import com.example.backend.competency.entity.Competency;
 import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.SubCompetencyRepository;
-import com.example.backend.extracurricular.dto.ETCAddForm;
-import com.example.backend.extracurricular.dto.ETCDetailDto;
-import com.example.backend.extracurricular.dto.ETCEditForm;
-import com.example.backend.extracurricular.dto.ETCListDto;
+import com.example.backend.extracurricular.dto.*;
 import com.example.backend.extracurricular.entity.*;
 import com.example.backend.extracurricular.enums.OperationType;
 import com.example.backend.extracurricular.repository.ExtraCurricularApplicationRepository;
@@ -428,4 +425,15 @@ public class ExtraCurricularService {
         extraCurricularProgramRepository.delete(data);
     }
 
+    public AppList appList(Integer seq) {
+        ExtraCurricularProgram etc = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("프로그램이 존재하지 않습니다."));
+
+        return AppList.builder()
+                .title(etc.getTitle())
+                .operateStartDt(etc.getOperateStartDt())
+                .operateEndDt(etc.getOperateEndDt())
+                .operationType(mapToLabel(etc.getOperationType()))
+                .build();
+    }
 }

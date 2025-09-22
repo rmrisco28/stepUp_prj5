@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 
+// 비교과 카드 누르면 나오는 컴포넌트
 export function ExtraCurricularProgram() {
   const { seq } = useParams(); // URL에서 seq 받아오기
   const [program, setProgram] = useState(null);

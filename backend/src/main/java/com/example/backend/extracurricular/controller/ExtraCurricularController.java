@@ -88,5 +88,9 @@ public class ExtraCurricularController {
                         "text", seq + "번 프로그램이 삭제되었습니다.")));
     }
 
+    @GetMapping("/applicationList/{seq}")
+    public ResponseEntity<?> AppList(@PathVariable Integer seq) {
+        return ResponseEntity.ok().body(extraCurricularService.appList(seq));
+    }
 
 }
