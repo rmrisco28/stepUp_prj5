@@ -1,17 +1,30 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/menubar.css";
 import { AuthProvider } from "./AuthContext.jsx";
 import { useAuth } from "./AuthContext.jsx";
+import axios from "axios";
 
 export function MenuBar() {
-  const { user, isAdmin, logout, isAuthenticated } = useAuth();
+  const { user, logout, isAuthenticated } = useAuth();
+  const [isAdmin, setIsAdmin] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
 
   const name = user?.name;
   const loginId = user?.loginId;
+  useEffect(() => {
+    axios
+      .get("/api/auth/status") // 로그인 상태 확인 API
+      .then((res) => {
+        console.log("로그인된 사용자 정보:", res.data);
+        setIsAdmin(res.data.authName === "admin"); // authName이 'admin'이면 관리자
+      })
+      .catch((err) => {
+        console.log("로그인 상태 확인 실패");
+      });
+  }, []);
 
   const menus = [
     {
@@ -28,9 +41,12 @@ export function MenuBar() {
       subItems: [
         { name: "역량 소개", path: "/competency" },
         { name: "진단 검사", path: "/competency/assessment" },
-        { name: "관리자 핵심역량 목록", path: "/competency/list" },
-        { name: "관리자 하위역량 목록", path: "/competency/subList" },
-      ],
+        isAdmin && { name: "관리자 핵심역량 목록", path: "/competency/list" },
+        isAdmin && {
+          name: "관리자 하위역량 목록",
+          path: "/competency/subList",
+        },
+      ].filter(Boolean),
     },
     {
       name: "나의 활동",
@@ -96,7 +112,7 @@ export function MenuBar() {
           {/* 로고 */}
           <Navbar.Brand as={Link} to="/">
             <img
-              src="../image/stepUp_logo_수정.png"
+              src="/../image/stepUp_logo_수정.png"
               alt="logo"
               className="logo"
             />

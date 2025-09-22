@@ -6,16 +6,19 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "response", schema = "prj5")
-public class Response {
+@Table(name = "complete", schema = "prj5")
+public class Complete {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "response_seq", nullable = false)
+    @Column(name = "result_seq", nullable = false)
     private Integer seq;
 
     @ManyToOne(optional = false)
@@ -23,11 +26,11 @@ public class Response {
     private Member memberSeq;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "question_seq", nullable = false)
-    private Question questionSeq;
+    @JoinColumn(name = "ca_seq", nullable = false)
+    private Assessment caSeq;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "choice_seq", nullable = false)
-    private Choice choiceSeq;
+    @ColumnDefault("current_timestamp()")
+    @Column(name = "assessmentDttm", nullable = false, insertable = false, updatable = false)
+    private LocalDateTime assessmentDttm;
 
 }

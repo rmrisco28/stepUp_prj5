@@ -24,6 +24,7 @@ export function CompetencyAssessmentTestStart() {
   const [pageInfo, setPageInfo] = useState(null);
   const [response, setResponse] = useState({}); // 전체 답 저장용
   const [pageResponse, setPageResponse] = useState({}); // 현제페이지에 보여질 값
+  const [memberSeq, setMemberSeq] = useState("");
 
   const [questionList, setQuestionList] = useState([]);
   const [choiceList, setChoiceList] = useState([]);
@@ -34,6 +35,17 @@ export function CompetencyAssessmentTestStart() {
   const { assessmentSeq } = useParams();
 
   useEffect(() => {
+    // 사용자 여부
+    axios
+      .get("/api/auth/status") // 로그인 상태 확인 API
+      .then((res) => {
+        console.log("로그인된 사용자 정보:", res.data);
+        setMemberSeq(res.data.memberSeq);
+      })
+      .catch((err) => {
+        console.log("로그인 상태 확인 실패");
+      });
+
     // 문제 받아오기
     axios
       .get(`/api/competency/assessment/admin/${assessmentSeq}?${searchParams}`)
@@ -61,7 +73,7 @@ export function CompetencyAssessmentTestStart() {
     const responseDtos = Object.entries(response).map(
       ([questionSeq, respObj]) => ({
         seq: respObj.responseSeq ?? null, // 기존 seq 있으면 사용
-        studentSeqId: 1,
+        memberSeq: memberSeq,
         questionSeqSeq: Number(questionSeq),
         choiceSeqSeq: Number(respObj.choiceSeq), // 선택한 choice seq
       }),
@@ -114,7 +126,7 @@ export function CompetencyAssessmentTestStart() {
     const responseDtos = Object.entries(response).map(
       ([questionSeq, respObj]) => ({
         seq: respObj.responseSeq ?? null, // 기존 seq 있으면 사용
-        studentSeqId: 1,
+        memberSeq: memberSeq,
         questionSeqSeq: Number(questionSeq),
         choiceSeqSeq: Number(respObj.choiceSeq), // 선택한 choice seq
       }),
@@ -137,7 +149,7 @@ export function CompetencyAssessmentTestStart() {
         });
         setResponse(nextResponse);
 
-        navigate(`/competency/assessment/test/result/${assessmentSeq}`);
+        navigate(`/competency/assessment/test/complete/${assessmentSeq}`);
       });
 
     // 페이지 답안 초기화

@@ -13,7 +13,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class ResponseDto implements Serializable {
     Integer seq;
-    Integer studentSeqId;
+    Integer memberSeq;
     Integer questionSeqSeq;
     Integer questionSeqQuestionNum;
     Integer choiceSeqSeq;
