@@ -11,6 +11,7 @@ import {
 } from "react-bootstrap";
 import { useAuth } from "../../common/AuthContext.jsx";
 import { useNavigate } from "react-router";
+import { AppFooter } from "../../common/AppFooter.jsx";
 
 export function Login() {
   const { login, loading, user } = useAuth();
@@ -41,27 +42,22 @@ export function Login() {
   }
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
       {/* 상단 헤더 */}
-      <div
+      <header
         className="bg-success text-white text-center py-3 d-flex flex-column justify-content-center align-items-center"
-        style={{
-          width: "100vw",
-          height: "150px",
-          position: "fixed",
-          top: 0,
-          left: 0,
-        }}
+        style={{ width: "100%", height: "200px" }}
       >
         <img
           src="../image/stepUp_logo_수정.png"
           alt="logo"
-          style={{
-            height: "80%",
-            objectFit: "contain",
-            display: "block",
-            cursor: "pointer",
-          }}
+          style={{ height: "100px", objectFit: "contain", cursor: "pointer" }}
           onClick={() => navigate("/")}
         />
         <span
@@ -69,18 +65,21 @@ export function Login() {
         >
           stepUp university extracurricular
         </span>
-      </div>
+      </header>
 
-      {/* 헤더 아래 여백 */}
-      <div style={{ height: "160px" }} />
-
-      {/* 메인 컨텐츠 */}
-      <div className="container">
-        <Row className="justify-content-center align-items-stretch">
-          {/* 오른쪽 로그인 카드 - 모바일에서 위로 올라오도록 */}
-          <Col xs={12} lg={6} className="d-flex mb-4 mb-lg-0 order-lg-2">
-            <Card className="flex-fill border-secondary-subtle">
-              <Card.Body>
+      {/* 메인 컨텐츠 영역 */}
+      <main
+        className="container my-5"
+        style={{ flexGrow: 1, display: "flex", alignItems: "center" }}
+      >
+        <Row className="justify-content-center align-items-stretch g-4 w-100">
+          {/* 오른쪽 로그인 카드 */}
+          <Col xs={12} lg={6} className="d-flex order-lg-2">
+            <Card
+              className="flex-fill border-secondary-subtle shadow-sm"
+              style={{ minHeight: "450px" }} // 카드 높이 증가
+            >
+              <Card.Body className="d-flex flex-column justify-content-center">
                 <h3 className="mb-3 text-center">stepUp에 로그인하세요</h3>
                 <h6 className="mb-3 text-center">비교과 통합관리시스템</h6>
                 <hr />
@@ -128,10 +127,13 @@ export function Login() {
             </Card>
           </Col>
 
-          {/* 왼쪽 테스트 계정 정보 - 모바일에서 아래로 내려가도록 */}
+          {/* 왼쪽 테스트 계정 정보 */}
           <Col xs={12} lg={5} className="d-flex order-lg-1">
-            <Card className="flex-fill bg-light text-muted small border-success-subtle">
-              <Card.Body>
+            <Card
+              className="flex-fill bg-light text-muted small border-success-subtle shadow-sm"
+              style={{ minHeight: "450px" }} // 카드 높이 증가
+            >
+              <Card.Body className="d-flex flex-column justify-content-center">
                 <h5 className="mb-3 text-center text-dark">테스트 계정 정보</h5>
                 <div className="mb-2">
                   학생 아이디 : <b>2021134001</b> | 비밀번호 : <b>050405</b>
@@ -147,28 +149,25 @@ export function Login() {
                   로그인 후 체험해보세요
                 </h6>
                 <div className="mb-2">
-                  <b>
-                    {"<"}학생{">"}
-                  </b>
+                  <b>&lt;학생&gt;</b>
                   <div>
                     비교과 신청, 비교과/마일리지 내역 확인, 비밀번호 변경
                   </div>
-                  <b>
-                    {"<"}센터{">"}
-                  </b>
+                  <b>&lt;센터&gt;</b>
                   <div>
                     비교과 추가, 비교과/마일리지 내역 관리, 비밀번호 변경
                   </div>
-                  <b>
-                    {"<"}관리자{">"}
-                  </b>
+                  <b>&lt;관리자&gt;</b>
                   <div>학생 역량 관리, 비밀번호 변경</div>
                 </div>
               </Card.Body>
             </Card>
           </Col>
         </Row>
-      </div>
-    </>
+      </main>
+
+      {/* 푸터 */}
+      <AppFooter />
+    </div>
   );
 }

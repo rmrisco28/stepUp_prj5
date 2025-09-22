@@ -43,6 +43,9 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/*로그인*/}
+          <Route path="login" element={<Login />} />
+
           {/*전체 구조*/}
           <Route path="/" element={<MainLayout />}>
             {/*메인 페이지*/}
@@ -163,9 +166,6 @@ function App() {
             <Route path="board/faq/edit/:seq" element={<FaqEdit />} />
             <Route path="board/faq/manage" element={<FaqManage />} />
             <Route path="board/faq/:seq" element={<FaqDetail />} />
-
-            {/*로그인*/}
-            <Route path="login" element={<Login />} />
           </Route>
         </Routes>
       </BrowserRouter>

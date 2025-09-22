@@ -1,13 +1,9 @@
 import { MenuBar } from "./MenuBar.jsx";
 import React from "react";
-import { Outlet, useLocation } from "react-router";
+import { Outlet } from "react-router";
 import { AppFooter } from "./AppFooter.jsx";
-import { useAuth } from "./AuthContext.jsx";
 
 export function MainLayout() {
-  const location = useLocation();
-  const hideMenu = location.pathname === "/login";
-
   return (
     // 전체 레이아웃을 Flexbox 컨테이너로 설정
     <div
@@ -18,7 +14,9 @@ export function MainLayout() {
       }}
     >
       {/* 메뉴바 */}
-      <div className="mb-5">{!hideMenu && <MenuBar />}</div>
+      <div className="mb-5">
+        <MenuBar />
+      </div>
 
       {/* 메인 콘텐츠 영역 */}
       <div
