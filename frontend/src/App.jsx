@@ -28,6 +28,8 @@ import { MyETC } from "./feature/activity/MyETC.jsx";
 import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
 import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
 import { CompetencyAssessmentTestComplete } from "./feature/competency/competencyTest/CompetencyAssessmentTestComplete.jsx";
+import { CompetencyAssessmentTestResult } from "./feature/competency/competencyTest/CompetencyAssessmentTestResult.jsx";
+import { CompetencyAssessmentTestResultList } from "./feature/competency/competencyTest/CompetencyAssessmentTestResultList.jsx";
 
 function App() {
   return (
@@ -116,10 +118,21 @@ function App() {
               element={<CompetencyAssessmentTestStart />}
             />
 
-            {/*------------------역량 진단  결과----------------*/}
+            {/*------------------역량 진단 결과----------------*/}
             <Route
               path="/competency/assessment/test/complete/:assessmentSeq"
               element={<CompetencyAssessmentTestComplete />}
+            />
+
+            {/*진단검사 세부결과*/}
+            <Route
+              path="/competency/assessment/test/result/:assessmentSeq"
+              element={<CompetencyAssessmentTestResult />}
+            />
+            {/*진단검사 세부결과목록*/}
+            <Route
+              path="/competency/assessment/test/resultList"
+              element={<CompetencyAssessmentTestResultList />}
             />
 
             {/*나의 활동*/}

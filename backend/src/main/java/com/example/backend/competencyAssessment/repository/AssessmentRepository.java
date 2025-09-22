@@ -35,5 +35,5 @@ public interface AssessmentRepository extends JpaRepository<Assessment, Integer>
     Assessment findEntityBySeq(int seq);
 
 
-    Assessment findByCaSeq(int seq);
+    Assessment findAllBySeq(int seq);
 }

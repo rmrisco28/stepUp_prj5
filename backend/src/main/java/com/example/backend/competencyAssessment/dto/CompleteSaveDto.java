@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class CompleteSaveDto implements Serializable {
     Integer seq;
-    Integer studentSeqId;
+    Integer memberSeq;
     Integer caSeqSeq;
     LocalDateTime assessmentDttm;
 }

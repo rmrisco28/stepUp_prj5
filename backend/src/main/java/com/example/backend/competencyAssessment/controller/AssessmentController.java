@@ -150,7 +150,7 @@ public class AssessmentController {
     public ResponseEntity<?> responseSave(@PathVariable int seq, @RequestBody List<ResponseDto> dtoList) {
         dtoList.forEach(dto -> {
             System.out.println("dto.getSeq() = " + dto.getSeq());
-            System.out.println("학생번호 = " + dto.getStudentSeqId());
+            System.out.println("학생번호 = " + dto.getMemberSeq());
             System.out.println("문항번호 = " + dto.getQuestionSeqSeq());
             System.out.println("선택지번호 = " + dto.getChoiceSeqSeq());
         });

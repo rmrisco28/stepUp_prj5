@@ -1,6 +1,7 @@
 package com.example.backend.competencyAssessment.entity;
 
 import com.example.backend.batch.student.entity.Student;
+import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,8 +19,8 @@ public class Response {
     private Integer seq;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "student_seq", nullable = false)
-    private Student studentSeq;
+    @JoinColumn(name = "member_seq", nullable = false)
+    private Member memberSeq;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "question_seq", nullable = false)

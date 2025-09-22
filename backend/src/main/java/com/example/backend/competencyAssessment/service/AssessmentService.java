@@ -1,7 +1,5 @@
 package com.example.backend.competencyAssessment.service;
 
-import com.example.backend.batch.student.entity.Student;
-import com.example.backend.batch.student.repository.StudentRepository;
 import com.example.backend.competency.dto.CompetencyDto;
 import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.CompetencyRepository;
@@ -10,6 +8,8 @@ import com.example.backend.competencyAssessment.dto.*;
 import com.example.backend.competency.dto.MainCompetencyDto;
 import com.example.backend.competencyAssessment.entity.*;
 import com.example.backend.competencyAssessment.repository.*;
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,9 +35,9 @@ public class AssessmentService {
     private final SubCompetencyRepository subCompetencyRepository;
     private final QuestionRepository questionRepository;
     private final ChoiceRepository choiceRepository;
-    private final StudentRepository studentRepository;
     private final ResponseRepository responseRepository;
     private final CompleteRepository completeRepository;
+    private final MemberRepository memberRepository;
 
     /*----------------- 역량 진단 목록 ----------------*/
 
@@ -271,6 +271,8 @@ public class AssessmentService {
         }
     }
 
+    /* --------------------- 테스트 ----------------------- */
+
     public AssessmentDto testReady(int seq) {
         AssessmentDto assessmentDto = assessmentRepository.findBySeq(seq);
         return assessmentDto;
@@ -287,11 +289,12 @@ public class AssessmentService {
         responseDtos.forEach(dto -> {
             if (dto.getSeq() == null) {
                 Response response = new Response();
-                Student student = studentRepository.findById(dto.getStudentSeqId());
+                //TODO gg
+//                Member member = memberRepository.findById(dto.getMemberSeq());
                 Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
                 Choice choice = choiceRepository.findBySeq(dto.getChoiceSeqSeq());
 
-                response.setStudentSeq(student);
+//                response.setMemberSeq(member); TODO gg
                 response.setQuestionSeq(question);
                 response.setChoiceSeq(choice);
 
@@ -315,11 +318,12 @@ public class AssessmentService {
     public ResponseEntity<?> complete(int seq, CompleteSaveDto dto) {
         Complete complete = new Complete();
 
-        Student student = studentRepository.findById(dto.getStudentSeqId());
-        Assessment assessment = assessmentRepository.findByCaSeq(seq);
+        //todo gg
+//        Member member = memberRepository.findById(dto.getMemberSeq());
+        Assessment assessment = assessmentRepository.findAllBySeq(seq);
 
 
-        complete.setStudentSeq(student);
+//        complete.setMemberSeq(member); // todo gg
         complete.setCaSeq(assessment);
 
         completeRepository.save(complete);
