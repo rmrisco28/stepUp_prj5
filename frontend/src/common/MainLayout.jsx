@@ -9,22 +9,31 @@ export function MainLayout() {
   const hideMenu = location.pathname === "/login";
 
   return (
-    <>
-      <div className="mb-5">
-        {/*메뉴바*/}
-        {!hideMenu && <MenuBar />}
-      </div>
+    // 전체 레이아웃을 Flexbox 컨테이너로 설정
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+      }}
+    >
+      {/* 메뉴바 */}
+      <div className="mb-5">{!hideMenu && <MenuBar />}</div>
 
-      {/*메인콘텐츠 영역-비교과,역량 등등..*/}
-      <div className="mb-5">
+      {/* 메인 콘텐츠 영역 */}
+      <div
+        className="mb-5"
+        style={{
+          flex: "1", // 이 부분이 콘텐츠가 길어질 때 늘어나게 하는 역할
+        }}
+      >
         <Outlet />
       </div>
 
-      {/*푸터*/}
-      {/*평소엔 보이는 화면 아래에 위치하는데, Outlet에 있는 데이터에 따라 밀려나도록*/}
+      {/* 푸터 */}
       <div className="mb-0">
         <AppFooter />
       </div>
-    </>
+    </div>
   );
 }
