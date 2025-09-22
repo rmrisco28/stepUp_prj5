@@ -29,6 +29,7 @@ import { ExtraCurricularApplication } from "./feature/extracurricular/ExtraCurri
 import { MyETC } from "./feature/activity/MyETC.jsx";
 import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
 import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
+import { NoticeEdit } from "./feature/notice/NoticeEdit.jsx";
 
 function App() {
   return (
@@ -130,6 +131,7 @@ function App() {
             <Route path="board/notice" element={<NoticeList />} />
             <Route path="board/notice/add" element={<NoticeAdd />} />
             <Route path="board/notice/:id" element={<NoticeDetail />} />
+            <Route path="board/notice/edit/:id" element={<NoticeEdit />} />
             <Route path="board/faq" element={<NoticeList />} />
 
             {/*로그인*/}

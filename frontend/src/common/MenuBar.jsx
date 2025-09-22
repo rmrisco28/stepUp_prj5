@@ -50,6 +50,8 @@ export function MenuBar() {
     },
   ];
 
+  // const logo = "../image/stepUp_logo_수정.png";
+
   return (
     <>
       <Navbar bg="success" className="py-0 border-bottom shadow-sm">
