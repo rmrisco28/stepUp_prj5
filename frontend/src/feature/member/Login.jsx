@@ -12,6 +12,13 @@ import {
 import { useAuth } from "../../common/AuthContext.jsx";
 import { useNavigate } from "react-router";
 import { AppFooter } from "../../common/AppFooter.jsx";
+import {
+  FaCheckCircle,
+  FaUserCog,
+  FaUserGraduate,
+  FaUserTie,
+} from "react-icons/fa";
+import { FaGear } from "react-icons/fa6";
 
 export function Login() {
   const { login, loading, user } = useAuth();
@@ -80,7 +87,9 @@ export function Login() {
               style={{ minHeight: "450px" }} // 카드 높이 증가
             >
               <Card.Body className="d-flex flex-column justify-content-center">
-                <h3 className="mb-3 text-center">stepUp에 로그인하세요</h3>
+                <h3 className="mb-3 text-center">
+                  <b>stepUp에 로그인하세요</b>
+                </h3>
                 <h6 className="mb-3 text-center">비교과 통합관리시스템</h6>
                 <hr />
                 {error && <Alert variant="danger">{error}</Alert>}
@@ -113,7 +122,7 @@ export function Login() {
                   <Button
                     type="submit"
                     variant="outline-success"
-                    className="w-100"
+                    className="w-100 mt-3"
                     disabled={loading}
                   >
                     {loading ? (
@@ -134,31 +143,81 @@ export function Login() {
               style={{ minHeight: "450px" }} // 카드 높이 증가
             >
               <Card.Body className="d-flex flex-column justify-content-center">
-                <h5 className="mb-3 text-center text-dark">테스트 계정 정보</h5>
-                <div className="mb-2">
-                  학생 아이디 : <b>2021134001</b> | 비밀번호 : <b>050405</b>
-                </div>
-                <div className="mb-2">
-                  센터 아이디 : <b>EC93001</b> | 비밀번호 : <b>690928</b>
-                </div>
-                <div>
-                  관리자 아이디 : <b>CM21007</b> | 비밀번호 : <b>000524</b>
-                </div>
+                <h5 className="mb-3 text-center text-dark">
+                  <b>테스트 계정 정보</b>
+                </h5>
+
+                <ul className="list-unstyled">
+                  <li className="d-flex align-items-center mb-2">
+                    <FaUserGraduate className="me-2 text-success" />
+                    <div>
+                      학생 아이디: <b>2021134001</b> | 비밀번호: <b>050405</b>
+                    </div>
+                  </li>
+                  <li className="d-flex align-items-center mb-2">
+                    <FaUserCog className="me-2 text-success" />
+                    <div>
+                      센터 아이디: <b>EC93001</b> | 비밀번호: <b>690928</b>
+                    </div>
+                  </li>
+                  <li className="d-flex align-items-center mb-2">
+                    <FaUserTie className="me-2 text-success" />
+                    <div>
+                      관리자 아이디: <b>CM21007</b> | 비밀번호: <b>000524</b>
+                    </div>
+                  </li>
+                </ul>
+
                 <hr />
-                <h6 className="mb-3 text-center text-dark">
-                  로그인 후 체험해보세요
+
+                <h6 className="mb-2 text-center text-dark">
+                  <b>로그인 후 이용해보세요</b>
                 </h6>
-                <div className="mb-2">
-                  <b>&lt;학생&gt;</b>
-                  <div>
-                    비교과 신청, 비교과/마일리지 내역 확인, 비밀번호 변경
-                  </div>
-                  <b>&lt;센터&gt;</b>
-                  <div>
-                    비교과 추가, 비교과/마일리지 내역 관리, 비밀번호 변경
-                  </div>
-                  <b>&lt;관리자&gt;</b>
-                  <div>학생 역량 관리, 비밀번호 변경</div>
+
+                <div className="d-flex flex-column">
+                  <h6 className="text-dark">
+                    <FaUserGraduate className="me-2" />
+                    학생
+                  </h6>
+                  <ul className="list-unstyled ms-4">
+                    <li className="d-flex align-items-center mb-1">
+                      {/*<FaCheckCircle className="me-2 text-info" size="14" />*/}
+                      비교과 신청, 비교과/마일리지 내역 확인
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark mt-1">
+                    <FaUserCog className="me-2" />
+                    센터
+                  </h6>
+                  <ul className="list-unstyled ms-4">
+                    <li className="d-flex align-items-center mb-1">
+                      {/*<FaCheckCircle className="me-2 text-info" size="14" />*/}
+                      비교과 추가, 비교과/마일리지 내역 관리
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark mt-1">
+                    <FaUserTie className="me-2" />
+                    관리자
+                  </h6>
+                  <ul className="list-unstyled ms-4">
+                    <li className="d-flex align-items-center mb-1">
+                      {/*<FaCheckCircle className="me-2 text-info" size="14" />*/}
+                      학생 역량 관리
+                    </li>
+                  </ul>
+
+                  <h6 className="text-dark mt-1">
+                    <FaGear className="me-2" />
+                    공통
+                  </h6>
+                  <ul className="list-unstyled ms-4">
+                    <li className="d-flex align-items-center mb-1">
+                      {/*<FaCheckCircle className="me-2 text-info" size="14" />*/}
+                      비밀번호 변경
+                    </li>
+                  </ul>
                 </div>
               </Card.Body>
             </Card>
