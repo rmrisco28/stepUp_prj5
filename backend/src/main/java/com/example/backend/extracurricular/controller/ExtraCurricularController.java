@@ -111,4 +111,21 @@ public class ExtraCurricularController {
         }
     }
 
+    @DeleteMapping("/applyDelete")
+    public ResponseEntity<?> applyDelete(@RequestBody ETCApplyForm dto) {
+        try {
+            extraCurricularService.applyDelete(dto);
+            return ResponseEntity.ok().body(Map.of(
+                    "success", true,
+                    "message", "해당 비교과 프로그램 신청이 취소되었습니다."
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "신청 취소에 실패했습니다."
+            ));
+            // 추후 마감 지남 등의 예외 추가하기
+        }
+    }
+
 }

@@ -8,10 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExtraCurricularApplicationRepository extends JpaRepository<ExtraCurricularApplication, Integer> {
 
     // 비교과 중복 신청 방지
     boolean existsByMemberSeq_IdAndProgramSeq_SeqAndStatus(Integer memberSeq, Integer programSeq, int i);
+
+    Optional<ExtraCurricularApplication> existsByMemberSeq_IdAndProgramSeq_Seq(Integer memberSeq, Integer programSeq);
 }

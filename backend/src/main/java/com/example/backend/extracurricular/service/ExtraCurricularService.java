@@ -463,4 +463,21 @@ public class ExtraCurricularService {
         eca.setMotive(dto.getMotive());
         extraCurricularApplicationRepository.save(eca);
     }
+
+    public void applyDelete(ETCApplyForm dto) {
+        // 이미 신청했는지 확인
+        boolean alreadyApplied = extraCurricularApplicationRepository
+                .existsByMemberSeq_IdAndProgramSeq_SeqAndStatus(dto.getMemberSeq(), dto.getProgramSeq(), 1);
+        // 신청 안 했는데 하려고 하면
+        if (!alreadyApplied) {
+            throw new RuntimeException("신청한 적이 없는 프로그램입니다.");
+        }
+
+        // 프로그램 seq, 사용자 seq로 확인
+        ExtraCurricularApplication eca = extraCurricularApplicationRepository
+                .existsByMemberSeq_IdAndProgramSeq_Seq(dto.getMemberSeq(), dto.getProgramSeq())
+                .orElseThrow(() -> new RuntimeException("존재하지 않은 신청내역입니다"));
+
+        extraCurricularApplicationRepository.delete(eca);
+    }
 }
