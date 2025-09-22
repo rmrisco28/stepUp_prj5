@@ -72,28 +72,10 @@ export function Login() {
 
       {/* 메인 컨텐츠 */}
       <div className="container">
-        <Row className="justify-content-center">
-          {/* 왼쪽 테스트 계정 정보 */}
-          <Col xs={12} md={4} className="mb-4 mb-md-0">
-            <Card className="h-100 bg-light text-muted small">
-              <Card.Body>
-                <h5 className="mb-3 text-center text-dark">테스트 계정 정보</h5>
-                <div className="mb-2">
-                  학생 아이디 : <b>2021134001</b> | 비밀번호 : <b>050405</b>
-                </div>
-                <div className="mb-2">
-                  센터 아이디 : <b>EC93001</b> | 비밀번호 : <b>690928</b>
-                </div>
-                <div>
-                  관리자 아이디 : <b>CM21007</b> | 비밀번호 : <b>000524</b>
-                </div>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          {/* 오른쪽 로그인 카드 */}
-          <Col xs={12} md={5}>
-            <Card>
+        <Row className="justify-content-center align-items-stretch">
+          {/* 오른쪽 로그인 카드 - 모바일에서 위로 올라오도록 */}
+          <Col xs={12} lg={6} className="d-flex mb-4 mb-lg-0 order-lg-2">
+            <Card className="flex-fill border-secondary-subtle">
               <Card.Body>
                 <h3 className="mb-3 text-center">stepUp에 로그인하세요</h3>
                 <h6 className="mb-3 text-center">비교과 통합관리시스템</h6>
@@ -138,6 +120,46 @@ export function Login() {
                     )}
                   </Button>
                 </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* 왼쪽 테스트 계정 정보 - 모바일에서 아래로 내려가도록 */}
+          <Col xs={12} lg={5} className="d-flex order-lg-1">
+            <Card className="flex-fill bg-light text-muted small border-success-subtle">
+              <Card.Body>
+                <h5 className="mb-3 text-center text-dark">테스트 계정 정보</h5>
+                <div className="mb-2">
+                  학생 아이디 : <b>2021134001</b> | 비밀번호 : <b>050405</b>
+                </div>
+                <div className="mb-2">
+                  센터 아이디 : <b>EC93001</b> | 비밀번호 : <b>690928</b>
+                </div>
+                <div>
+                  관리자 아이디 : <b>CM21007</b> | 비밀번호 : <b>000524</b>
+                </div>
+                <hr />
+                <h6 className="mb-3 text-center text-dark">
+                  로그인 후 체험해보세요
+                </h6>
+                <div className="mb-2">
+                  <b>
+                    {"<"}학생{">"}
+                  </b>
+                  <div>
+                    비교과 신청, 비교과/마일리지 내역 확인, 비밀번호 변경
+                  </div>
+                  <b>
+                    {"<"}센터{">"}
+                  </b>
+                  <div>
+                    비교과 추가, 비교과/마일리지 내역 관리, 비밀번호 변경
+                  </div>
+                  <b>
+                    {"<"}관리자{">"}
+                  </b>
+                  <div>학생 역량 관리, 비밀번호 변경</div>
+                </div>
               </Card.Body>
             </Card>
           </Col>
