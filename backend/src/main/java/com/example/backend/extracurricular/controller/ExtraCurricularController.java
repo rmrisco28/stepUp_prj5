@@ -1,6 +1,8 @@
 package com.example.backend.extracurricular.controller;
 
+import com.example.backend.extracurricular.dto.ApplicationRequestDto;
 import com.example.backend.extracurricular.dto.ETCAddForm;
+import com.example.backend.extracurricular.dto.ETCApplyForm;
 import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
@@ -87,5 +89,26 @@ public class ExtraCurricularController {
                         "text", seq + "번 프로그램이 삭제되었습니다.")));
     }
 
+    @GetMapping("/applicationList/{seq}")
+    public ResponseEntity<?> AppList(@PathVariable Integer seq) {
+        return ResponseEntity.ok().body(extraCurricularService.appList(seq));
+    }
+
+    @PostMapping("/apply")
+    public ResponseEntity<?> apply(@RequestBody ETCApplyForm dto) {
+        try {
+            extraCurricularService.apply(dto);
+            return ResponseEntity.ok().body(Map.of(
+                    "success", true,
+                    "message", "신청이 완료되었습니다."
+            ));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "success", false,
+                    "message", "이미 신청한 상태입니다."
+            ));
+            // 추후 마감 지남 등의 예외 추가하기
+        }
+    }
 
 }

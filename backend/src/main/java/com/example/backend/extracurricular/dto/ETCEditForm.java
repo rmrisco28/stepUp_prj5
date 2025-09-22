@@ -19,7 +19,7 @@ public class ETCEditForm {
     private LocalDateTime operateEndDt;
     private LocalDateTime applyStartDt;
     private LocalDateTime applyEndDt;
-    private String competency;
+    private Integer competency;
     private String location;
     private String operationType;
     private String grades;

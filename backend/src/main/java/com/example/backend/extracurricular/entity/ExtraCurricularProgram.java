@@ -1,5 +1,7 @@
 package com.example.backend.extracurricular.entity;
 
+import com.example.backend.competency.entity.Competency;
+import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.extracurricular.enums.OperationType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -7,7 +9,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -46,8 +47,11 @@ public class ExtraCurricularProgram {
     @Column(name = "location", length = 250)
     private String location;
 
-    @Column(name = "competency", nullable = false, length = 100)
-    private String competency;
+    //    @Column(name = "competency", nullable = false, length = 100)
+//    private String competency;
+    @ManyToOne
+    @JoinColumn(name = "competency", referencedColumnName = "sub_competency_seq", nullable = false)
+    private SubCompetency subCompetency;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "operation_type", nullable = false, length = 100)

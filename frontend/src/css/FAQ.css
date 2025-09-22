@@ -1,0 +1,44 @@
+/* 전체 아코디언 */
+.faq-accordion .accordion-item {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+/* 질문 영역 스타일 */
+.faq-accordion .accordion-header {
+    background-color: #f7f6f3; /* 연한 베이지/회색 */
+}
+
+/* 기본 배경색 */
+.faq-accordion .accordion-button {
+    background-color: #ffffff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+    transition: background-color 0.2s ease;
+}
+
+/* 호버 시 배경색 변경 */
+.faq-accordion .accordion-button:hover {
+    background-color: #def8e3;
+}
+
+/* 아코디언 열렸을 때 배경색 변경 */
+.faq-accordion .accordion-button:not(.collapsed) {
+    background-color: #def8e3;
+    color: #333;
+    box-shadow: none;
+}
+
+/* 답변 영역 스타일 */
+.faq-accordion .accordion-body {
+    background-color: #fff;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 15px 20px;
+    border-top: 1px solid #eee;
+}

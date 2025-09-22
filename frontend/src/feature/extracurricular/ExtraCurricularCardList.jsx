@@ -19,34 +19,40 @@ export function ExtraCurricularCardList({ programs }) {
             style={{ borderRadius: "10px", cursor: "pointer" }}
             onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
           >
-            {p.thumbUrl ? (
-              <img
-                src={p.thumbUrl}
-                alt={p.title}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  borderTopLeftRadius: "10px",
-                  borderTopRightRadius: "10px",
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  height: "150px",
-                  borderTopLeftRadius: "10px",
-                  borderTopRightRadius: "10px",
-                  background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              ></div>
-            )}
-
+            <div
+              style={{
+                width: "100%",
+                height: "150px",
+                borderTopLeftRadius: "10px",
+                borderTopRightRadius: "10px",
+                overflow: "hidden",
+              }}
+            >
+              {p.thumbUrl ? (
+                <img
+                  src={p.thumbUrl}
+                  alt={p.title}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    background:
+                      "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    color: "white",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                ></div>
+              )}
+            </div>
             <Card.Body>
               <div className="d-flex justify-content-between align-items-start mb-3">
                 <Card.Title className="fw-bold flex-grow-1 me-2">

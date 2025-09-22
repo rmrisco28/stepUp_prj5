@@ -1,11 +1,18 @@
 package com.example.backend.extracurricular.service;
 
+import com.example.backend.batch.student.repository.StudentRepository;
+import com.example.backend.competency.entity.Competency;
+import com.example.backend.competency.entity.SubCompetency;
+import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.extracurricular.dto.*;
 import com.example.backend.extracurricular.entity.*;
 import com.example.backend.extracurricular.enums.OperationType;
+import com.example.backend.extracurricular.repository.ExtraCurricularApplicationRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularImageContentRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularImageThumbRepository;
 import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +42,11 @@ public class ExtraCurricularService {
     private final ExtraCurricularImageThumbRepository extraCurricularImageThumbRepository;
     private final ExtraCurricularImageContentRepository extraCurricularImageContentRepository;
     private final S3Client s3Client;
+    private final ExtraCurricularApplicationRepository extraCurricularApplicationRepository;
+
+    private final StudentRepository studentRepository;
+    private final MemberRepository memberRepository;
+    private final SubCompetencyRepository subCompetencyRepository;
 
     @Value("${image.prefix}")
     private String imagePrefix;
@@ -45,6 +57,9 @@ public class ExtraCurricularService {
     // 비교과 프로그램 등록(관리목록에 등록)
     public void register(ETCAddForm etcAddForm) {
 
+        SubCompetency subCompetencyId = subCompetencyRepository.findById(etcAddForm.getCompetency())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid competency ID"));
+
         ExtraCurricularProgram ETCProgram = new ExtraCurricularProgram();
         ETCProgram.setTitle(etcAddForm.getTitle());
         ETCProgram.setContent(etcAddForm.getContent());
@@ -52,7 +67,7 @@ public class ExtraCurricularService {
         ETCProgram.setOperateEndDt(etcAddForm.getOperateEndDt());
         ETCProgram.setApplyStartDt(etcAddForm.getApplyStartDt());
         ETCProgram.setApplyEndDt(etcAddForm.getApplyEndDt());
-        ETCProgram.setCompetency(etcAddForm.getCompetency());
+        ETCProgram.setSubCompetency(subCompetencyId);
         ETCProgram.setLocation(etcAddForm.getLocation());
 
         ETCProgram.setOperationType(mapToEnum(etcAddForm.getOperationType()));
@@ -251,7 +266,7 @@ public class ExtraCurricularService {
         dto.setOperateEndDt(data.getOperateEndDt());
         dto.setApplyStartDt(data.getApplyStartDt());
         dto.setApplyEndDt(data.getApplyEndDt());
-        dto.setCompetency(data.getCompetency());
+        dto.setCompetency(data.getSubCompetency().getSubCompetencyName());
         dto.setLocation(data.getLocation());
         dto.setOperationType(mapToLabel(data.getOperationType()));
         dto.setGrades(data.getGrades());
@@ -294,6 +309,10 @@ public class ExtraCurricularService {
 
     // 프로그램 수정
     public void edit(Integer seq, ETCEditForm form) {
+
+        SubCompetency subCompetency = subCompetencyRepository.findById(form.getCompetency())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid competency ID"));
+
         ExtraCurricularProgram data = extraCurricularProgramRepository.findById(seq)
                 .orElseThrow(() -> new RuntimeException("프로그램 수정 오류"));
 
@@ -304,7 +323,7 @@ public class ExtraCurricularService {
         data.setOperateEndDt(form.getOperateEndDt());
         data.setApplyStartDt(form.getApplyStartDt());
         data.setApplyEndDt(form.getApplyEndDt());
-        data.setCompetency(form.getCompetency());
+        data.setSubCompetency(subCompetency);
         data.setLocation(form.getLocation());
         data.setOperationType(mapToEnum(form.getOperationType()));
         data.setGrades(form.getGrades());
@@ -407,4 +426,41 @@ public class ExtraCurricularService {
         extraCurricularProgramRepository.delete(data);
     }
 
+    public AppList appList(Integer seq) {
+        ExtraCurricularProgram etc = extraCurricularProgramRepository.findById(seq)
+                .orElseThrow(() -> new RuntimeException("프로그램이 존재하지 않습니다."));
+
+        return AppList.builder()
+                .seq(etc.getSeq())
+                .title(etc.getTitle())
+                .operateStartDt(etc.getOperateStartDt())
+                .operateEndDt(etc.getOperateEndDt())
+                .operationType(mapToLabel(etc.getOperationType()))
+                .build();
+    }
+
+    public void apply(ETCApplyForm dto) {
+        // 이미 신청했는지 확인
+        boolean alreadyApplied = extraCurricularApplicationRepository
+                .existsByMemberSeq_IdAndProgramSeq_SeqAndStatus(dto.getMemberSeq(), dto.getProgramSeq(), 1);
+
+        if (alreadyApplied) {
+            throw new RuntimeException("이미 신청한 프로그램입니다.");
+        }
+
+        // 회원 시퀀스
+        // 프로그램 시퀀스
+        // 신청 테이블에 저장하기
+        ExtraCurricularApplication eca = new ExtraCurricularApplication();
+
+        ExtraCurricularProgram ecp = extraCurricularProgramRepository.findById(dto.getProgramSeq())
+                .orElseThrow(() -> new RuntimeException("프로그램 정보가 없습니다."));
+        Member mb = memberRepository.findById(dto.getMemberSeq())
+                .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다."));
+
+        eca.setProgramSeq(ecp);
+        eca.setMemberSeq(mb);
+        eca.setMotive(dto.getMotive());
+        extraCurricularApplicationRepository.save(eca);
+    }
 }

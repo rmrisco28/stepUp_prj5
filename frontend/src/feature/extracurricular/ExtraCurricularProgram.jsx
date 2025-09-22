@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 
+// 비교과 카드 누르면 나오는 컴포넌트
 export function ExtraCurricularProgram() {
   const { seq } = useParams(); // URL에서 seq 받아오기
   const [program, setProgram] = useState(null);
@@ -198,7 +199,12 @@ export function ExtraCurricularProgram() {
 
       {/* 하단 버튼 */}
       <div className="d-flex justify-content-center gap-2 my-3">
-        <Button variant="primary">신청하기</Button>
+        <Button
+          variant="primary"
+          onClick={() => navigate(`/extracurricular/application/${seq}`)}
+        >
+          신청하기
+        </Button>
         <Button
           variant="secondary"
           onClick={() => navigate("/extracurricular")}

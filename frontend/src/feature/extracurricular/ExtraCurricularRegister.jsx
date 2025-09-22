@@ -9,7 +9,7 @@ import {
   FormLabel,
   Row,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
@@ -33,8 +33,22 @@ export function ExtraCurricularRegister() {
     thumbnail: null, // 썸네일 파일
     contentImages: [], // 본문 이미지 파일
   });
+  const [competencies, setCompetencies] = useState([]); // 역량 목록을 저장할 상태
 
   const navigate = useNavigate();
+
+  // 역량 목록 가져옴. 추후 작성자도 가져오게 하면 될 듯!
+  useEffect(() => {
+    axios
+      .get("/api/competency/subList")
+      .then((response) => {
+        console.log(response.data);
+        setCompetencies(response.data);
+      })
+      .catch((error) => {
+        console.error("역량 목록을 불러오는 데 실패했습니다.", error);
+      });
+  }, []);
 
   // 입력값 변경 처리
   const handleChange = (e) => {
@@ -71,7 +85,12 @@ export function ExtraCurricularRegister() {
     // 텍스트/단일 파일 필드
     for (const key in formData) {
       if (key !== "contentImages") {
-        submitData.append(key, formData[key]);
+        // thumbnail 필드가 존재하고 유효한 경우에만 FormData에 추가
+        if (key === "thumbnail" && formData[key] instanceof File) {
+          submitData.append(key, formData[key]);
+        } else if (key !== "thumbnail") {
+          submitData.append(key, formData[key]);
+        }
       }
     }
 
@@ -121,7 +140,7 @@ export function ExtraCurricularRegister() {
     <Container className="mt-5 my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4 text-center text-primary fw-bold">
+          <h2 className="mb-4 text-center text-success fw-bold">
             비교과 프로그램 등록
           </h2>
           <Form>
@@ -206,11 +225,19 @@ export function ExtraCurricularRegister() {
                 <FormGroup className="mb-3" controlId="competency">
                   <FormLabel>역량</FormLabel>
                   <FormControl
-                    type="text"
+                    as="select" // select 태그로 변경
                     name="competency"
                     value={formData.competency}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">역량을 선택하세요</option>
+                    {competencies.map((comp) => (
+                      <option key={comp.seq} value={comp.seq}>
+                        {/* 보이는 건 이름인데, 실제론 시퀀스 값이 넘어감 */}
+                        {comp.subCompetencyName}
+                      </option>
+                    ))}
+                  </FormControl>
                 </FormGroup>
               </Col>
               <Col>

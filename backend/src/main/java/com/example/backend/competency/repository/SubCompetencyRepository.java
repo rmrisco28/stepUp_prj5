@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SubCompetencyRepository extends JpaRepository<SubCompetency, Integer> {
 
@@ -58,4 +59,6 @@ public interface SubCompetencyRepository extends JpaRepository<SubCompetency, In
                      ORDER BY c.seq DESC
             """)
     List<MainCompetencyDto> findAllSubCompetenciesUse();
+
+//    Optional<SubCompetency> findBySubCompetencyName(String subComName);
 }

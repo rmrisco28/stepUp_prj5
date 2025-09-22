@@ -44,6 +44,7 @@ export function ExtraCurricularEdit() {
   });
 
   const [loading, setLoading] = useState(true);
+  const [competencies, setCompetencies] = useState([]);
 
   const { seq } = useParams();
   const [searchParams] = useSearchParams();
@@ -95,6 +96,18 @@ export function ExtraCurricularEdit() {
         setLoading(false);
       });
   }, [seq, navigate]);
+
+  useEffect(() => {
+    axios
+      .get("/api/competency/subList")
+      .then((response) => {
+        console.log(response.data);
+        setCompetencies(response.data);
+      })
+      .catch((error) => {
+        console.error("역량 목록을 불러오는 데 실패했습니다.", error);
+      });
+  }, []);
 
   // 모든 입력값 처리 (텍스트, 날짜, 셀렉트 전용)
   const handleChange = (e) => {
@@ -162,7 +175,7 @@ export function ExtraCurricularEdit() {
     <Container className="mt-5 my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4 text-center text-primary fw-bold">
+          <h2 className="mb-4 text-center text-success fw-bold">
             비교과 프로그램 수정
           </h2>
           <Form>
@@ -246,10 +259,19 @@ export function ExtraCurricularEdit() {
                 <FormGroup className="mb-3" controlId="competency">
                   <FormLabel>역량</FormLabel>
                   <FormControl
+                    as="select"
                     name="competency"
                     value={formData.competency}
                     onChange={handleChange}
-                  />
+                  >
+                    <option value="">수정할 역량을 선택하세요</option>
+                    {competencies.map((comp) => (
+                      <option key={comp.seq} value={comp.seq}>
+                        {/* 보이는 건 이름인데, 실제론 시퀀스 값이 넘어감 */}
+                        {comp.subCompetencyName}
+                      </option>
+                    ))}
+                  </FormControl>
                 </FormGroup>
               </Col>
               {/* 장소 */}
