@@ -12,6 +12,7 @@ import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +36,8 @@ public class AssessmentService {
     private final ResponseRepository responseRepository;
     private final CompleteRepository completeRepository;
     private final MemberRepository memberRepository;
+    private final ResourceLoader resourceLoader;
+    private final ResultRepository resultRepository;
 
     /*----------------- 역량 진단 목록 ----------------*/
 
@@ -278,27 +278,60 @@ public class AssessmentService {
         return assessmentDto;
     }
 
+
+    // 진단여부 확인
+    public ResponseEntity<Boolean> testCheck(int seq, int memberSeq) {
+        Boolean check = completeRepository.existsByMemberSeq_IdAndCaSeq_Seq(memberSeq, seq);
+        System.out.println("check = " + check);
+        return ResponseEntity.ok(check);
+    }
+
     public List<?> choiceList(int seq) {
         List<ChoiceListDto> choiceListDto = choiceRepository.findByQuestionSeqCaSeqSeq(seq);
         return choiceListDto;
     }
 
-    public ResponseEntity<?> responseSave(int seq, List<ResponseDto> responseDtos) {
+    // 응답 저장
+    public ResponseEntity<?> responseSave(int seq, List<ResponseDto> dtoList) {
         List<Response> savedList = new ArrayList<>();
 
-        responseDtos.forEach(dto -> {
+        dtoList.forEach(dto -> {
             if (dto.getSeq() == null) {
                 Response response = new Response();
-                //TODO gg
-//                Member member = memberRepository.findById(dto.getMemberSeq());
+
+                Optional<Member> member = memberRepository.findById(dto.getMemberSeq());
                 Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
                 Choice choice = choiceRepository.findBySeq(dto.getChoiceSeqSeq());
 
-//                response.setMemberSeq(member); TODO gg
+                if (member.isPresent()) {
+                    response.setMemberSeq(member.get());
+                } else {
+                    return;
+                }
                 response.setQuestionSeq(question);
                 response.setChoiceSeq(choice);
 
                 savedList.add(responseRepository.save(response));
+            } else {
+                Optional<Response> existingResponse = responseRepository.findById(dto.getSeq());
+                if (existingResponse.isPresent()) {
+                    Response response = existingResponse.get();
+
+                    // 기존 응답 수정
+                    Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
+                    if (question != null) {
+                        response.setQuestionSeq(question);
+                    }
+
+                    Choice choice = choiceRepository.findBySeq(dto.getChoiceSeqSeq());
+                    if (choice != null) {
+                        response.setChoiceSeq(choice);
+                    }
+
+                    // 기존 응답 저장 (업데이트)
+                    savedList.add(responseRepository.save(response));
+                }
+
             }
 
         });
@@ -317,25 +350,48 @@ public class AssessmentService {
 
     public ResponseEntity<?> complete(int seq, CompleteSaveDto dto) {
         Complete complete = new Complete();
-
-        //todo gg
-//        Member member = memberRepository.findById(dto.getMemberSeq());
         Assessment assessment = assessmentRepository.findAllBySeq(seq);
 
+        Optional<Member> member = memberRepository.findById(dto.getMemberSeq());
 
-//        complete.setMemberSeq(member); // todo gg
+        if (member.isPresent()) {
+            complete.setMemberSeq(member.get());
+        } else {
+            return ResponseEntity.badRequest().body("잘못된 저장입니다.");
+        }
+
         complete.setCaSeq(assessment);
 
         completeRepository.save(complete);
         return ResponseEntity.ok().build();
-
-
     }
 
 
-    // 진단 목록 세부 관리
-//    public List<?> adminList(int seq) {
-//        List<QuestionDto> questionDtos = questionRepository.findByCaSeqSeq(seq);
-//        return questionDtos;
-//    }
+    public ResponseEntity<?> resultSave(int seq, List<ResponseDto> dtoList) {
+        // 배열 수 만큼 반복시킨다.
+        List<Result> savedList = new ArrayList<>();
+
+        dtoList.forEach(dto -> {
+
+            Result result = new Result();
+            // 사용자 ID 저장
+            Member member = memberRepository.findById(dto.getMemberSeq()).get();
+            result.setMemberSeq(member);
+
+            // 역량 저장
+            Question question = questionRepository.findBySeq(dto.getQuestionSeqSeq());
+            result.setSubCompetencySeq(question.getSubCompetencySeq());
+
+            // 역량 진단 제목 저장
+            Assessment assessment = assessmentRepository.findAllBySeq(seq);
+            result.setCaSeq(assessment);
+
+            //점수 저장
+            Choice choice = choiceRepository.findBySeq(dto.getChoiceSeqSeq());
+            result.setScore(choice.getPoint());
+
+            savedList.add(resultRepository.save(result));
+        });
+        return ResponseEntity.ok(savedList);
+    }
 }

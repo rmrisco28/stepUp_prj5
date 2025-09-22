@@ -109,17 +109,21 @@ CREATE TABLE `response`
 
 DROP TABLE IF EXISTS `response`;
 
-# 결과 테이블
+# 완료 테이블
 CREATE TABLE `complete`
 (
     `complete_seq`   INT AUTO_INCREMENT NOT NULL,
     `member_seq`     INT                NOT NULL COMMENT '회원 ID',
     `ca_seq`         INT                NOT NULL COMMENT '역량 진단 제목',
     `assessmentDttm` DateTime           NOT NULL DEFAULT NOW(),
-    CONSTRAINT pk_result PRIMARY KEY (complete_seq),
+    CONSTRAINT pk_complete PRIMARY KEY (complete_seq),
     FOREIGN KEY (member_seq) REFERENCES member (member_seq),
     FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq)
 );
+
+DROP TABLE complete;
+
+
 
 DROP TABLE IF EXISTS `complete`;
 
@@ -130,72 +134,15 @@ DROP TABLE IF EXISTS `result`;
 CREATE TABLE `result`
 (
     `result_seq`         INT AUTO_INCREMENT NOT NULL,
-    `complete_seq`       INT                NOT NULL, # 학생 정보 가져오기
+    `member_seq`         INT                NOT NULL, # 학생 정보 가져오기
     `sub_competency_seq` INT                NOT NULL COMMENT '역량',
     `ca_seq`             INT                NOT NULL COMMENT '역량 진단 제목',
-    `score`              INT                NOT NULL,
-    CONSTRAINT pk_detail PRIMARY KEY (result_seq),
-    FOREIGN KEY (complete_seq) REFERENCES complete (complete_seq),
+    `score`              DOUBLE             NOT NULL,
+    CONSTRAINT pk_result PRIMARY KEY (result_seq),
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq),
     FOREIGN KEY (sub_competency_seq) REFERENCES sub_competency (sub_competency_seq),
     FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq)
 );
 
+DROP TABLE result;
 
-ALTER TABLE `sub_competency`
-    MODIFY COLUMN `competency_seq` INT NOT NULL;
-ALTER TABLE `sub_competency`
-    MODIFY COLUMN `competency_seq` INT NOT NULL;
-
-
-ALTER TABLE `sub_competency`
-    ADD CONSTRAINT `sub_competency_ibfk_1`
-        FOREIGN KEY (`competency_seq`)
-            REFERENCES `competency` (`competency_seq`);
-
-
-SELECT TABLE_NAME,
-       CONSTRAINT_NAME
-FROM information_schema.KEY_COLUMN_USAGE
-WHERE REFERENCED_TABLE_NAME = 'competency'
-  AND REFERENCED_COLUMN_NAME = 'competency_seq';
-
-
-ALTER TABLE `sub_competency`
-    DROP FOREIGN KEY `sub_competency_ibfk_1`;
-
-SELECT TABLE_NAME,
-       CONSTRAINT_NAME
-FROM information_schema.KEY_COLUMN_USAGE
-WHERE CONSTRAINT_NAME = 'FKbxh3dy33xj3h4s9uf906fchvn';
-
-ALTER TABLE `program`
-    DROP FOREIGN KEY `FKbxh3dy33xj3h4s9uf906fchvn`;
-
-ALTER TABLE `sub_competency`
-    MODIFY COLUMN `competency_seq` INT NOT NULL;
-
-
-SELECT CONSTRAINT_NAME,
-       TABLE_NAME,
-       COLUMN_NAME,
-       REFERENCED_TABLE_NAME,
-       REFERENCED_COLUMN_NAME
-FROM information_schema.KEY_COLUMN_USAGE
-WHERE CONSTRAINT_NAME = 'sub_competency_ibfk_1';
-
-SELECT CONSTRAINT_NAME,
-       TABLE_NAME,
-       COLUMN_NAME,
-       REFERENCED_TABLE_NAME,
-       REFERENCED_COLUMN_NAME
-FROM information_schema.KEY_COLUMN_USAGE
-WHERE TABLE_NAME = 'sub_competency';
-ALTER TABLE `sub_competency`
-    DROP FOREIGN KEY `FKbxh3dy33xj3h4s9uf906fchvn`;
-
-
-SELECT CONSTRAINT_NAME,
-       TABLE_NAME
-FROM information_schema.KEY_COLUMN_USAGE
-WHERE CONSTRAINT_NAME = 'fk_program_competency';
-SHOW CREATE TABLE extra_curricular_program;

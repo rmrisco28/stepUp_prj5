@@ -30,7 +30,6 @@ import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
 import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
 import { CompetencyAssessmentTestComplete } from "./feature/competency/competencyTest/CompetencyAssessmentTestComplete.jsx";
 import { CompetencyAssessmentTestResult } from "./feature/competency/competencyTest/CompetencyAssessmentTestResult.jsx";
-import { CompetencyAssessmentTestResultList } from "./feature/competency/competencyTest/CompetencyAssessmentTestResultList.jsx";
 import { NoticeEdit } from "./feature/notice/NoticeEdit.jsx";
 import { Faq } from "./feature/faq/Faq.jsx";
 import { FaqAdd } from "./feature/faq/FaqAdd.jsx";
@@ -138,11 +137,6 @@ function App() {
             <Route
               path="/competency/assessment/test/result/:assessmentSeq"
               element={<CompetencyAssessmentTestResult />}
-            />
-            {/*진단검사 세부결과목록*/}
-            <Route
-              path="/competency/assessment/test/resultList"
-              element={<CompetencyAssessmentTestResultList />}
             />
 
             {/*나의 활동*/}

@@ -4,5 +4,5 @@ import com.example.backend.competencyAssessment.entity.Response;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ResponseRepository extends JpaRepository<Response, Integer> {
-    Response findBySeq(Integer seq);
+
 }

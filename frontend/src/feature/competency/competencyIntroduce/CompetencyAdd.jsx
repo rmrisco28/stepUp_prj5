@@ -6,17 +6,36 @@ import {
   FormLabel,
   Row,
 } from "react-bootstrap";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
 
 export function CompetencyAdd() {
   const [name, setName] = useState("");
   const [expln, setExpln] = useState("");
-  const [file, setFile] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
 
   let navigate = useNavigate();
+
+  useEffect(() => {
+    // 관리자만
+    axios
+      .get("/api/auth/status") // 로그인 상태 확인 API
+      .then((res) => {
+        if (res.data.authName !== "admin") {
+          alert("잘못된 접근입니다...!");
+          navigate("/");
+        } else {
+          console.log("로그인된 사용자 정보:", res.data);
+          setIsAdmin(res.data.authName === "admin"); // authName이 'admin'이면 관리자
+        }
+      })
+      .catch((err) => {
+        console.log("로그인 상태 확인 실패");
+        navigate("/login");
+      });
+  }, [navigate]);
 
   function handleSavaButton() {
     if (!name.trim() || !expln.trim() || isProcessing) {

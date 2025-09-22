@@ -8,6 +8,7 @@ export function CompetencyAssessment() {
   const [pageInfo, setPageInfo] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [memberSeq, setMemberSeq] = useState("");
   const [modalShow, setModalShow] = useState(false);
   const [selectAssment, setSelectAssment] = useState({});
 
@@ -18,11 +19,18 @@ export function CompetencyAssessment() {
     axios
       .get("/api/auth/status") // 로그인 상태 확인 API
       .then((res) => {
-        console.log("로그인된 사용자 정보:", res.data);
-        setIsAdmin(res.data.authName === "admin"); // authName이 'admin'이면 관리자
+        if (!res.data.authName) {
+          alert("로그인이 필요합니다.");
+          navigate("/login");
+        } else {
+          console.log("로그인된 사용자 정보:", res.data);
+          setIsAdmin(res.data.authName === "admin");
+          setMemberSeq(res.data.memberSeq);
+        }
       })
       .catch((err) => {
         console.log("로그인 상태 확인 실패");
+        navigate("/login");
       });
 
     axios
@@ -39,7 +47,7 @@ export function CompetencyAssessment() {
       .finally(() => {
         console.log("finally");
       });
-  }, [searchParams]);
+  }, [searchParams, navigate]);
 
   if (!pageInfo) {
     return <div>Loading...</div>;
@@ -141,7 +149,7 @@ export function CompetencyAssessment() {
                       </td>
                       <td align="center">
                         <Button
-                          variant="outline-danger"
+                          variant="danger"
                           onClick={() =>
                             navigate(
                               `/competency/assessment/test/result/${data.seq}`,
