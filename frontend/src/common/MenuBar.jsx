@@ -46,6 +46,7 @@ export function MenuBar() {
       subItems: [
         { name: "공지사항", path: "/board/notice" },
         { name: "FAQ", path: "/board/faq" },
+        { name: "FAQ 관리", path: "/board/faq/manage" },
       ],
     },
   ];

@@ -4,7 +4,6 @@ import { ExtraCurricular } from "./feature/extracurricular/ExtraCurricular.jsx";
 import { Competency } from "./feature/competency/competencyIntroduce/Competency.jsx";
 import { NoticeList } from "./feature/notice/NoticeList.jsx";
 import { Mileage } from "./feature/activity/Mileage.jsx";
-import { Counseling } from "./feature/counseling/Counseling.jsx";
 import { ExtraCurricularRegister } from "./feature/extracurricular/ExtraCurricularRegister.jsx";
 import { CompetencyAdd } from "./feature/competency/competencyIntroduce/CompetencyAdd.jsx";
 import { CompetencyList } from "./feature/competency/competencyIntroduce/CompetencyList.jsx";
@@ -30,6 +29,11 @@ import { MyETC } from "./feature/activity/MyETC.jsx";
 import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
 import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
 import { NoticeEdit } from "./feature/notice/NoticeEdit.jsx";
+import { Faq } from "./feature/faq/Faq.jsx";
+import { FaqAdd } from "./feature/faq/FaqAdd.jsx";
+import { FaqEdit } from "./feature/faq/FaqEdit.jsx";
+import { FaqManage } from "./feature/faq/FaqManage.jsx";
+import { FaqDetail } from "./feature/faq/FaqDetail.jsx";
 
 function App() {
   return (
@@ -128,11 +132,17 @@ function App() {
 
             {/*안내*/}
             <Route path="board" element={<NoticeList />} />
+            {/* 공지사항 */}
             <Route path="board/notice" element={<NoticeList />} />
             <Route path="board/notice/add" element={<NoticeAdd />} />
             <Route path="board/notice/:id" element={<NoticeDetail />} />
             <Route path="board/notice/edit/:id" element={<NoticeEdit />} />
-            <Route path="board/faq" element={<NoticeList />} />
+            {/* FAQ */}
+            <Route path="board/faq" element={<Faq />} />
+            <Route path="board/faq/add" element={<FaqAdd />} />
+            <Route path="board/faq/edit/:seq" element={<FaqEdit />} />
+            <Route path="board/faq/manage" element={<FaqManage />} />
+            <Route path="board/faq/:seq" element={<FaqDetail />} />
 
             {/*로그인*/}
             <Route path="login" element={<Login />} />

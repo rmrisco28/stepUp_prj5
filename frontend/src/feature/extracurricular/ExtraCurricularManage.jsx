@@ -70,7 +70,7 @@ export function ExtraCurricularManage() {
         <Row className="justify-content-between align-items-center mb-4">
           <Col>
             <h3
-              className="text-primary fw-bold"
+              className="text-success fw-bold"
               style={{
                 cursor: "pointer",
                 width: "280px",

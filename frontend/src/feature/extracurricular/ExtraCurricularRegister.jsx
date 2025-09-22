@@ -140,7 +140,7 @@ export function ExtraCurricularRegister() {
     <Container className="mt-5 my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4 text-center text-primary fw-bold">
+          <h2 className="mb-4 text-center text-success fw-bold">
             비교과 프로그램 등록
           </h2>
           <Form>
