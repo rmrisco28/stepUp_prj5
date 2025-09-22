@@ -60,9 +60,13 @@ export function Login() {
             height: "80%",
             objectFit: "contain",
             display: "block",
+            cursor: "pointer",
           }}
+          onClick={() => navigate("/")}
         />
-        <span style={{ marginTop: "5px", fontWeight: "bold" }}>
+        <span
+          style={{ marginTop: "5px", fontWeight: "bold", cursor: "pointer" }}
+        >
           stepUp university extracurricular
         </span>
       </div>
