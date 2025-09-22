@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Form, Button, Spinner, Alert, Card, Navbar } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Spinner,
+  Alert,
+  Card,
+  Navbar,
+  Row,
+  Col,
+} from "react-bootstrap";
 import { useAuth } from "../../common/AuthContext.jsx";
 import { useNavigate } from "react-router";
 
@@ -33,6 +42,7 @@ export function Login() {
 
   return (
     <>
+      {/* 상단 헤더 */}
       <div
         className="bg-success text-white text-center py-3 d-flex flex-column justify-content-center align-items-center"
         style={{
@@ -44,11 +54,11 @@ export function Login() {
         }}
       >
         <img
-          src="../../image/stepUp_logo_수정.png"
+          src="../image/stepUp_logo_수정.png"
           alt="logo"
           style={{
-            height: "80%", // 부모 높이의 80% 정도 차지
-            objectFit: "contain", // 비율 유지
+            height: "80%",
+            objectFit: "contain",
             display: "block",
           }}
         />
@@ -56,59 +66,83 @@ export function Login() {
           stepUp university extracurricular
         </span>
       </div>
-      <div style={{ height: "120px" }} />
-      <Card style={{ maxWidth: "400px", margin: "2rem auto" }}>
-        <Card.Body>
-          <h3 className="mb-3 text-center">stepUp에 로그인하세요</h3>
-          <h6 className="mb-3 text-center">비교과 통합관리시스템</h6>
-          <hr />
-          {error && <Alert variant="danger">{error}</Alert>}
-          {success && <Alert variant="success">{success}</Alert>}
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="formLoginId">
-              <Form.Label>
-                <b>아이디</b>
-              </Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="아이디 입력"
-                value={loginId}
-                onChange={(e) => setLoginId(e.target.value)}
-              />
-            </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formPassword">
-              <Form.Label>
-                <b>비밀번호</b>
-              </Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="비밀번호 입력"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </Form.Group>
-            <Button
-              type="submit"
-              variant="outline-success"
-              className="w-100"
-              disabled={loading}
-            >
-              {loading ? <Spinner animation="border" size="sm" /> : "로그인"}
-            </Button>
-          </Form>
-        </Card.Body>
-        <Card.Footer className="bg-light text-muted small">
-          <div className="mb-2">
-            <b>테스트 계정 정보</b>
-          </div>
-          <div className="mb-1">
-            학생 아이디 : 2021134001 | 비밀번호 : 050405
-          </div>
-          <div className="mb-1">센터 아이디 : EC93001 | 비밀번호 : 690928</div>
-          <div>관리자 아이디 : CM21007 | 비밀번호 : 000524</div>
-        </Card.Footer>
-      </Card>
+      {/* 헤더 아래 여백 */}
+      <div style={{ height: "160px" }} />
+
+      {/* 메인 컨텐츠 */}
+      <div className="container">
+        <Row className="justify-content-center">
+          {/* 왼쪽 테스트 계정 정보 */}
+          <Col xs={12} md={4} className="mb-4 mb-md-0">
+            <Card className="h-100 bg-light text-muted small">
+              <Card.Body>
+                <h5 className="mb-3 text-center text-dark">테스트 계정 정보</h5>
+                <div className="mb-2">
+                  학생 아이디 : <b>2021134001</b> | 비밀번호 : <b>050405</b>
+                </div>
+                <div className="mb-2">
+                  센터 아이디 : <b>EC93001</b> | 비밀번호 : <b>690928</b>
+                </div>
+                <div>
+                  관리자 아이디 : <b>CM21007</b> | 비밀번호 : <b>000524</b>
+                </div>
+              </Card.Body>
+            </Card>
+          </Col>
+
+          {/* 오른쪽 로그인 카드 */}
+          <Col xs={12} md={5}>
+            <Card>
+              <Card.Body>
+                <h3 className="mb-3 text-center">stepUp에 로그인하세요</h3>
+                <h6 className="mb-3 text-center">비교과 통합관리시스템</h6>
+                <hr />
+                {error && <Alert variant="danger">{error}</Alert>}
+                {success && <Alert variant="success">{success}</Alert>}
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3" controlId="formLoginId">
+                    <Form.Label>
+                      <b>아이디</b>
+                    </Form.Label>
+                    <Form.Control
+                      type="text"
+                      placeholder="아이디 입력"
+                      value={loginId}
+                      onChange={(e) => setLoginId(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Form.Group className="mb-3" controlId="formPassword">
+                    <Form.Label>
+                      <b>비밀번호</b>
+                    </Form.Label>
+                    <Form.Control
+                      type="password"
+                      placeholder="비밀번호 입력"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                    />
+                  </Form.Group>
+
+                  <Button
+                    type="submit"
+                    variant="outline-success"
+                    className="w-100"
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <Spinner animation="border" size="sm" />
+                    ) : (
+                      "로그인"
+                    )}
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </div>
     </>
   );
 }
