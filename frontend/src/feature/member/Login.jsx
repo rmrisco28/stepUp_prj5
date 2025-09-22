@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Spinner, Alert, Card } from "react-bootstrap";
+import { Form, Button, Spinner, Alert, Card, Navbar } from "react-bootstrap";
 import { useAuth } from "../../common/AuthContext.jsx";
 import { useNavigate } from "react-router";
 
@@ -33,14 +33,42 @@ export function Login() {
 
   return (
     <>
+      <div
+        className="bg-success text-white text-center py-3 d-flex flex-column justify-content-center align-items-center"
+        style={{
+          width: "100vw",
+          height: "150px",
+          position: "fixed",
+          top: 0,
+          left: 0,
+        }}
+      >
+        <img
+          src="../../image/stepUp_logo_수정.png"
+          alt="logo"
+          style={{
+            height: "80%", // 부모 높이의 80% 정도 차지
+            objectFit: "contain", // 비율 유지
+            display: "block",
+          }}
+        />
+        <span style={{ marginTop: "5px", fontWeight: "bold" }}>
+          stepUp university extracurricular
+        </span>
+      </div>
+      <div style={{ height: "120px" }} />
       <Card style={{ maxWidth: "400px", margin: "2rem auto" }}>
         <Card.Body>
-          <h4 className="mb-3 text-center">로그인</h4>
+          <h3 className="mb-3 text-center">stepUp에 로그인하세요</h3>
+          <h6 className="mb-3 text-center">비교과 통합관리시스템</h6>
+          <hr />
           {error && <Alert variant="danger">{error}</Alert>}
           {success && <Alert variant="success">{success}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3" controlId="formLoginId">
-              <Form.Label>아이디</Form.Label>
+              <Form.Label>
+                <b>아이디</b>
+              </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="아이디 입력"
@@ -50,7 +78,9 @@ export function Login() {
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="formPassword">
-              <Form.Label>비밀번호</Form.Label>
+              <Form.Label>
+                <b>비밀번호</b>
+              </Form.Label>
               <Form.Control
                 type="password"
                 placeholder="비밀번호 입력"
@@ -58,10 +88,9 @@ export function Login() {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
-
             <Button
               type="submit"
-              variant="primary"
+              variant="outline-success"
               className="w-100"
               disabled={loading}
             >
@@ -69,10 +98,16 @@ export function Login() {
             </Button>
           </Form>
         </Card.Body>
-        <hr />
-        <div>학생 아이디 : 2021134001 | 비밀번호 : 050405 </div>
-        <div>센터 아이디 : EC93001 | 비밀번호 : 690928 </div>
-        <div>관리자 아이디 : CM21007 | 비밀번호 : 000524 </div>
+        <Card.Footer className="bg-light text-muted small">
+          <div className="mb-2">
+            <b>테스트 계정 정보</b>
+          </div>
+          <div className="mb-1">
+            학생 아이디 : 2021134001 | 비밀번호 : 050405
+          </div>
+          <div className="mb-1">센터 아이디 : EC93001 | 비밀번호 : 690928</div>
+          <div>관리자 아이디 : CM21007 | 비밀번호 : 000524</div>
+        </Card.Footer>
       </Card>
     </>
   );
