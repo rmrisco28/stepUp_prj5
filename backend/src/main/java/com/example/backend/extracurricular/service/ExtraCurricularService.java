@@ -268,7 +268,7 @@ public class ExtraCurricularService {
         dto.setOperateEndDt(data.getOperateEndDt());
         dto.setApplyStartDt(data.getApplyStartDt());
         dto.setApplyEndDt(data.getApplyEndDt());
-        dto.setCompetency(data.getSubCompetency().getSeq());
+        dto.setCompetency(data.getSubCompetency().getSubCompetencyName());
         dto.setLocation(data.getLocation());
         dto.setOperationType(mapToLabel(data.getOperationType()));
         dto.setGrades(data.getGrades());

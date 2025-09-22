@@ -18,7 +18,7 @@ public class ETCDetailDto {
     private LocalDateTime operateEndDt;
     private LocalDateTime applyStartDt;
     private LocalDateTime applyEndDt;
-    private Integer competency;
+    private String competency;
     private String location;
     private String operationType;
     private String grades;
@@ -43,7 +43,7 @@ public class ETCDetailDto {
     public ETCDetailDto(Integer seq, String title, String content,
                         LocalDateTime operateStartDt, LocalDateTime operateEndDt,
                         LocalDateTime applyStartDt, LocalDateTime applyEndDt,
-                        Integer competency, String location, String operationType,
+                        String competency, String location, String operationType,
                         String grades, Integer capacity, Integer applicants, Integer waiting,
                         String status, Integer mileagePoints, String manager, String managerPhone,
                         String author, LocalDateTime createdAt, LocalDateTime updatedAt,
