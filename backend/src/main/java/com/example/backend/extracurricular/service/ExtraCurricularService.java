@@ -430,6 +430,7 @@ public class ExtraCurricularService {
                 .orElseThrow(() -> new RuntimeException("프로그램이 존재하지 않습니다."));
 
         return AppList.builder()
+                .seq(etc.getSeq())
                 .title(etc.getTitle())
                 .operateStartDt(etc.getOperateStartDt())
                 .operateEndDt(etc.getOperateEndDt())

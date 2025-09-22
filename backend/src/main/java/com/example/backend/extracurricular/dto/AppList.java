@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class AppList {
+    private Integer seq;
     private String title;
     // 운영 일정
     private LocalDateTime operateStartDt;
