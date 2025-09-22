@@ -36,8 +36,8 @@ public class ExtraCurricularApplication {
     @Column(name = "apply_dt", nullable = false, insertable = false, updatable = false)
     private LocalDateTime applyDt;
 
-    @Column(name = "status", length = 100)
-    private String status = "신청";
+    @Column(name = "status")
+    private Integer status;
 
     @Column(name = "motive", length = 500)
     private String motive;
