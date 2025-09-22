@@ -102,16 +102,14 @@ export function ExtraCurricularApplication() {
     );
     if (!confirmed) return; // 취소 시 종료
 
-    const deleteData = {
-      programSeq: ApplicationInfo.seq,
-      memberSeq: user.memberSeq,
-    };
-
     // 삭제 요청
     axios
       .delete("/api/extracurricular/applyDelete", {
         headers: { "Content-Type": "application/json" },
-        data: deleteData,
+        data: {
+          programSeq: ApplicationInfo.seq,
+          memberSeq: user.memberSeq,
+        },
       })
       .then((res) => {
         alert(res.data.message);

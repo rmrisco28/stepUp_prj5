@@ -16,5 +16,6 @@ public interface ExtraCurricularApplicationRepository extends JpaRepository<Extr
     // 비교과 중복 신청 방지
     boolean existsByMemberSeq_IdAndProgramSeq_SeqAndStatus(Integer memberSeq, Integer programSeq, int i);
 
-    Optional<ExtraCurricularApplication> existsByMemberSeq_IdAndProgramSeq_Seq(Integer memberSeq, Integer programSeq);
+    // 삭제할 신청 프로그램 찾기
+    Optional<ExtraCurricularApplication> findByMemberSeq_IdAndProgramSeq_Seq(Integer memberSeq, Integer programSeq);
 }

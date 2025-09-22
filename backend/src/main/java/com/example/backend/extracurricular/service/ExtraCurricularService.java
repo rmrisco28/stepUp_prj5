@@ -475,7 +475,7 @@ public class ExtraCurricularService {
 
         // 프로그램 seq, 사용자 seq로 확인
         ExtraCurricularApplication eca = extraCurricularApplicationRepository
-                .existsByMemberSeq_IdAndProgramSeq_Seq(dto.getMemberSeq(), dto.getProgramSeq())
+                .findByMemberSeq_IdAndProgramSeq_Seq(dto.getMemberSeq(), dto.getProgramSeq())
                 .orElseThrow(() -> new RuntimeException("존재하지 않은 신청내역입니다"));
 
         extraCurricularApplicationRepository.delete(eca);
