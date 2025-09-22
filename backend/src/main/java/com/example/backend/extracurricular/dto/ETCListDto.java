@@ -25,4 +25,6 @@ public class ETCListDto {
     private final Boolean useYn;
 
     private String thumbUrl;
+
+    private final Integer applicants;
 }

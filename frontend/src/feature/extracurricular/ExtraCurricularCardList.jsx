@@ -74,7 +74,8 @@ export function ExtraCurricularCardList({ programs }) {
                   {new Date(p.operateStartDt).toISOString().slice(0, 10)} ~{" "}
                   {new Date(p.operateEndDt).toISOString().slice(0, 10)}
                 </div>
-                <div>모집인원: {p.capacity}명</div>
+                <div className="mb-2">모집인원: {p.capacity}명</div>
+                <div>신청인원: {p.applicants}명</div>
               </div>
 
               <Button variant="primary" className="w-100 rounded-pill">
