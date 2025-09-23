@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import { ExtraCurricularCardList } from "./ExtraCurricularCardList.jsx";
+import { IoSearch } from "react-icons/io5";
 
 export function ExtraCurricular() {
   const [programs, setPrograms] = useState([]);
@@ -93,7 +94,7 @@ export function ExtraCurricular() {
         </Row>
 
         {/* 검색 필터 */}
-        <section className="bg-light border rounded-4 p-4 mb-5">
+        <section className="bg-light border p-4 mb-5">
           <Form>
             {/* 1행 */}
             <Row className="mb-3">
@@ -164,7 +165,7 @@ export function ExtraCurricular() {
 
             {/* 2행: 프로그램명 */}
             <Row className="mb-3">
-              <Col md={10}>
+              <Col md={11}>
                 {/*<FormLabel>프로그램명</FormLabel>*/}
 
                 <FormControl
@@ -182,13 +183,13 @@ export function ExtraCurricular() {
                   onChange={(e) => setKeyword(e.target.value)}
                 />
               </Col>
-              <Col md={2} className="d-flex align-items-end">
+              <Col md={1} className="d-flex align-items-end">
                 <Button
-                  variant="primary"
+                  variant="secondary"
                   className="w-100"
                   onClick={handleSearch}
                 >
-                  검색
+                  <IoSearch style={{ fontSize: "1.3rem" }} />
                 </Button>
               </Col>
             </Row>
