@@ -58,26 +58,26 @@ export function ExtraCurricularEdit() {
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
         setFormData({
-          title: data.title || "",
-          content: data.content || "",
-          operateStartDt: data.operateStartDt?.slice(0, 16) || "",
-          operateEndDt: data.operateEndDt?.slice(0, 16) || "",
-          applyStartDt: data.applyStartDt?.slice(0, 16) || "",
-          applyEndDt: data.applyEndDt?.slice(0, 16) || "",
-          competency: data.competency || "",
-          location: data.location || "",
-          operationType: data.operationType || "대면",
-          grades: data.grades ? data.grades.split(",") : [],
-          capacity: data.capacity || 0,
-          status: data.status || "DRAFT",
-          manager: data.manager || "",
-          managerPhone: data.managerPhone || "",
-          mileagePoints: data.mileagePoints || 0,
-          author: data.author || "",
+          title: res.data.title || "",
+          content: res.data.content || "",
+          operateStartDt: res.data.operateStartDt?.slice(0, 16) || "",
+          operateEndDt: res.data.operateEndDt?.slice(0, 16) || "",
+          applyStartDt: res.data.applyStartDt?.slice(0, 16) || "",
+          applyEndDt: res.data.applyEndDt?.slice(0, 16) || "",
+          competency: res.data.competency || "",
+          location: res.data.location || "",
+          operationType: res.data.operationType || "대면",
+          grades: res.data.grades ? res.data.grades.split(",") : [],
+          capacity: res.data.capacity || 0,
+          status: res.data.status || "DRAFT",
+          manager: res.data.manager || "",
+          managerPhone: res.data.managerPhone || "",
+          mileagePoints: res.data.mileagePoints || 0,
+          author: res.data.author || "",
         });
-        setExistingThumbnail(data.thumbnail); // 기존 썸네일 URL
+        setExistingThumbnail(res.data.thumbnail); // 기존 썸네일 URL
         setExistingContentImages(
-          (data.contentImages || []).map((img) =>
+          (res.data.contentImages || []).map((img) =>
             typeof img === "string" ? { name: img, path: img } : img,
           ),
         );
