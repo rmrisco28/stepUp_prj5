@@ -97,11 +97,14 @@ export function ExtraCurricularCardList({ programs }) {
                     {new Date(p.operateEndDt).toISOString().slice(0, 10)}
                   </div>
                   <div className="mb-2">
+                    핵심역량 | {p.competencyName || "미정"}
+                  </div>
+                  <div className="mb-2">
                     {" "}
                     운영방식 |{" "}
                     {operationTypeMap[p.operationType] || p.operationType}
                   </div>
-                  <div className="mb-2">모집인원 | {p.capacity}명</div>
+                  <div className="mb-2">대상학년 | {p.grades}</div>
                   <div className="position-relative flex-grow-1 mt-2">
                     {p.capacity > 0 ? (
                       <>
@@ -111,9 +114,12 @@ export function ExtraCurricularCardList({ programs }) {
                         </span>
                       </>
                     ) : (
-                      <span className="fw-bold">
-                        {p.applicants}명 / 모집인원 미정
-                      </span>
+                      <>
+                        <ProgressBar variant="warning" />
+                        <span className="position-absolute top-50 start-50 translate-middle fw-bold">
+                          {p.applicants}명 / 0명
+                        </span>
+                      </>
                     )}
                   </div>
                 </div>

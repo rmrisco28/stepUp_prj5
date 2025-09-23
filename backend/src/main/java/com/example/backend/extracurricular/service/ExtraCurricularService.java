@@ -6,10 +6,7 @@ import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.extracurricular.dto.*;
 import com.example.backend.extracurricular.entity.*;
 import com.example.backend.extracurricular.enums.OperationType;
-import com.example.backend.extracurricular.repository.ExtraCurricularApplicationRepository;
-import com.example.backend.extracurricular.repository.ExtraCurricularImageContentRepository;
-import com.example.backend.extracurricular.repository.ExtraCurricularImageThumbRepository;
-import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
+import com.example.backend.extracurricular.repository.*;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +38,9 @@ public class ExtraCurricularService {
     private final ExtraCurricularImageContentRepository extraCurricularImageContentRepository;
     private final S3Client s3Client;
     private final ExtraCurricularApplicationRepository extraCurricularApplicationRepository;
+    private final ExtraCurricularCompleteRepository extraCurricularCompleteRepository;
 
-    private final StudentRepository studentRepository;
+
     private final MemberRepository memberRepository;
     private final SubCompetencyRepository subCompetencyRepository;
 
@@ -169,11 +167,26 @@ public class ExtraCurricularService {
     }
 
     // 프로그램 목록(관리자 화면)
-    public Map<String, Object> list(Integer pageNumber, String keyword) {
+    public Map<String, Object> list(Integer pageNumber, String keyword,
+                                    Integer competency, String operationTypeLabel, String grade) {
 
+        // 한글 운영방식 → Enum 변환
+        OperationType operationType = null;
+        if (operationTypeLabel != null && !operationTypeLabel.isEmpty()) {
+            switch (operationTypeLabel) {
+                case "대면" -> operationType = OperationType.OFFLINE;
+                case "비대면" -> operationType = OperationType.ONLINE;
+                case "혼합" -> operationType = OperationType.HYBRID;
+            }
+        }
+
+        // 검색 + 페이지네이션
         Page<ETCListDto> programPage = extraCurricularProgramRepository.findAllBy(
                 PageRequest.of(pageNumber - 1, 10),
-                keyword
+                keyword,
+                competency,
+                operationType,
+                grade
         );
 
         // 프로그램 seq 조회
@@ -444,40 +457,39 @@ public class ExtraCurricularService {
             throw new RuntimeException("이미 신청한 프로그램입니다.");
         }
 
-        // 회원 시퀀스
-        // 프로그램 시퀀스
-        // 신청 테이블에 저장하기
-        ExtraCurricularApplication eca = new ExtraCurricularApplication();
-
+        // 회원, 프로그램 조회
         ExtraCurricularProgram ecp = extraCurricularProgramRepository.findById(dto.getProgramSeq())
                 .orElseThrow(() -> new RuntimeException("프로그램 정보가 없습니다."));
         Member mb = memberRepository.findById(dto.getMemberSeq())
                 .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다."));
 
+        // 신청 테이블에 저장
+        ExtraCurricularApplication eca = new ExtraCurricularApplication();
         eca.setProgramSeq(ecp);
         eca.setMemberSeq(mb);
         eca.setMotive(dto.getMotive());
 
-        // 모집정원 기준 체크
         if (ecp.getApplicants() < ecp.getCapacity()) {
-            // 정원 내면 신청자 수 증가
             ecp.setApplicants(ecp.getApplicants() + 1);
-            // status 1 = 신청
-            eca.setStatus(1);
+            eca.setStatus(1); // 신청
         } else {
-            // 정원 초과면 대기자 수 증가
             ecp.setWaiting(ecp.getWaiting() + 1);
-            // status 2 = 대기
-            eca.setStatus(2);
+            eca.setStatus(2); // 대기
         }
 
-        // 신청 테이블 저장
-        extraCurricularApplicationRepository.save(eca);
-
-        // 프로그램 테이블 저장
+        ExtraCurricularApplication savedApplication = extraCurricularApplicationRepository.save(eca);
         extraCurricularProgramRepository.save(ecp);
 
+        // ✅ 비교과 내역 테이블에도 저장
+        ExtraCurricularComplete complete = new ExtraCurricularComplete();
+        complete.setProgramSeq(ecp);
+        complete.setApplicationSeq(savedApplication);
+        complete.setMemberSeq(mb);
+        complete.setCompleteStatus(0); // 0 = 미이수
+
+        extraCurricularCompleteRepository.save(complete);
     }
+
 
     public void applyDelete(ETCApplyForm dto) {
         // 이미 신청했는지 확인
@@ -494,5 +506,21 @@ public class ExtraCurricularService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않은 신청내역입니다"));
 
         extraCurricularApplicationRepository.delete(eca);
+    }
+
+    // 회원별 비교과 내역 조회
+    public List<ETCCompleteDto> complete(Integer memberSeq) {
+        return extraCurricularCompleteRepository.findByMemberSeq_Id(memberSeq)
+                .stream()
+                .map(c -> {
+                    ETCCompleteDto dto = new ETCCompleteDto();
+                    dto.setSeq(c.getSeq());
+                    dto.setTitle(c.getProgramSeq().getTitle());
+                    dto.setOperateStartDt(c.getProgramSeq().getOperateStartDt());
+                    dto.setOperateEndDt(c.getProgramSeq().getOperateEndDt());
+                    dto.setCompleteStatus(c.getCompleteStatus() == 1 ? "이수" : "미이수");
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

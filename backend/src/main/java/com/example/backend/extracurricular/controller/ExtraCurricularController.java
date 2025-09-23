@@ -42,9 +42,12 @@ public class ExtraCurricularController {
     @GetMapping("list")
     public Map<String, Object> list(
             @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
-            @RequestParam(value = "q", defaultValue = "") String keyword
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "competency", required = false) Integer competency,
+            @RequestParam(value = "operationType", required = false) String operationType,
+            @RequestParam(value = "grade", required = false) String grade
     ) {
-        return extraCurricularService.list(pageNumber, keyword);
+        return extraCurricularService.list(pageNumber, keyword, competency, operationType, grade);
     }
 
     // 프로그램 상세 보기(관리자)
@@ -124,6 +127,12 @@ public class ExtraCurricularController {
             ));
             // 추후 마감 지남 등의 예외 추가하기
         }
+    }
+
+    // 비교과 내역
+    @GetMapping("complete/{seq}")
+    public ResponseEntity<?> complete(@PathVariable Integer memberSeq) {
+        return ResponseEntity.ok(extraCurricularService.complete(memberSeq));
     }
 
 }

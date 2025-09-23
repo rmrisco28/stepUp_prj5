@@ -81,33 +81,19 @@ export function ExtraCurricularDetail() {
 
   return (
     <Container className="mt-4 my-5" style={{ maxWidth: "1000px" }}>
-      <h3 className="text-success fw-bold mb-3">
+      <h3 className="text-success fw-bold mb-5">
         {program.seq}번 프로그램 정보
       </h3>
       <Form>
-        <section
-          style={{ backgroundColor: "#e9ecef" }}
-          className="px-3 py-3 rounded-4"
-        >
-          <Row className="mb-3">
-            <Col>
+        <Row className="mb-3">
+          <Col>
+            <section className="border px-4 py-4 mb-4">
               <FormGroup className="mb-3" controlId="title">
                 <FormLabel>제목</FormLabel>
                 <FormControl
                   type="text"
                   name="title"
                   value={program.title}
-                  readOnly
-                />
-              </FormGroup>
-
-              <FormGroup className="mb-3" controlId="content">
-                <FormLabel>내용</FormLabel>
-                <FormControl
-                  as="textarea"
-                  name="content"
-                  rows={5}
-                  value={program.content}
                   readOnly
                 />
               </FormGroup>
@@ -161,7 +147,9 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
+            </section>
 
+            <section className="border px-4 py-4 mb-4">
               <Row className="mb-3">
                 <Col>
                   <FormGroup controlId="competency">
@@ -211,7 +199,9 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
+            </section>
 
+            <section className="border px-4 py-4 mb-4">
               <Row className="mb-3">
                 <Col>
                   <FormGroup controlId="capacity">
@@ -305,7 +295,58 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
+            </section>
 
+            <section className="border px-4 py-4 mb-4">
+              <FormGroup className="mb-3" controlId="content">
+                <FormLabel>내용</FormLabel>
+                <FormControl
+                  as="textarea"
+                  name="content"
+                  rows={5}
+                  value={program.content}
+                  readOnly
+                />
+              </FormGroup>
+
+              <Row>
+                {/* 썸네일 사진 */}
+                <Col className="text-center">
+                  <div className="mb-3">썸네일</div>
+                  <img
+                    src={program.thumbnails}
+                    alt="썸네일 이미지"
+                    className="img-fluid rounded mb-3"
+                    style={{ width: "250px" }}
+                  />
+                </Col>
+
+                {/* 본문 사진 */}
+                <Col className="border-start border-dark">
+                  <div className="mb-3 text-center">본문 이미지</div>
+                  {contentImages.length > 0 && (
+                    <div className="d-flex flex-wrap gap-3 justify-content-center">
+                      {contentImages.map((imgUrl, index) => (
+                        <Card
+                          key={index}
+                          className="shadow-sm"
+                          style={{ width: "250px" }}
+                        >
+                          <Card.Img
+                            variant="bottom"
+                            src={imgUrl}
+                            alt={`프로그램 이미지 ${index + 1}`}
+                            className="img-fluid rounded"
+                          />
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            </section>
+
+            <section className="border px-4 py-4 mb-4">
               <Row className="mb-3">
                 <Col>
                   <FormGroup controlId="author">
@@ -345,44 +386,9 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
-              <Row>
-                {/* 썸네일 사진 */}
-                <Col className="text-center">
-                  <div className="mb-3">썸네일</div>
-                  <img
-                    src={program.thumbnails}
-                    alt="썸네일 이미지"
-                    className="img-fluid rounded mb-3"
-                    style={{ width: "250px" }}
-                  />
-                </Col>
-
-                {/* 본문 사진 */}
-                <Col className="border-start border-dark">
-                  <div className="mb-3 text-center">본문 이미지</div>
-                  {contentImages.length > 0 && (
-                    <div className="d-flex flex-wrap gap-3 justify-content-center">
-                      {contentImages.map((imgUrl, index) => (
-                        <Card
-                          key={index}
-                          className="shadow-sm"
-                          style={{ width: "250px" }}
-                        >
-                          <Card.Img
-                            variant="bottom"
-                            src={imgUrl}
-                            alt={`프로그램 이미지 ${index + 1}`}
-                            className="img-fluid rounded"
-                          />
-                        </Card>
-                      ))}
-                    </div>
-                  )}
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </section>
+            </section>
+          </Col>
+        </Row>
         <Row className="text-end mt-3">
           <Col>
             <Button
