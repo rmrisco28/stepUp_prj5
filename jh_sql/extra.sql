@@ -82,3 +82,16 @@ CREATE TABLE faq
 
 DROP TABLE faq;
 
+CREATE TABLE extra_curricular_complete
+(
+    complete_seq    INT AUTO_INCREMENT PRIMARY KEY,
+    program_seq     INT    NOT NULL,
+    application_seq INT    NOT NULL,
+    member_seq      INT    NOT NULL,
+    complete_status INT(1) NOT NULL DEFAULT 0 COMMENT '0=미신청, 1=신청',
+    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq) ON DELETE CASCADE,
+    FOREIGN KEY (application_seq) REFERENCES extra_curricular_application (application_seq) ON DELETE CASCADE,
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq) ON DELETE CASCADE
+);
+
+DROP TABLE extra_curricular_complete;

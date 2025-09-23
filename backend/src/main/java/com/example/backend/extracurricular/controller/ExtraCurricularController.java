@@ -3,7 +3,6 @@ package com.example.backend.extracurricular.controller;
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCApplyForm;
 import com.example.backend.extracurricular.dto.ETCEditForm;
-import com.example.backend.extracurricular.enums.OperationType;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -128,6 +127,12 @@ public class ExtraCurricularController {
             ));
             // 추후 마감 지남 등의 예외 추가하기
         }
+    }
+
+    // 비교과 내역
+    @GetMapping("complete/{seq}")
+    public ResponseEntity<?> complete(@PathVariable Integer memberSeq) {
+        return ResponseEntity.ok(extraCurricularService.complete(memberSeq));
     }
 
 }
