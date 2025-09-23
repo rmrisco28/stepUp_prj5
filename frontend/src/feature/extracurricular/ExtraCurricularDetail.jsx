@@ -348,16 +348,20 @@ export function ExtraCurricularDetail() {
               <Row>
                 {/* 썸네일 사진 */}
                 <Col>
+                  <div className="mb-2">썸네일</div>
                   <img
                     src={program.thumbnails}
                     alt="프로그램 포스터"
-                    className="img-fluid rounded"
+                    className="img-fluid rounded mb-3"
+                    style={{ width: "250px" }}
                   />
                 </Col>
+
                 {/* 본문 사진 */}
                 <Col>
+                  <div className="mb-2">본문 이미지</div>
                   {contentImages.length > 0 && (
-                    <div className="d-flex flex-wrap gap-3 mt-3">
+                    <div className="d-flex flex-wrap gap-3">
                       {contentImages.map((imgUrl, index) => (
                         <Card
                           key={index}
@@ -374,23 +378,6 @@ export function ExtraCurricularDetail() {
                       ))}
                     </div>
                   )}
-                </Col>
-              </Row>
-
-              {/* 사용 여부 */}
-              <Row>
-                <Col>
-                  <FormGroup controlId="useYn">
-                    <FormLabel className="me-3">사용여부</FormLabel>
-                    <FormCheck
-                      inline
-                      type="checkbox"
-                      name="useYn"
-                      label="사용"
-                      checked={program.useYn}
-                      readOnly
-                    />
-                  </FormGroup>
                 </Col>
               </Row>
             </Col>

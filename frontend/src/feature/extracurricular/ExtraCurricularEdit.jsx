@@ -37,7 +37,6 @@ export function ExtraCurricularEdit() {
     managerPhone: "",
     mileagePoints: 0,
     author: "",
-    useYn: true,
     thumbnail: null, // 새 썸네일
     newContentImages: [], // 새 본문 이미지
     deleteContentImageNames: [], // 삭제할 이미지
@@ -77,7 +76,6 @@ export function ExtraCurricularEdit() {
           managerPhone: data.managerPhone || "",
           mileagePoints: data.mileagePoints || 0,
           author: data.author || "",
-          useYn: data.useYn ?? true,
         });
         setExistingThumbnail(data.thumbnail); // 기존 썸네일 URL
         setExistingContentImages(
@@ -391,21 +389,6 @@ export function ExtraCurricularEdit() {
                 <option value="OPEN">모집중</option>
                 <option value="CLOSED">모집마감</option>
               </FormControl>
-            </FormGroup>
-
-            {/* 사용 여부 */}
-            <FormGroup className="mb-3" controlId="useYn">
-              <FormLabel className="me-3">사용여부</FormLabel>
-              <FormCheck
-                inline
-                type="checkbox"
-                name="useYn"
-                label="사용"
-                checked={formData.useYn}
-                onChange={(e) =>
-                  setFormData({ ...formData, useYn: e.target.checked })
-                }
-              />
             </FormGroup>
 
             {existingThumbnail && (

@@ -22,7 +22,6 @@ public class ETCListDto {
     private final Integer capacity;
     private final LocalDateTime createdAt;
     private final String status;
-    private final Boolean useYn;
 
     private String thumbUrl;
 

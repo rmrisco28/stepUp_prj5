@@ -24,8 +24,13 @@ CREATE TABLE `extra_curricular_program`
     view             INT                            NULL     DEFAULT 0,
     created_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    use_yn           BOOLEAN                        NOT NULL DEFAULT TRUE
 );
+
+SHOW CREATE TABLE extra_curricular_program;
+
+# ALTER TABLE extra_curricular_program
+#     DROP COLUMN use_yn;
+
 
 DROP TABLE extra_curricular_program;
 

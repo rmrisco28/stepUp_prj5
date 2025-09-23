@@ -20,7 +20,6 @@ public interface ExtraCurricularProgramRepository extends JpaRepository<ExtraCur
             e.capacity,
             e.createdAt,
             e.status,
-            e.useYn,
             e.applicants
             )
             FROM ExtraCurricularProgram e
