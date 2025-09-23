@@ -107,6 +107,18 @@ export function ExtraCurricularEdit() {
       });
   }, []);
 
+  // 3. competencies와 formData.competency 문자열이 준비되면 seq로 변환
+  useEffect(() => {
+    if (competencies.length > 0 && formData.competency) {
+      const matched = competencies.find(
+        (c) => c.subCompetencyName === formData.competency,
+      );
+      if (matched) {
+        setFormData((prev) => ({ ...prev, competency: matched.seq }));
+      }
+    }
+  }, [competencies, formData.competency]);
+
   // 모든 입력값 처리 (텍스트, 날짜, 셀렉트 전용)
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -139,6 +151,10 @@ export function ExtraCurricularEdit() {
   // 폼 제출
   function handleEditButtonClick(e) {
     e.preventDefault();
+
+    if (!window.confirm("프로그램을 수정하시겠습니까?")) {
+      return; // 사용자가 취소 누르면 실행 중단
+    }
 
     const fd = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -487,7 +503,6 @@ export function ExtraCurricularEdit() {
                           alt={`content-${idx}`}
                           fluid
                           style={{
-                            width: "100px",
                             height: "auto",
                             objectFit: "cover",
                             filter: formData.deleteContentImageNames?.includes(

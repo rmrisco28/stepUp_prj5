@@ -28,8 +28,8 @@ CREATE TABLE `extra_curricular_program`
 
 SHOW CREATE TABLE extra_curricular_program;
 
-# ALTER TABLE extra_curricular_program
-#     DROP COLUMN use_yn;
+ALTER TABLE extra_curricular_program
+    DROP COLUMN use_yn;
 
 
 DROP TABLE extra_curricular_program;

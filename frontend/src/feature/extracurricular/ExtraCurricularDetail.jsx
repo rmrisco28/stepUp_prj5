@@ -347,21 +347,21 @@ export function ExtraCurricularDetail() {
               </Row>
               <Row>
                 {/* 썸네일 사진 */}
-                <Col>
-                  <div className="mb-2">썸네일</div>
+                <Col className="text-center">
+                  <div className="mb-3">썸네일</div>
                   <img
                     src={program.thumbnails}
-                    alt="프로그램 포스터"
+                    alt="썸네일 이미지"
                     className="img-fluid rounded mb-3"
                     style={{ width: "250px" }}
                   />
                 </Col>
 
                 {/* 본문 사진 */}
-                <Col>
-                  <div className="mb-2">본문 이미지</div>
+                <Col className="border-start border-dark">
+                  <div className="mb-3 text-center">본문 이미지</div>
                   {contentImages.length > 0 && (
-                    <div className="d-flex flex-wrap gap-3">
+                    <div className="d-flex flex-wrap gap-3 justify-content-center">
                       {contentImages.map((imgUrl, index) => (
                         <Card
                           key={index}
