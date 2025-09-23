@@ -91,73 +91,147 @@ export function CompetencyAssessmentTestStart() {
       });
   }, [searchParams]);
 
+  // 답안 불러오기
+  useEffect(() => {
+    if (!memberSeq || !assessmentSeq || questionList.length === 0) return;
+
+    axios
+      .get(
+        `/api/competency/assessment/test/response/${assessmentSeq}?memberSeq=${memberSeq}`,
+      )
+      .then((res) => {
+        // res.data가 문자열이면 JSON.parse
+        const data =
+          typeof res.data === "string" ? JSON.parse(res.data) : res.data;
+
+        console.log("답안 불러오기 성공", data);
+
+        const serverResponse = {};
+        data.forEach((r) => {
+          serverResponse[r.questionSeqSeq] = {
+            choiceSeq: r.choiceSeqSeq,
+            responseSeq: r.seq,
+          };
+        });
+
+        setResponse(serverResponse);
+        setPageResponse(serverResponse);
+      })
+      .catch((err) => {
+        console.error("저장된 응답 불러오기 실패", err);
+      });
+  }, [memberSeq, assessmentSeq, questionList]);
   // 페이지 이동, 저장 버튼
 
   const questionRefs = useRef([]);
 
-  // 페이지 클릭
-  function handlePageNumberClick(pageNumber) {
-    const responseDtos = Object.entries(response).map(
-      ([questionSeq, respObj]) => ({
-        seq: respObj.responseSeq ?? null, // 기존 seq 있으면 사용
-        memberSeq: memberSeq,
-        questionSeqSeq: Number(questionSeq),
-        choiceSeqSeq: Number(respObj.choiceSeq), // 선택한 choice seq
-      }),
+  // 오른쪽 페이지 클릭
+  function handleRightPageNumberClick(pageNumber) {
+    // 전체 응답 여부 체크
+    const firstUnansweredIndex = questionList.findIndex(
+      (q) => !pageResponse[q.seq]?.choiceSeq,
     );
 
-    console.log("과연", responseDtos);
+    if (firstUnansweredIndex !== -1) {
+      alert("모든 문항에 응답해야 페이지를 이동할 수 있습니다.");
+      setModalShow(false);
+      // 해당 문제로 스크롤 이동
+      questionRefs.current[firstUnansweredIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+    // 답안 저장
+    const responseDtos = Object.entries(response).map(([qSeq, r]) => ({
+      seq: r.responseSeq ?? null,
+      memberSeq,
+      questionSeqSeq: Number(qSeq),
+      choiceSeqSeq: Number(r.choiceSeq),
+    }));
+
     axios
       .put(
         `/api/competency/assessment/test/responseSave/${assessmentSeq}`,
         responseDtos,
       )
       .then((res) => {
-        console.log("저장완료");
-
-        const nextResponse = { ...response };
+        const updatedResponse = { ...response };
         res.data.forEach((item) => {
-          nextResponse[item.questionSeq] = {
-            ...nextResponse[item.questionSeq],
-            responseSeq: item.responseSeq, // 새로 생성되었거나 업데이트된 seq
+          updatedResponse[item.questionSeq] = {
+            ...updatedResponse[item.questionSeq],
+            responseSeq: item.responseSeq,
           };
         });
-        setResponse(nextResponse);
+        setResponse(updatedResponse);
       });
 
+    // 페이지 이동
     const nextSearchParams = new URLSearchParams(searchParams);
     nextSearchParams.set("p", pageNumber);
     setSearchParams(nextSearchParams);
-
-    // 페이지 이동 후 맨 위로
-    window.scrollTo(0, 0);
-
-    // 페이지 답안 초기화
-    setPageResponse({});
-  }
-
-  useEffect(() => {
+    // 다음 페이지 답안 로딩
     const newPageResponse = {};
     questionList.forEach((q) => {
       if (response[q.seq]) {
-        newPageResponse[q.seq] = {
-          choiceSeq: response[q.seq].choiceSeq,
-          responseSeq: response[q.seq].responseSeq,
-        };
+        newPageResponse[q.seq] = { ...response[q.seq] };
       }
     });
     setPageResponse(newPageResponse);
-  }, [questionList, response]);
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  // 답 선택시
+  function handleChoiceSelect(qSeq, choiceSeq, qIndex) {
+    setResponse((prev) => ({
+      ...prev,
+      [qSeq]: {
+        choiceSeq,
+        responseSeq: prev[qSeq]?.responseSeq ?? null,
+      },
+    }));
+
+    setPageResponse((prev) => ({
+      ...prev,
+      [qSeq]: {
+        choiceSeq,
+        responseSeq: prev[qSeq]?.responseSeq ?? null,
+      },
+    }));
+
+    // 다음 문제로 스크롤
+    const nextEl = questionRefs.current[qIndex + 1];
+    if (nextEl) {
+      const halfDelta = (nextEl.offsetTop - window.scrollY) / 2;
+      window.scrollTo({ top: window.scrollY + halfDelta, behavior: "smooth" });
+    }
+  }
 
   function handelSaveButton() {
-    const responseDtos = Object.entries(response).map(
-      ([questionSeq, respObj]) => ({
-        seq: respObj.responseSeq ?? null, // 기존 seq 있으면 사용
-        memberSeq: memberSeq,
-        questionSeqSeq: Number(questionSeq),
-        choiceSeqSeq: Number(respObj.choiceSeq), // 선택한 choice seq
-      }),
+    // 전체 응답 여부 체크
+    const firstUnansweredIndex = questionList.findIndex(
+      (q) => !pageResponse[q.seq]?.choiceSeq,
     );
+
+    if (firstUnansweredIndex !== -1) {
+      alert("모든 문항에 응답해야 페이지를 이동할 수 있습니다.");
+      setModalShow(false);
+      // 해당 문제로 스크롤 이동
+      questionRefs.current[firstUnansweredIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+
+    const responseDtos = Object.entries(response).map(([qSeq, r]) => ({
+      seq: r.responseSeq ?? null,
+      memberSeq,
+      questionSeqSeq: Number(qSeq),
+      choiceSeqSeq: Number(r.choiceSeq),
+    }));
+
     // 응답(response) 테이블 저장
     axios
       .put(
@@ -208,7 +282,7 @@ export function CompetencyAssessmentTestStart() {
 
     // 페이지 답안 초기화
     navigate(`/competency/assessment/test/complete/${assessmentSeq}`);
-    setPageResponse({});
+    setPageResponse((prev) => ({ ...prev }));
   }
 
   // 페이지 정보가 아직 로딩되지 않았으면 렌더링하지 않음
@@ -259,38 +333,9 @@ export function CompetencyAssessmentTestStart() {
                         checked={
                           pageResponse[item.seq]?.choiceSeq === choice.seq
                         }
-                        onChange={() => {
-                          setPageResponse((prev) => ({
-                            ...prev,
-                            [item.seq]: {
-                              choiceSeq: choice.seq,
-                              responseSeq: prev[item.seq]?.responseSeq ?? null,
-                            },
-                          }));
-
-                          setResponse((prev) => ({
-                            ...prev,
-                            [item.seq]: {
-                              choiceSeq: choice.seq,
-                              responseSeq: prev[item.seq]?.responseSeq ?? null, // 기존 seq 유지
-                            },
-                          }));
-
-                          const next = questionRefs.current[qIndex + 1];
-
-                          if (next) {
-                            const scrollY = window.scrollY; // 현재 스크롤 위치
-                            const targetY = next.offsetTop; // 다음 질문의 위치
-
-                            const delta = targetY - scrollY; // 이동할 거리
-                            const halfDelta = delta / 2; // 절반만 이동
-
-                            window.scrollTo({
-                              top: scrollY + halfDelta,
-                              behavior: "smooth",
-                            });
-                          }
-                        }}
+                        onChange={() =>
+                          handleChoiceSelect(item.seq, choice.seq, qIndex)
+                        }
                       />
                       <FormCheck.Label>{choice.option}</FormCheck.Label>
                     </FormCheck>
@@ -326,7 +371,7 @@ export function CompetencyAssessmentTestStart() {
               <Pagination.Prev
                 disabled={pageInfo.currentPageNumber === 1}
                 onClick={() =>
-                  handlePageNumberClick(pageInfo.currentPageNumber - 1)
+                  handleRightPageNumberClick(pageInfo.currentPageNumber - 1)
                 }
               >
                 이전
@@ -334,7 +379,7 @@ export function CompetencyAssessmentTestStart() {
               <Pagination.Next
                 disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
                 onClick={() =>
-                  handlePageNumberClick(pageInfo.currentPageNumber + 1)
+                  handleRightPageNumberClick(pageInfo.currentPageNumber + 1)
                 }
               >
                 다음

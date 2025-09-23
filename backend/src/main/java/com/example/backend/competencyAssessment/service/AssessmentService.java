@@ -8,6 +8,7 @@ import com.example.backend.competencyAssessment.dto.*;
 import com.example.backend.competency.dto.MainCompetencyDto;
 import com.example.backend.competencyAssessment.entity.*;
 import com.example.backend.competencyAssessment.repository.*;
+import com.example.backend.member.dto.MemberMajorDto;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -291,6 +292,13 @@ public class AssessmentService {
         return choiceListDto;
     }
 
+    // 응답 불러오기
+    public List<?> getSavedResponses(int assessmentSeq, int memberSeq) {
+        List<Response> responses = responseRepository.findByQuestionSeqCaSeqSeqAndMemberSeqId(assessmentSeq, memberSeq);
+        return responses;
+    }
+
+
     // 응답 저장
     public ResponseEntity<?> responseSave(int seq, List<ResponseDto> dtoList) {
         List<Response> savedList = new ArrayList<>();
@@ -348,6 +356,7 @@ public class AssessmentService {
 
     }
 
+
     public ResponseEntity<?> complete(int seq, CompleteSaveDto dto) {
         Complete complete = new Complete();
         Assessment assessment = assessmentRepository.findAllBySeq(seq);
@@ -402,7 +411,29 @@ public class AssessmentService {
     }
 
     public List<QuestionListDto> resultQuestionList(int seq) {
+
         List<QuestionListDto> resultQuestionList = questionRepository.findByCaSeqSeq(seq);
         return resultQuestionList;
     }
+
+    public ResponseEntity<?> testReadyMajor(int memberSeq) {
+        System.out.println("memberSeq = " + memberSeq);
+
+        Member member = memberRepository.findById(memberSeq)
+                .orElseThrow(() -> {
+                    System.out.println("Member with seq " + memberSeq + " not found");
+                    return new EntityNotFoundException("Member Not Found");
+                });
+
+        // Member 정보를 MemberMajorDto로 변환
+        MemberMajorDto memberMajorDto = new MemberMajorDto(
+                member.getId(),
+                member.getStudent().getId(),
+                member.getStudent().getStudentNo(),
+                member.getStudent().getMajor()
+        );
+        return ResponseEntity.ok(memberMajorDto);
+    }
+
+
 }

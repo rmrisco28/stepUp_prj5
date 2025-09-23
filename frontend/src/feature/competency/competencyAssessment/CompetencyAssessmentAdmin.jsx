@@ -124,6 +124,7 @@ export function CompetencyAssessmentAdmin() {
                 <th>하위역량</th>
                 <th>문제</th>
                 <th>배점</th>
+                <th>삭제</th>
               </tr>
             </thead>
             <tbody>
@@ -173,11 +174,19 @@ export function CompetencyAssessmentAdmin() {
                       {/*배점*/}
                       {data.score}
                     </td>
+                    <td
+                      style={{
+                        textAlign: "center",
+                        width: "10%",
+                      }}
+                    >
+                      <Button>삭제</Button>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5}>문제가 없습니다.</td>
+                  <td colSpan={6}>생성된 문제가 없습니다.</td>
                 </tr>
               )}
             </tbody>

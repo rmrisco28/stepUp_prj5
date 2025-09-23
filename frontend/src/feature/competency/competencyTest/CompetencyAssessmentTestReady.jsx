@@ -8,6 +8,9 @@ export function CompetencyAssessmentTestReady() {
   const [endDttm, setEndDttm] = useState("");
   const [memberSeq, setMemberSeq] = useState("");
   const [imposible, setimposible] = useState(true);
+  const [memberName, setMemberName] = useState("");
+  const [loginId, setLoginId] = useState("");
+  const [major, setMajor] = useState("");
 
   const navigate = useNavigate();
 
@@ -23,7 +26,11 @@ export function CompetencyAssessmentTestReady() {
           navigate("/login");
         } else {
           // console.log("로그인된 사용자 정보:", res.data);
+          console.log("로그인 정보", res.data);
           setMemberSeq(res.data.memberSeq);
+          setMemberName(res.data.name);
+          setLoginId(res.data.loginId);
+          setMajor(res.data.major);
 
           // 로그인된 후, 해당 사용자가 검사했는지 확인
           axios
@@ -53,22 +60,56 @@ export function CompetencyAssessmentTestReady() {
         console.log("로그인 상태 확인 실패");
         navigate("/login");
       });
+  }, []);
 
+  useEffect(() => {
     axios
-      .get(`/api/competency/assessment/test/ready/${assessmentSeq}`)
+      .get(`/api/competency/assessment/test/ready/${assessmentSeq}`, {
+        params: { memberSeq: memberSeq },
+      })
       .then((res) => {
         console.log(res.data);
         setTitle(res.data.caTitle);
         setEndDttm(res.data.endDttm);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-  });
+    axios
+      .get(`/api/competency/assessment/test/readyMajor`, {
+        params: { memberSeq: memberSeq },
+      })
+      .then((res) => {
+        console.log("학과 받아오기", res.data);
+        setMajor(res.data.studentMajor);
+      })
+      .catch((err) => {
+        console.log("학과 받아오기 실패", err);
+      });
+  }, [memberSeq, assessmentSeq]);
 
   return (
     <>
       <Row className="d-flex justify-content-center">
         <Col xs={12} md={8} lg={6}>
           <h3 className=" d-flex justify-content-center mb-4">"{title}"</h3>
-          <div className="mb-5"></div>
+          <div className="mb-3"></div>
+
+          <h5 className="d-flex justify-content-center mb-4">
+            <div className="m-2">
+              응시자: <strong>{memberName}</strong>
+            </div>
+            <div className="m-2">
+              학번: <strong>{loginId} </strong>
+            </div>
+          </h5>
+          <h5 className="d-flex justify-content-center mb-4">
+            <div>
+              학과: <strong> {major}</strong>
+            </div>
+          </h5>
+
+          <hr />
           <p className="d-flex justify-content-center mb-4">
             답안 제출 가능 횟수: {imposible ? "0" : "1"}
           </p>

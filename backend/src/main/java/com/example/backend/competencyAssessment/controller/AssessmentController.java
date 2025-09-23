@@ -3,6 +3,7 @@ package com.example.backend.competencyAssessment.controller;
 import com.example.backend.competencyAssessment.dto.*;
 import com.example.backend.competencyAssessment.repository.ResultRepository;
 import com.example.backend.competencyAssessment.service.AssessmentService;
+import com.example.backend.member.dto.MemberMajorDto;
 import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -136,9 +137,15 @@ public class AssessmentController {
     // 학생 진단검사 시작 전 초기화면
     @GetMapping("test/ready/{seq}")
     public AssessmentDto testReady(@PathVariable int seq) {
-
         return assessmentService.testReady(seq);
+    }
 
+    // 학생 진단 검사 시작 전 초기화면 학과 넘기기
+    @GetMapping("test/readyMajor")
+    public ResponseEntity<?> testReadyMajor(
+            @RequestParam int memberSeq) {
+        System.out.println("memberSeq = " + memberSeq);
+        return assessmentService.testReadyMajor(memberSeq);
     }
 
     // 진단여부 확인

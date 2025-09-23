@@ -61,10 +61,6 @@ export function CompetencyAssessmentTestResult() {
       .then((res) => {
         console.log("문항 정보 가져오기 성공", res.data);
         setQuestionList(res.data);
-        if (res.data.length === 0) {
-          alert("진단검사 결과가 없습니다.");
-          navigate("/competency/assessment");
-        }
       })
       .catch((err) => {
         console.log(
@@ -93,6 +89,10 @@ export function CompetencyAssessmentTestResult() {
       )
       .then((res) => {
         console.log("불러오기 성공", res.data);
+        if (res.data.length === 0) {
+          alert("진단검사 결과가 없습니다.");
+          navigate("/competency/assessment");
+        }
         setResultData(res.data);
         console.log("실험", res.data[0].memberSeqStudentMajor);
         setMemberMajor(res.data[0].memberSeqStudentMajor);
@@ -103,7 +103,7 @@ export function CompetencyAssessmentTestResult() {
       });
   }, [memberSeq, assessmentSeq]);
 
-  if (!memberSeq) {
+  if (!memberSeq || resultData.length === 0) {
     return <div>로딩 중...</div>; // 혹은 스피너 컴포넌트 등 로딩 표시
   }
 
