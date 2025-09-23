@@ -3,6 +3,7 @@ package com.example.backend.extracurricular.controller;
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCApplyForm;
 import com.example.backend.extracurricular.dto.ETCEditForm;
+import com.example.backend.extracurricular.dto.updateETCCompleteDto;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -140,6 +141,13 @@ public class ExtraCurricularController {
     @GetMapping("applyStudentList/{seq}")
     public ResponseEntity<?> applyStudentList(@PathVariable Integer seq) {
         return ResponseEntity.ok(extraCurricularService.applyStudentList(seq));
+    }
+
+    // 이수 확인 요청
+    @PostMapping("updateComplete")
+    public void updateComplete(@RequestBody updateETCCompleteDto dto) {
+        extraCurricularService.updateComplete(dto);
+//        return ResponseEntity.ok();
     }
 
 }

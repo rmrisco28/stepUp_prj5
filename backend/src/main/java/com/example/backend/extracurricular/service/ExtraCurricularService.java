@@ -557,8 +557,32 @@ public class ExtraCurricularService {
                             .seq(etcas.getMemberSeq().getId())
                             .name(etcas.getMemberSeq().getStudent().getName())
                             .completeStatus(completeStatus)
+                            .applicationSeq(etcas.getId())
                             .build();
                 })
                 .collect(Collectors.toList());
+    }
+
+    public void updateComplete(updateETCCompleteDto dto) {
+        // dto에는 Integer 타입의 memberSeq랑 CompleteStatus가 있고
+        // 그 memberSeq를 통해 member를 조회해서
+        // 위의 member를 통해 ECComplete 테이블을 조회해서
+        // dto로 받은 CompleteStatus를 그 행의 completeStatus를 저장.
+
+        // 이건 필요 없을지도 ?
+        Member mb = memberRepository.findById(dto.getMemberSeq())
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않음"));
+
+        // 신청 seq를 통해 신청 객체 조회
+        ExtraCurricularApplication eca = extraCurricularApplicationRepository
+                .findById(dto.getApplicationSeq())
+                .orElseThrow(() -> new RuntimeException("신청한 내역이 없습니다."));
+
+        // 객체를 통해 이수 객체 조회
+        ExtraCurricularComplete ecc = extraCurricularCompleteRepository
+                .findByApplicationSeq(eca)
+                .orElseThrow(() -> new RuntimeException("이수 내역이 없습니다."));
+        ecc.setCompleteStatus(dto.getCompleteStatus());
+        extraCurricularCompleteRepository.save(ecc);
     }
 }

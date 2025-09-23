@@ -454,6 +454,7 @@ export function ExtraCurricularDetail() {
                     checked={student.completeStatus === 1}
                     onChange={(e) => {
                       // 체크 상태 변경 시, applyStudents 상태를 업데이트
+                      // 그리고 아래 저장 버튼에 따라서 취소되거나 선택되면 그것도 바로 화면에서 업데이트 되도록 표시 되나??
                       setApplyStudents((prev) =>
                         prev.map((s) =>
                           s.seq === student.seq
@@ -471,9 +472,10 @@ export function ExtraCurricularDetail() {
                     onClick={() => {
                       // 저장 버튼 클릭 시, 해당 학생의 seq와 completed 상태를 백엔드로 전송
                       axios
-                        .post(`/api/extracurricular/updateCompletion`, {
-                          seq: student.seq,
-                          completed: student.completed,
+                        .post(`/api/extracurricular/updateComplete`, {
+                          applicationSeq: student.applicationSeq,
+                          memberSeq: student.seq,
+                          completeStatus: student.completeStatus,
                         })
                         .then((res) => {
                           alert(`${student.name} 이수 상태가 저장되었습니다.`);
