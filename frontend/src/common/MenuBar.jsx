@@ -58,7 +58,13 @@ export function MenuBar() {
       subItems: [
         { name: "비교과 내역", path: "/activity/etclog" },
         { name: "마일리지 내역", path: "/activity/mileage" },
-      ],
+        isAuthenticated && {
+          name: "비밀번호 변경",
+          path: "/activity/changePw",
+        },
+        // isAdmin() && { name: "학생 계정 관리", path: "/activity/stdAccess" },
+        // { name: "학생 계정 관리", path: "/activity/stdAccess" },
+      ].filter(Boolean),
     },
     {
       name: "안내",

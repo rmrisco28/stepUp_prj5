@@ -33,7 +33,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<LoginResponse> logout() {
         authService.logout();
-        return ResponseEntity.ok(new LoginResponse(true, "로그아웃 성공", null, null, null, null));
+        return ResponseEntity.ok(new LoginResponse(true, "로그아웃 성공", null, null, null, null, null));
     }
 
     @GetMapping("/status")

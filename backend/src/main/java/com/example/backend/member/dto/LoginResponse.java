@@ -16,4 +16,6 @@ public class LoginResponse {
     private String name;
 
     private String authName;
+
+    private String pwNotice;
 }
