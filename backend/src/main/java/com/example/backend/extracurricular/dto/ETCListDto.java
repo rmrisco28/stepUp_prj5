@@ -23,6 +23,7 @@ public class ETCListDto {
     private final String status;
     private final String grades;
     private final OperationType operationType;
+    private final String competencyName;
 
     private String thumbUrl;
 

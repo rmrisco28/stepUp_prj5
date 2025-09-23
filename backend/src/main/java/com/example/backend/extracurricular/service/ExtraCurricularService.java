@@ -169,11 +169,26 @@ public class ExtraCurricularService {
     }
 
     // 프로그램 목록(관리자 화면)
-    public Map<String, Object> list(Integer pageNumber, String keyword) {
+    public Map<String, Object> list(Integer pageNumber, String keyword,
+                                    Integer competency, String operationTypeLabel, String grade) {
 
+        // 한글 운영방식 → Enum 변환
+        OperationType operationType = null;
+        if (operationTypeLabel != null && !operationTypeLabel.isEmpty()) {
+            switch (operationTypeLabel) {
+                case "대면" -> operationType = OperationType.OFFLINE;
+                case "비대면" -> operationType = OperationType.ONLINE;
+                case "혼합" -> operationType = OperationType.HYBRID;
+            }
+        }
+
+        // 검색 + 페이지네이션
         Page<ETCListDto> programPage = extraCurricularProgramRepository.findAllBy(
                 PageRequest.of(pageNumber - 1, 10),
-                keyword
+                keyword,
+                competency,
+                operationType,
+                grade
         );
 
         // 프로그램 seq 조회

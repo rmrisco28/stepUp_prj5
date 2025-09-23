@@ -3,6 +3,7 @@ package com.example.backend.extracurricular.controller;
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCApplyForm;
 import com.example.backend.extracurricular.dto.ETCEditForm;
+import com.example.backend.extracurricular.enums.OperationType;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,9 +43,12 @@ public class ExtraCurricularController {
     @GetMapping("list")
     public Map<String, Object> list(
             @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
-            @RequestParam(value = "q", defaultValue = "") String keyword
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "competency", required = false) Integer competency,
+            @RequestParam(value = "operationType", required = false) String operationType,
+            @RequestParam(value = "grade", required = false) String grade
     ) {
-        return extraCurricularService.list(pageNumber, keyword);
+        return extraCurricularService.list(pageNumber, keyword, competency, operationType, grade);
     }
 
     // 프로그램 상세 보기(관리자)

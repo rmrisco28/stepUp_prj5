@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
 import {
   Badge,
   Button,
-  Card,
   Col,
   Container,
   Form,
@@ -17,9 +15,14 @@ import axios from "axios";
 import { ExtraCurricularCardList } from "./ExtraCurricularCardList.jsx";
 
 export function ExtraCurricular() {
-  const navigate = useNavigate();
   const [programs, setPrograms] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [competencies, setCompetencies] = useState([]); // 역량 목록을 저장할 상태
+
+  const [keyword, setKeyword] = useState("");
+  const [selectedCompetency, setSelectedCompetency] = useState(""); // 역량 선택
+  const [selectedOperationType, setSelectedOperationType] = useState(""); // 운영방식 선택
+  const [selectedGrade, setSelectedGrade] = useState(""); // 학년 선택
 
   useEffect(() => {
     axios
@@ -30,6 +33,18 @@ export function ExtraCurricular() {
       })
       .catch((err) => console.error("목록 불러오기 실패", err))
       .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get("/api/competency/subList")
+      .then((response) => {
+        console.log(response.data);
+        setCompetencies(response.data);
+      })
+      .catch((error) => {
+        console.error("역량 목록을 불러오는 데 실패했습니다.", error);
+      });
   }, []);
 
   if (loading) {
@@ -44,6 +59,25 @@ export function ExtraCurricular() {
   const visiblePrograms = programs.filter(
     (p) => p.status === "OPEN" || p.status === "CLOSED",
   );
+
+  const handleSearch = () => {
+    setLoading(true);
+
+    axios
+      .get("/api/extracurricular/list", {
+        params: {
+          q: keyword,
+          competency: selectedCompetency,
+          operationType: selectedOperationType,
+          grade: selectedGrade,
+        },
+      })
+      .then((res) => {
+        setPrograms(res.data.programList);
+      })
+      .catch((err) => console.error("검색 실패", err))
+      .finally(() => setLoading(false));
+  };
 
   return (
     <Container className="my-5">
@@ -83,28 +117,43 @@ export function ExtraCurricular() {
 
             {/* 2행: 운영년도/학기/대학/부서 */}
             <Row className="mb-3">
-              <Col md={3}>
-                <FormLabel>운영년도</FormLabel>
-                <FormSelect>
-                  <option>전체</option>
+              <Col md={4}>
+                <FormLabel>역량</FormLabel>
+                <FormSelect
+                  value={selectedCompetency}
+                  onChange={(e) => setSelectedCompetency(e.target.value)}
+                >
+                  <option value="">전체</option>
+                  {competencies.map((comp) => (
+                    <option key={comp.seq} value={comp.seq}>
+                      {comp.subCompetencyName}
+                    </option>
+                  ))}
                 </FormSelect>
               </Col>
-              <Col md={3}>
-                <FormLabel>운영학기</FormLabel>
-                <FormSelect>
-                  <option>전체</option>
+              <Col md={4}>
+                <FormLabel>운영방식</FormLabel>
+                <FormSelect
+                  value={selectedOperationType}
+                  onChange={(e) => setSelectedOperationType(e.target.value)}
+                >
+                  <option value="">전체</option>
+                  <option value="대면">대면</option>
+                  <option value="비대면">비대면</option>
+                  <option value="혼합">혼합</option>
                 </FormSelect>
               </Col>
-              <Col md={3}>
-                <FormLabel>참여대학/학과</FormLabel>
-                <FormSelect>
-                  <option>전체</option>
-                </FormSelect>
-              </Col>
-              <Col md={3}>
-                <FormLabel>운영부서</FormLabel>
-                <FormSelect>
-                  <option>전체</option>
+              <Col md={4}>
+                <FormLabel>대상학년</FormLabel>
+                <FormSelect
+                  value={selectedGrade}
+                  onChange={(e) => setSelectedGrade(e.target.value)}
+                >
+                  <option value="">전체</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
                 </FormSelect>
               </Col>
             </Row>
@@ -113,13 +162,20 @@ export function ExtraCurricular() {
             <Row className="mb-3">
               <Col md={10}>
                 <FormLabel>프로그램명</FormLabel>
+
                 <FormControl
                   type="text"
                   placeholder="프로그램명을 입력하세요."
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
                 />
               </Col>
               <Col md={2} className="d-flex align-items-end">
-                <Button variant="primary" className="w-100">
+                <Button
+                  variant="primary"
+                  className="w-100"
+                  onClick={handleSearch}
+                >
                   검색
                 </Button>
               </Col>
