@@ -57,7 +57,7 @@ export function MenuBar() {
       path: "/activity",
       subItems: [
         { name: "비교과 내역", path: "/activity/etclog" },
-        { name: "마일리지 내역", path: "/activity/mileage" },
+        // { name: "마일리지 내역", path: "/activity/mileage" },
         { name: "역량진단 결과", path: "/competency/assessment" },
         isAuthenticated && {
           name: "비밀번호 변경",
