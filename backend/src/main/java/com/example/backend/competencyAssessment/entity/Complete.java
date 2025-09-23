@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class Complete {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "result_seq", nullable = false)
+    @Column(name = "complete_seq", nullable = false)
     private Integer seq;
 
     @ManyToOne(optional = false)

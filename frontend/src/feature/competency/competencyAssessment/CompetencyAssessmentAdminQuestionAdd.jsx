@@ -25,11 +25,29 @@ export function CompetencyAssessmentAdminQuestionAdd() {
   const [score, setScore] = useState(1);
   const [point, setPoint] = useState([0.0]);
   const [questionNum, setQuestionNum] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const navigate = useNavigate();
   const { assessmentSeq } = useParams();
 
   useEffect(() => {
+    // 관리자만
+    axios
+      .get("/api/auth/status") // 로그인 상태 확인 API
+      .then((res) => {
+        if (res.data.authName !== "admin") {
+          alert("잘못된 접근입니다...!");
+          navigate("/");
+        } else {
+          console.log("로그인된 사용자 정보:", res.data);
+          setIsAdmin(res.data.authName === "admin"); // authName이 'admin'이면 관리자
+        }
+      })
+      .catch((err) => {
+        console.log("로그인 상태 확인 실패");
+        navigate("/login");
+      });
+
     // 핵심역량 불러오기
     axios
       .get(`/api/competency/assessment/admin/competency`)

@@ -7,7 +7,7 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString(exclude = {"student", "employee"})
+@ToString
 @Entity
 @Table(name = "member", schema = "prj5")
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class Member {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "user_yn", insertable = false)
+    @Column(name = "user_yn")
     private Integer userYn;
 
     @OneToOne(mappedBy = "memberSeq")
