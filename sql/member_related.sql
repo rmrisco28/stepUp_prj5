@@ -154,12 +154,28 @@ CREATE TABLE auth
     FOREIGN KEY (member_seq) REFERENCES member (member_seq) ON DELETE CASCADE
 );
 DROP TABLE auth;
+
+# 테스트용 교직원들
 INSERT INTO auth
 VALUES ('extra', 108);
 INSERT INTO auth
 VALUES ('admin', 107);
+
+# 지훈
+INSERT INTO auth
+VALUES ('extra', 116);
+
+# 건국
 INSERT INTO auth
 VALUES ('admin', 115);
+
+# 유민
+INSERT INTO auth
+VALUES ('extra', 117);
+INSERT INTO auth
+VALUES ('admin', 117);
+# 추가 순서는 상관없고,, a가 먼저 시작이라 이거 먼저 가져옴.
+# 그냥 프론트에서 어드민은 다 할 수 있도록 하는게 나을 듯
 
 # 아무것도 안 됨 ;;
 SHOW CREATE TABLE member;
