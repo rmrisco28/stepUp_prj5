@@ -189,7 +189,9 @@ export function CompetencyAssessmentTestResult() {
     <>
       <Row className="d-flex justify-content-center">
         <Col xs={12} md={10} lg={8}>
-          <h3 className="">진단검사 결과</h3>
+          <h3 className="" onClick={() => {}}>
+            진단검사 결과
+          </h3>
           <div className="mb-5"></div>
           이름: {memberName}
           <br />

@@ -311,7 +311,7 @@ export function CompetencyAssessmentTestStart() {
               취소
             </Button>
 
-            <Button variant="outline-danger" onClick={handelSaveButton}>
+            <Button variant="outline-success" onClick={handelSaveButton}>
               제출
             </Button>
           </Modal.Footer>
@@ -347,7 +347,9 @@ export function CompetencyAssessmentTestStart() {
       {pageInfo.currentPageNumber === pageInfo.totalPages && (
         <Row className="d-flex justify-content-center">
           <Col xs={12} md={10} lg={8} className="d-flex justify-content-end">
-            <Button onClick={() => setModalShow(true)}>제출하기</Button>
+            <Button variant="success" onClick={() => setModalShow(true)}>
+              제출하기
+            </Button>
           </Col>
         </Row>
       )}

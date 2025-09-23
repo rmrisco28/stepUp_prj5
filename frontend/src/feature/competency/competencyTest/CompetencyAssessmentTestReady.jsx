@@ -77,6 +77,7 @@ export function CompetencyAssessmentTestReady() {
           </p>
           <div className="d-flex justify-content-center  mb-4">
             <Button
+              variant="success"
               onClick={() =>
                 navigate(`/competency/assessment/test/start/${assessmentSeq}`)
               }
@@ -86,7 +87,7 @@ export function CompetencyAssessmentTestReady() {
           </div>
           <div className="d-flex justify-content-center  gap-5">
             <Button
-              variant="outline-secondary"
+              variant="outline-success"
               onClick={() => navigate(`/competency/assessment`)}
             >
               강좌로 돌아가기
