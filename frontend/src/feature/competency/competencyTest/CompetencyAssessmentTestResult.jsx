@@ -61,6 +61,10 @@ export function CompetencyAssessmentTestResult() {
       .then((res) => {
         console.log("문항 정보 가져오기 성공", res.data);
         setQuestionList(res.data);
+        if (res.data.length === 0) {
+          alert("진단검사 결과가 없습니다.");
+          navigate("/competency/assessment");
+        }
       })
       .catch((err) => {
         console.log(

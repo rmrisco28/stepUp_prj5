@@ -61,7 +61,12 @@ export function Competency() {
             style={{ width: "100%" }}
           />
           <hr className="mb-5" />
-          <Table>
+          <Table
+            striped
+            bordered
+            responsive
+            className="text-center align-middle"
+          >
             <thead>
               <tr>
                 <th
