@@ -8,4 +8,5 @@ import lombok.Data;
 public class applyStudentDto {
     private Integer seq;
     private String name;
+    private Integer completeStatus;
 }

@@ -541,11 +541,22 @@ public class ExtraCurricularService {
         List<ExtraCurricularApplication> etca = extraCurricularApplicationRepository
                 .findByProgramSeq(ep);
 
+        // extraCurricularApplication의 pk를 통해
+        // extraCurricularComplete 테이블의 completeStatus를 가져오기
+        // 값을 그냥 가져와야할듯!!! .
+
         return etca.stream()
                 .map(etcas -> {
+                    Optional<ExtraCurricularComplete> complete =
+                            extraCurricularCompleteRepository.findByApplicationSeq(etcas);
+                    Integer completeStatus = complete
+                            .map(ExtraCurricularComplete::getCompleteStatus)
+                            .orElse(0);
+
                     return applyStudentDto.builder()
                             .seq(etcas.getMemberSeq().getId())
                             .name(etcas.getMemberSeq().getStudent().getName())
+                            .completeStatus(completeStatus)
                             .build();
                 })
                 .collect(Collectors.toList());
