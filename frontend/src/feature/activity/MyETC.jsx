@@ -1,9 +1,42 @@
-import { Col, Container, Row, Table } from "react-bootstrap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Col, Container, Row, Table, Spinner } from "react-bootstrap";
 import axios from "axios";
-import { useParams } from "react-router";
+import { useAuth } from "../../common/AuthContext.jsx";
+import { useNavigate } from "react-router";
 
 export function MyETC() {
+  const { user, loading: authLoading } = useAuth(); // 로그인 상태와 user 가져오기
+  const [etcList, setEtcList] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) return; // 로그인 사용자 없으면 호출하지 않음
+
+    setLoading(true);
+    axios
+      .get(`/api/extracurricular/complete/${user.memberSeq}`)
+      .then((res) => {
+        const sorted = res.data.sort((a, b) => b.seq - a.seq); // seq 내림차순
+
+        setEtcList(sorted);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("비교과 내역 조회 실패:", err);
+        setLoading(false);
+      });
+  }, [user]);
+
+  if (authLoading) {
+    return (
+      <Container className="my-2 text-center">
+        <Spinner animation="border" /> 로그인 상태 확인 중...
+      </Container>
+    );
+  }
+
   return (
     <Container className="my-2">
       <Row className="justify-content-center">
@@ -19,12 +52,37 @@ export function MyETC() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>그렇죠</td>
-                <td className="text-start">그렇죠</td>
-                <td>그렇죠</td>
-                <td>그렇죠</td>
-              </tr>
+              {loading ? (
+                <tr>
+                  <td colSpan="4">
+                    <Spinner animation="border" size="sm" /> 로딩 중...
+                  </td>
+                </tr>
+              ) : etcList.length === 0 ? (
+                <tr>
+                  <td colSpan="4">등록된 내역이 없습니다.</td>
+                </tr>
+              ) : (
+                etcList.map((etc, idx) => (
+                  <tr key={etc.seq}>
+                    <td>{idx + 1}</td>
+                    <td
+                      className="text-start"
+                      style={{ cursor: "pointer" }}
+                      onClick={() =>
+                        navigate(`/extracurricular/program/${etc.programSeq}`)
+                      }
+                    >
+                      {etc.title}
+                    </td>
+                    <td>
+                      {new Date(etc.operateStartDt).toLocaleDateString()} ~{" "}
+                      {new Date(etc.operateEndDt).toLocaleDateString()}
+                    </td>
+                    <td>{etc.completeStatus}</td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
         </Col>
