@@ -120,6 +120,9 @@ export function MenuBar() {
                 className="d-flex align-items-center"
                 style={{ height: "47px" }}
               >
+                <small className="me-2 text-white">
+                  환영합니다! 로그인 후 이용해주세요.
+                </small>
                 <Nav.Link as={Link} to="/login" className="text-white p-0">
                   <Button
                     variant="outline-light"
