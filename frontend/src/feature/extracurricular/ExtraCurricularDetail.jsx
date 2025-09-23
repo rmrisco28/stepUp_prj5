@@ -432,14 +432,15 @@ export function ExtraCurricularDetail() {
       </Form>
 
       {/*  프로그램 신청 학생 목록 */}
-      {/*  프로그램 신청 학생 목록 */}
       <h3 className="mt-5 mb-3">신청 학생 목록</h3>
       {applyStudents && applyStudents.length > 0 ? (
         <Table striped bordered hover responsive>
           <thead className="table-success text-center">
             <tr>
               <th style={{ width: "20%" }}>번호</th>
-              <th style={{ width: "80%" }}>학생 이름</th>
+              <th style={{ width: "50%" }}>학생 이름</th>
+              <th style={{ width: "15%" }}>이수 확인</th>
+              <th style={{ width: "15%" }}>저장</th>
             </tr>
           </thead>
           <tbody>
@@ -447,6 +448,47 @@ export function ExtraCurricularDetail() {
               <tr key={student.seq} className="text-center">
                 <td>{index + 1}</td>
                 <td>{student.name}</td>
+                <td>
+                  <FormCheck
+                    type="checkbox"
+                    checked={student.completeStatus === 1}
+                    onChange={(e) => {
+                      // 체크 상태 변경 시, applyStudents 상태를 업데이트
+                      // 그리고 아래 저장 버튼에 따라서 취소되거나 선택되면 그것도 바로 화면에서 업데이트 되도록 표시 되나??
+                      setApplyStudents((prev) =>
+                        prev.map((s) =>
+                          s.seq === student.seq
+                            ? { ...s, completeStatus: e.target.checked ? 1 : 0 }
+                            : s,
+                        ),
+                      );
+                    }}
+                  />
+                </td>
+                <td>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    onClick={() => {
+                      // 저장 버튼 클릭 시, 해당 학생의 seq와 completed 상태를 백엔드로 전송
+                      axios
+                        .post(`/api/extracurricular/updateComplete`, {
+                          applicationSeq: student.applicationSeq,
+                          memberSeq: student.seq,
+                          completeStatus: student.completeStatus,
+                        })
+                        .then((res) => {
+                          alert(`${student.name} 이수 상태가 저장되었습니다.`);
+                        })
+                        .catch((err) => {
+                          console.error(err);
+                          alert("저장 중 오류가 발생했습니다.");
+                        });
+                    }}
+                  >
+                    저장
+                  </Button>
+                </td>
               </tr>
             ))}
           </tbody>

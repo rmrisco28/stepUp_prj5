@@ -5,9 +5,8 @@ import lombok.Data;
 
 @Data
 @Builder
-public class applyStudentDto {
-    private Integer seq;
-    private String name;
-    private Integer completeStatus;
+public class updateETCCompleteDto {
     private Integer applicationSeq;
+    private Integer memberSeq;
+    private Integer completeStatus;
 }
