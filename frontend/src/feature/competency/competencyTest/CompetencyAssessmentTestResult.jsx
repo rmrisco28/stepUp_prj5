@@ -194,7 +194,11 @@ export function CompetencyAssessmentTestResult() {
           학과: {memberMajor}
           <br />
           <hr />
-          <Bar data={data} options={options} className="mb-5" />
+          <Row className="justify-content-center">
+            <Col xs={12} md={10} lg={8}>
+              <Bar data={data} options={options} className="mb-5" />
+            </Col>
+          </Row>
           <hr className="mb-5" />
           <h3 className="mb-3">역량 별 세부 결과</h3>
           {/* 역량 별 데이터 보여주기*/}
