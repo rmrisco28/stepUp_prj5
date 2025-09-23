@@ -8,7 +8,7 @@ import { useAuth } from "./AuthContext.jsx";
 import axios from "axios";
 
 export function MenuBar() {
-  const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin, isExtra } = useAuth();
   // const [isAdmin, setIsAdmin] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
 
@@ -35,8 +35,12 @@ export function MenuBar() {
       path: "/extracurricular",
       subItems: [
         { name: "프로그램 신청", path: "/extracurricular" },
-        { name: "프로그램 관리", path: "/extracurricular/manage" },
-      ],
+        isExtra() ||
+          (isAdmin() && {
+            name: "프로그램 관리",
+            path: "/extracurricular/manage",
+          }),
+      ].filter(Boolean),
     },
     {
       name: "핵심역량",
