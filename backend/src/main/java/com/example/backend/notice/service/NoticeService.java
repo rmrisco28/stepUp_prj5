@@ -1,5 +1,7 @@
 package com.example.backend.notice.service;
 
+import com.example.backend.member.entity.Member;
+import com.example.backend.member.repository.MemberRepository;
 import com.example.backend.notice.dto.NoticeAddForm;
 import com.example.backend.notice.dto.NoticeDto;
 import com.example.backend.notice.dto.NoticeListInfo;
@@ -17,12 +19,17 @@ import java.util.Optional;
 @Transactional
 public class NoticeService {
     private final NoticeRepository noticeRepository;
+    private final MemberRepository memberRepository;
 
     // 공지사항 추가
     public void addNotice(NoticeAddForm dto) {
+        Member mb = memberRepository.findById(dto.getMemberSeq())
+                .orElseThrow(() -> new RuntimeException("Member not found"));
+
         Notice notice = new Notice();
         notice.setTitle(dto.getTitle());
         notice.setContent(dto.getContent());
+        notice.setAuthorSeq(mb);
         noticeRepository.save(notice);
     }
 

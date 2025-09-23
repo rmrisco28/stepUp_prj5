@@ -6,4 +6,5 @@ import lombok.Data;
 public class NoticeAddForm {
     private String title;
     private String content;
+    private Integer memberSeq;
 }
