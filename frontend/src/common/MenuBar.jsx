@@ -138,6 +138,7 @@ export function MenuBar() {
       <Navbar bg="light" expand="lg" className="mb-3 shadow-sm">
         <Container>
           {/* 로고 */}
+          {/* 로그인에서 만들어진 로고 가져와도 괜찮을 듯 */}
           <Navbar.Brand as={Link} to="/">
             <img
               src="/../image/stepUp_logo_수정.png"
