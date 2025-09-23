@@ -45,13 +45,14 @@ export function NoticeDetail() {
   };
 
   const handleDelete = () => {
+    // 확인 창 띄우기
+    const confirmed = window.confirm("공지사항을 삭제하시겠습니까?");
+    if (!confirmed) return; // 취소 시 종료
+
     axios
       .delete(`/api/notice/${id}`)
       .then((res) => {
-        const message = res.data.message;
-        if (message) {
-          toast(message.text, { type: message.type });
-        }
+        alert(res.data.message.text);
         navigate("/board/notice");
       })
       .catch(() => {
@@ -69,7 +70,7 @@ export function NoticeDetail() {
 
   return (
     <Row className="justify-content-center mt-4">
-      <Col xs={12} md={10} lg={8}>
+      <Col xs={12} md={10} lg={7}>
         {/* 제목 */}
         <div className="mb-4">
           <h3 className="fw-bold border-bottom pb-3">{notice.title}</h3>
@@ -117,7 +118,7 @@ export function NoticeDetail() {
         <div className="d-flex justify-content-between">
           <Button
             variant="outline-secondary"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/board/notice")}
             className="me-2"
           >
             목록
