@@ -51,10 +51,10 @@ export function ChangePw() {
         .put(`/api/member/changePw`, {
           memberSeq: user.memberSeq,
           oldPassword: oldPassword,
-          newPassword1: newPassword1,
+          newPassword: newPassword1,
         })
         .then((res) => {
-          alert(res.data.message);
+          alert(res.data.message.text);
           handleClose();
         })
         .catch((err) => {

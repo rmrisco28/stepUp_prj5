@@ -10,7 +10,9 @@ CREATE TABLE member
 #     last_login_at   DATETIME,
     # user_yn CHAR(1)
 );
+SHOW CREATE TABLE member;
 DROP TABLE member;
+# 아래는 컬럼 데이터 내용 지우는거, 테이블은 남아있지만 pk도 1부터 시작됨! 굿굿
 TRUNCATE TABLE member;
 SET FOREIGN_KEY_CHECKS = 0;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -20,6 +22,11 @@ VALUES ('yyy', '1234');
 # 비밀번호 암호화 안 해서 그런지 로그인 안 되넹 그냥 관리자도 만들어야지 ..
 ALTER TABLE member
     ADD COLUMN user_yn INT NOT NULL DEFAULT 0 COMMENT '0=로그아웃, 1=로그인';
+ALTER TABLE member
+    ADD COLUMN change_pw_cnt INT NOT NULL DEFAULT 0;
+ALTER TABLE member
+    ADD COLUMN change_pw_at DATETIME NOT NULL DEFAULT NOW();
+
 
 # -----------------------------------------------------------
 # student
@@ -124,19 +131,19 @@ VALUES ('CM', '역랑관리센터');
 # -----------------------------------------------------------
 # administrator
 # 흠 관리자 정보도 있어야 하나? 고민 ..
-CREATE TABLE administrator
-(
-    administrator_seq INT AUTO_INCREMENT PRIMARY KEY,
-    administrator_no  VARCHAR(20) UNIQUE,
-    name              VARCHAR(20) NOT NULL,
-    gender            VARCHAR(5)  NOT NULL,
-    birth_date        DATE        NOT NULL,
-    hire_date         DATE        NOT NULL,
-    phone             VARCHAR(20) NULL,
-    email             VARCHAR(50) NULL,
-    member_seq        INT,
-    FOREIGN KEY (member_seq) REFERENCES member (member_seq)
-);
+# CREATE TABLE administrator
+# (
+#     administrator_seq INT AUTO_INCREMENT PRIMARY KEY,
+#     administrator_no  VARCHAR(20) UNIQUE,
+#     name              VARCHAR(20) NOT NULL,
+#     gender            VARCHAR(5)  NOT NULL,
+#     birth_date        DATE        NOT NULL,
+#     hire_date         DATE        NOT NULL,
+#     phone             VARCHAR(20) NULL,
+#     email             VARCHAR(50) NULL,
+#     member_seq        INT,
+#     FOREIGN KEY (member_seq) REFERENCES member (member_seq)
+# );
 # -----------------------------------------------------------
 # auth
 CREATE TABLE auth
@@ -164,7 +171,7 @@ ALTER TABLE member
 ALTER TABLE member
     DROP COLUMN student_student_seq;
 
-# 전화번호들은 그냥 sql로 추가,
+# 전화번호들은 그냥 sql로 추가, csv 파일로 넣을 땐 이게 있을 거고 batch 도 수정 해줘야징 ,,
 
 -- 'student_seq'가 1부터 100까지인 학생들의 'phone' 컬럼을 업데이트합니다.
 -- CONCAT() 함수로 '010'과 8자리의 임의의 숫자를 결합하여 11자리 번호를 만듭니다.
@@ -180,3 +187,5 @@ SET phone = CONCAT('010', LPAD(FLOOR(RAND() * 90000000) + 10000000, 8, '0'))
 WHERE employee_seq BETWEEN 1 AND 13
   AND CONCAT('010', LPAD(FLOOR(RAND() * 90000000) + 10000000, 8, '0')) NOT IN (SELECT phone
                                                                                FROM student);
+
+-- member
