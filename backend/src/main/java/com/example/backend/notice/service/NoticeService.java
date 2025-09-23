@@ -9,9 +9,15 @@ import com.example.backend.notice.entity.Notice;
 import com.example.backend.notice.repository.NoticeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -34,9 +40,32 @@ public class NoticeService {
     }
 
     // 공지사항 목록 보기
-    public List<NoticeListInfo> listNotice() {
-        return noticeRepository.findAllByOrderByInsertedAtDesc();
+//    public List<NoticeListInfo> listNotice() {
+//        return noticeRepository.findAllByOrderByInsertedAtDesc();
+//    }
+
+    public Map<String, Object> listNotice(Integer num) {
+        // Spring Pageable은 0부터 시작하니까 num-1
+        Pageable pageable = PageRequest.of(num - 1, 5, Sort.by("insertedAt").descending());
+
+        Page<NoticeListInfo> noticePage = noticeRepository.findAllByOrderByInsertedAtDesc(pageable);
+
+        // 페이지 정보
+        Map<String, Object> pageInfo = Map.of(
+                "currentPage", noticePage.getNumber() + 1, // 1부터 시작
+                "totalPages", noticePage.getTotalPages(),
+                "totalElements", noticePage.getTotalElements()
+        );
+
+        // 공지사항 목록
+        List<NoticeListInfo> noticeList = noticePage.getContent();
+
+        return Map.of(
+                "pageInfo", pageInfo,
+                "noticeList", noticeList
+        );
     }
+
 
     // 공지사항 하나 보기
     public NoticeDto getNoticeDetail(Integer seq) {
