@@ -25,7 +25,6 @@ export function Faq() {
     axios
       .get("/api/faq/list")
       .then((res) => {
-        console.log(res.data);
         setFaqList(res.data);
       })
       .catch((error) => {

@@ -13,7 +13,6 @@ export function FaqManage() {
     axios
       .get("/api/faq/manage")
       .then((res) => {
-        console.log(res.data);
         setFaqList(res.data);
       })
       .catch((error) => {

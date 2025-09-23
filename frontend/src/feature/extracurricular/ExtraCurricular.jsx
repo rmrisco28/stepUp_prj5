@@ -29,7 +29,6 @@ export function ExtraCurricular() {
     axios
       .get("/api/extracurricular/list")
       .then((res) => {
-        console.log(res.data);
         setPrograms(res.data.programList);
       })
       .catch((err) => console.error("목록 불러오기 실패", err))
@@ -40,7 +39,6 @@ export function ExtraCurricular() {
     axios
       .get("/api/competency/subList")
       .then((response) => {
-        console.log(response.data);
         setCompetencies(response.data);
       })
       .catch((error) => {

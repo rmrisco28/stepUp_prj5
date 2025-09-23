@@ -39,7 +39,6 @@ export function ExtraCurricularDetail() {
     axios
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
-        console.log(res.data);
         setProgram(res.data);
       })
       .catch((err) => {
