@@ -7,19 +7,7 @@ export function CompetencyAssessmentTestComplete() {
   const navigate = useNavigate();
   const { assessmentSeq } = useParams();
 
-  useEffect(() => {
-    axios
-      .get(`/api/competency/assessment/test/complete/${assessmentSeq}`)
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {
-        console.log("finally");
-      });
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>

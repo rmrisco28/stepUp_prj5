@@ -25,6 +25,7 @@ export function CompetencyAssessmentTestStart() {
   const [response, setResponse] = useState({}); // 전체 답 저장용
   const [pageResponse, setPageResponse] = useState({}); // 현제페이지에 보여질 값
   const [memberSeq, setMemberSeq] = useState("");
+  const [totalScore, setTotalScore] = useState("");
 
   const [questionList, setQuestionList] = useState([]);
   const [choiceList, setChoiceList] = useState([]);
@@ -39,11 +40,36 @@ export function CompetencyAssessmentTestStart() {
     axios
       .get("/api/auth/status") // 로그인 상태 확인 API
       .then((res) => {
-        console.log("로그인된 사용자 정보:", res.data);
-        setMemberSeq(res.data.memberSeq);
+        if (!res.data.authName) {
+          alert("로그인이 필요합니다.");
+          navigate("/login");
+        } else {
+          // console.log("로그인된 사용자 정보:", res.data);
+          setMemberSeq(res.data.memberSeq);
+
+          // 로그인된 후, 해당 사용자가 검사했는지 확인
+          axios
+            .get(
+              `/api/competency/assessment/test/check/${assessmentSeq}?memberSeq=${res.data.memberSeq}`,
+            )
+            .then((response) => {
+              if (response.data) {
+                // 검사 완료된 경우
+                alert("이미 진단검사를 완료하셨습니다.");
+                navigate("/competency/assessment"); // 다른 페이지로 이동
+              } else {
+                // 아직 검사하지 않은 경우
+                console.log("검사할 수 있는 상태입니다.");
+              }
+            })
+            .catch((err) => {
+              console.log("검사 여부 확인 실패:", err);
+            });
+        }
       })
       .catch((err) => {
         console.log("로그인 상태 확인 실패");
+        navigate("/login");
       });
 
     // 문제 받아오기
@@ -54,6 +80,7 @@ export function CompetencyAssessmentTestStart() {
         setTitle(res.data.title[0].caTitle);
         setPageInfo(res.data.questionList.pageInfo);
         setQuestionList(res.data.questionList.questionList);
+        setTotalScore(res.data.totalScore);
       });
     // 답 받아오기
     axios
@@ -131,6 +158,7 @@ export function CompetencyAssessmentTestStart() {
         choiceSeqSeq: Number(respObj.choiceSeq), // 선택한 choice seq
       }),
     );
+    // 응답(response) 테이블 저장
     axios
       .put(
         `/api/competency/assessment/test/responseSave/${assessmentSeq}`,
@@ -148,11 +176,38 @@ export function CompetencyAssessmentTestStart() {
           };
         });
         setResponse(nextResponse);
+      })
+      .catch((err) => {
+        console.error("응답 저장 실패", err);
+      });
 
-        navigate(`/competency/assessment/test/complete/${assessmentSeq}`);
+    // 완료(complete)테이블저장
+    axios
+      .post(`/api/competency/assessment/test/complete/${assessmentSeq}`, {
+        memberSeq: memberSeq,
+      })
+      .then((res) => {
+        console.log("complete에 저장 완료", res.data);
+      })
+      .catch((err) => {
+        console.log(err, "complete에 저장 실패");
+      });
+
+    //세부 결과(result) 테이블 저장
+    axios
+      .post(
+        `/api/competency/assessment/test/resultSave/${assessmentSeq}`,
+        responseDtos,
+      )
+      .then((res) => {
+        console.log("result에 값 전달완료", res.data);
+      })
+      .catch((err) => {
+        console.log("result 저장 실패 ㅜㅜ ", err);
       });
 
     // 페이지 답안 초기화
+    navigate(`/competency/assessment/test/complete/${assessmentSeq}`);
     setPageResponse({});
   }
 
@@ -244,6 +299,7 @@ export function CompetencyAssessmentTestStart() {
             </div>
           ))}
         </Col>
+
         {/*모달*/}
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
@@ -263,28 +319,31 @@ export function CompetencyAssessmentTestStart() {
       </Row>
 
       {/*페이지 네이션*/}
-      <Row className="my-3">
-        <Col>
-          <Pagination className="justify-content-center">
-            <Pagination.Prev
-              disabled={pageInfo.currentPageNumber === 1}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.currentPageNumber - 1)
-              }
-            >
-              이전
-            </Pagination.Prev>
-            <Pagination.Next
-              disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
-              onClick={() =>
-                handlePageNumberClick(pageInfo.currentPageNumber + 1)
-              }
-            >
-              다음
-            </Pagination.Next>
-          </Pagination>
-        </Col>
-      </Row>
+      {totalScore.length > 20 && (
+        <Row className="my-3">
+          <Col>
+            <Pagination className="justify-content-center">
+              <Pagination.Prev
+                disabled={pageInfo.currentPageNumber === 1}
+                onClick={() =>
+                  handlePageNumberClick(pageInfo.currentPageNumber - 1)
+                }
+              >
+                이전
+              </Pagination.Prev>
+              <Pagination.Next
+                disabled={pageInfo.currentPageNumber === pageInfo.totalPages}
+                onClick={() =>
+                  handlePageNumberClick(pageInfo.currentPageNumber + 1)
+                }
+              >
+                다음
+              </Pagination.Next>
+            </Pagination>
+          </Col>
+        </Row>
+      )}
+
       {pageInfo.currentPageNumber === pageInfo.totalPages && (
         <Row className="d-flex justify-content-center">
           <Col xs={12} md={10} lg={8} className="d-flex justify-content-end">

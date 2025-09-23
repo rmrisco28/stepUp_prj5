@@ -8,23 +8,24 @@ import { useAuth } from "./AuthContext.jsx";
 import axios from "axios";
 
 export function MenuBar() {
-  const { user, logout, isAuthenticated } = useAuth();
-  const [isAdmin, setIsAdmin] = useState(false);
+  const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  // const [isAdmin, setIsAdmin] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
 
   const name = user?.name;
   const loginId = user?.loginId;
-  useEffect(() => {
-    axios
-      .get("/api/auth/status") // 로그인 상태 확인 API
-      .then((res) => {
-        console.log("로그인된 사용자 정보:", res.data);
-        setIsAdmin(res.data.authName === "admin"); // authName이 'admin'이면 관리자
-      })
-      .catch((err) => {
-        console.log("로그인 상태 확인 실패");
-      });
-  }, []);
+  // isAdmin 받아오면 이렇게 안 하고
+  // useEffect(() => {
+  //   axios
+  //     .get("/api/auth/status") // 로그인 상태 확인 API
+  //     .then((res) => {
+  //       console.log("로그인된 사용자 정보:", res.data);
+  //       setIsAdmin(res.data.authName === "admin"); // authName이 'admin'이면 관리자
+  //     })
+  //     .catch((err) => {
+  //       console.log("로그인 상태 확인 실패");
+  //     });
+  // }, []);
 
   const menus = [
     {
@@ -41,8 +42,9 @@ export function MenuBar() {
       subItems: [
         { name: "역량 소개", path: "/competency" },
         { name: "진단 검사", path: "/competency/assessment" },
-        isAdmin && { name: "관리자 핵심역량 목록", path: "/competency/list" },
-        isAdmin && {
+        // 요로케 간단베리하게도 할 수 있습니당! 필요한 정보 있는지 여쭤보기
+        isAdmin() && { name: "관리자 핵심역량 목록", path: "/competency/list" },
+        isAdmin() && {
           name: "관리자 하위역량 목록",
           path: "/competency/subList",
         },
@@ -62,8 +64,8 @@ export function MenuBar() {
       subItems: [
         { name: "공지사항", path: "/board/notice" },
         { name: "FAQ", path: "/board/faq" },
-        { name: "FAQ 관리", path: "/board/faq/manage" },
-      ],
+        isAdmin() && { name: "FAQ 관리", path: "/board/faq/manage" },
+      ].filter(Boolean),
     },
   ];
 

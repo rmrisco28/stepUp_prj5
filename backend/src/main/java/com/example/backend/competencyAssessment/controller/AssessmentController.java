@@ -1,7 +1,9 @@
 package com.example.backend.competencyAssessment.controller;
 
 import com.example.backend.competencyAssessment.dto.*;
+import com.example.backend.competencyAssessment.repository.ResultRepository;
 import com.example.backend.competencyAssessment.service.AssessmentService;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 public class AssessmentController {
     private final AssessmentService assessmentService;
+    private final ResultRepository resultRepository;
 
     /*----------------- 역량 진단 목록 ----------------*/
     // 역량 진단 목록 저장
@@ -133,10 +136,19 @@ public class AssessmentController {
     // 학생 진단검사 시작 전 초기화면
     @GetMapping("test/ready/{seq}")
     public AssessmentDto testReady(@PathVariable int seq) {
+
         return assessmentService.testReady(seq);
+
     }
 
-    // 위의     " // 진단 목록 세부 관리 "로 문제 가져감
+    // 진단여부 확인
+    @GetMapping("test/check/{seq}")
+    public ResponseEntity<Boolean> testCheck(
+            @PathVariable int seq,
+            @RequestParam int memberSeq) {
+        return assessmentService.testCheck(seq, memberSeq);
+    }
+
 
     // 선택지 보내기
     @GetMapping("test/choiceList/{seq}")
@@ -148,20 +160,30 @@ public class AssessmentController {
     // 응답 저장
     @PutMapping("test/responseSave/{seq}")
     public ResponseEntity<?> responseSave(@PathVariable int seq, @RequestBody List<ResponseDto> dtoList) {
-        dtoList.forEach(dto -> {
-            System.out.println("dto.getSeq() = " + dto.getSeq());
-            System.out.println("학생번호 = " + dto.getMemberSeq());
-            System.out.println("문항번호 = " + dto.getQuestionSeqSeq());
-            System.out.println("선택지번호 = " + dto.getChoiceSeqSeq());
-        });
+
 
         return assessmentService.responseSave(seq, dtoList);
     }
 
     /* ------------------진단 결과 -----------------------*/
 
+    // 진단 완료 테이블
     @PostMapping("test/complete/{seq}")
-    public ResponseEntity<?> complete(@PathVariable int seq, @RequestBody CompleteSaveDto dto) {
+    public ResponseEntity<?> complete(
+            @PathVariable int seq,
+            @RequestBody CompleteSaveDto dto) {
         return assessmentService.complete(seq, dto);
     }
+
+    // 세부 결과 저장
+    @PostMapping("test/resultSave/{seq}")
+    public ResponseEntity<?> resultSave(
+            @PathVariable int seq,
+            @RequestBody List<ResponseDto> dtoList) {
+        System.out.println("seq = " + seq);
+        System.out.println("dtoList = " + dtoList);
+        return assessmentService.resultSave(seq, dtoList);
+    }
+
+
 }
