@@ -8,7 +8,7 @@ CREATE TABLE notice
     title       VARCHAR(255)  NOT NULL,
     content     VARCHAR(1000) NOT NULL,
     inserted_at DATETIME      NOT NULL DEFAULT NOW(),
-    author_seq  INT           NULL
-#     FOREIGN KEY (`author_seq`) REFERENCES employee (`employee_seq`)
+    author_seq  INT           NOT NULL,
+    FOREIGN KEY (`author_seq`) REFERENCES member (`member_seq`)
 );
 DROP TABLE notice;
