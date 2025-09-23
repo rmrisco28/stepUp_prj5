@@ -73,7 +73,9 @@ export function FaqManage() {
               )}
             </tbody>
           </Table>
-          <Button onClick={FaqAddButton}>FAQ 등록</Button>
+          <Button variant="success" onClick={FaqAddButton}>
+            FAQ 등록
+          </Button>
         </Col>
       </Row>
     </Container>
