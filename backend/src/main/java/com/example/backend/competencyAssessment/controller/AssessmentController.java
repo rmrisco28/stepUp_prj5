@@ -194,5 +194,13 @@ public class AssessmentController {
         return assessmentService.result(seq, memberSeq);
     }
 
+    // 세부 결과 계산을 위한 문제 정보 전달
+    @GetMapping("test/resultQuestion/{seq}")
+    public List<?> resultQuestion(@PathVariable int seq) {
+        List<QuestionListDto> questionList = assessmentService.resultQuestionList(seq);
+        System.out.println("questionList 문항 정보 = " + questionList);
+        return questionList;
+    }
+
 
 }

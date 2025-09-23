@@ -400,4 +400,9 @@ public class AssessmentService {
         System.out.println("resultDto = " + resultDto);
         return resultDto;
     }
+
+    public List<QuestionListDto> resultQuestionList(int seq) {
+        List<QuestionListDto> resultQuestionList = questionRepository.findByCaSeqSeq(seq);
+        return resultQuestionList;
+    }
 }

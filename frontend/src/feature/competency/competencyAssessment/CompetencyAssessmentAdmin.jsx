@@ -69,6 +69,8 @@ export function CompetencyAssessmentAdmin() {
     0,
   );
 
+  const totalScoreRounded = totalScoreSum.toFixed(1);
+
   function handleQuestionEditButton(questionNum) {
     navigate(`questionEdit/${questionNum}`);
   }
@@ -184,7 +186,7 @@ export function CompetencyAssessmentAdmin() {
             <Col>
               {totalScore && totalScore.length > 0 ? (
                 <h3 style={{ margin: "10px", marginLeft: "30px" }}>
-                  총점: {totalScoreSum}점
+                  총점: {totalScoreRounded}점
                 </h3>
               ) : (
                 <h3> 총점 정보가 없습니다.</h3>
