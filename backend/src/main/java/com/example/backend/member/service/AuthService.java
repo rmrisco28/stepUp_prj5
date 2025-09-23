@@ -31,13 +31,17 @@ public class AuthService {
             Member member = memberOpt.get();
             // 중복 로그인 차단
             if (member.getUserYn() == 1) {
-                return new LoginResponse(false, "이미 로그인 중입니다.", null, null, null, null);
+                return new LoginResponse(false, "이미 로그인 중입니다.", null, null, null, null, null);
             }
 
             if (bCryptPasswordEncoder.matches(password, member.getPassword())) {
                 // 로그인 상태로 변경
                 member.setUserYn(1);
                 memberRepository.save(member);
+
+                // 비밀번호 변경 횟수 확인
+                String pwMessage = member.getChangePwCnt() == 0 ? "초기 비밀번호 상태입니다. 보안을 위해 비밀번호를 변경해주세요."
+                        : null;
 
                 // 사용자 이름 가져오기
                 String name = (member.getStudent() != null) ? name = member.getStudent().getName()
@@ -54,11 +58,11 @@ public class AuthService {
                 httpSession.setAttribute("authName", authName);
 
                 // LoginResponse 객체를 직접 생성하여 반환
-                return new LoginResponse(true, "로그인 성공", member.getId(), member.getLoginId(), name, authName);
+                return new LoginResponse(true, "로그인 성공", member.getId(), member.getLoginId(), name, authName, pwMessage);
             }
         }
         // 로그인 실패 시 실패 응답 생성
-        return new LoginResponse(false, "아이디 또는 비밀번호가 잘못되었습니다.", null, null, null, null);
+        return new LoginResponse(false, "아이디 또는 비밀번호가 잘못되었습니다.", null, null, null, null, null);
     }
 
     public void logout() {
@@ -80,9 +84,10 @@ public class AuthService {
         String authName = (String) httpSession.getAttribute("authName");
 
         if (memberSeq != null) {
-            return new LoginResponse(true, "로그인 상태", memberSeq, loginId, name, authName);
+            // 변경횟수는 로그인할 때만 한번 확인하면 되므로 여기는 null로
+            return new LoginResponse(true, "로그인 상태", memberSeq, loginId, name, authName, null);
         } else {
-            return new LoginResponse(false, "로그인되지 않음", null, null, null, null);
+            return new LoginResponse(false, "로그인되지 않음", null, null, null, null, null);
         }
     }
 }

@@ -13,7 +13,6 @@ export function FaqManage() {
     axios
       .get("/api/faq/manage")
       .then((res) => {
-        console.log(res.data);
         setFaqList(res.data);
       })
       .catch((error) => {
@@ -37,12 +36,12 @@ export function FaqManage() {
       <Row className="justify-content-center">
         <Col xs={12} md={9}>
           <h2 className="mb-5 fw-bold">FAQ 관리</h2>
-          <Table hover className="mb-4 text-center">
+          <Table hover className="mb-4">
             <thead>
-              <tr>
-                <th>#</th>
-                <th>질문</th>
-                <th>등록일</th>
+              <tr className="text-center">
+                <th style={{ width: "10%" }}>#</th>
+                <th style={{ width: "70%" }}>질문</th>
+                <th style={{ width: "20%" }}>등록일</th>
               </tr>
             </thead>
             <tbody>
@@ -65,15 +64,19 @@ export function FaqManage() {
                     onClick={() => navigate(`/board/faq/${faq.seq}`)}
                     style={{ cursor: "pointer" }}
                   >
-                    <td>{faq.seq}</td>
+                    <td className="text-center">{faq.seq}</td>
                     <td>{faq.question}</td>
-                    <td>{faq.insertedAt.replace("T", " ")}</td>
+                    <td className="text-center">
+                      {faq.insertedAt.replace("T", " ")}
+                    </td>
                   </tr>
                 ))
               )}
             </tbody>
           </Table>
-          <Button onClick={FaqAddButton}>FAQ 등록</Button>
+          <Button variant="success" onClick={FaqAddButton}>
+            FAQ 등록
+          </Button>
         </Col>
       </Row>
     </Container>

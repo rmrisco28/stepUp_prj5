@@ -9,9 +9,10 @@ import {
   FormLabel,
   Row,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../common/AuthContext.jsx";
 
 export function ExtraCurricularRegister() {
   const [formData, setFormData] = useState({
@@ -29,7 +30,6 @@ export function ExtraCurricularRegister() {
     manager: "",
     managerPhone: "",
     mileagePoints: 0,
-    author: "",
     thumbnail: null, // 썸네일 파일
     contentImages: [], // 본문 이미지 파일
   });
@@ -37,12 +37,13 @@ export function ExtraCurricularRegister() {
 
   const navigate = useNavigate();
 
+  const { user } = useAuth();
+
   // 역량 목록 가져옴. 추후 작성자도 가져오게 하면 될 듯!
   useEffect(() => {
     axios
       .get("/api/competency/subList")
       .then((response) => {
-        console.log(response.data);
         setCompetencies(response.data);
       })
       .catch((error) => {
@@ -99,6 +100,9 @@ export function ExtraCurricularRegister() {
       submitData.append("contentImages", file);
     });
 
+    // 작성자(user.name) 추가
+    submitData.append("author", user.name);
+
     axios
       .postForm("/api/extracurricular/register", submitData)
       .then(() => {
@@ -121,7 +125,6 @@ export function ExtraCurricularRegister() {
           manager: "",
           managerPhone: "",
           mileagePoints: 0,
-          author: "",
           thumbnail: null,
           contentImages: [],
         });
@@ -137,227 +140,243 @@ export function ExtraCurricularRegister() {
   }
 
   return (
-    <Container className="mt-5 my-5">
+    <Container className="mt-4 my-5">
       <Row className="justify-content-center">
-        <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4 text-center text-success fw-bold">
-            비교과 프로그램 등록
-          </h2>
+        <Col xs={12} md={8} lg={8}>
+          <h2 className="mb-5 text-success fw-bold">프로그램 등록</h2>
           <Form>
-            {/* 프로그램 제목 */}
-            <FormGroup className="mb-3" controlId="title">
-              <FormLabel>제목</FormLabel>
-              <FormControl
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-              />
-            </FormGroup>
-
-            {/* 프로그램 내용 */}
-            <FormGroup className="mb-3" controlId="content">
-              <FormLabel>내용</FormLabel>
-              <FormControl
-                as="textarea"
-                rows={4}
-                name="content"
-                value={formData.content}
-                onChange={handleChange}
-              />
-            </FormGroup>
-
-            {/* 운영기간 */}
-            <Row>
-              <Col>
-                <FormGroup className="mb-3" controlId="operateStartDt">
-                  <FormLabel>운영 시작일</FormLabel>
-                  <FormControl
-                    type="datetime-local"
-                    name="operateStartDt"
-                    value={formData.operateStartDt}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col>
-                <FormGroup className="mb-3" controlId="operateEndDt">
-                  <FormLabel>운영 종료일</FormLabel>
-                  <FormControl
-                    type="datetime-local"
-                    name="operateEndDt"
-                    value={formData.operateEndDt}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-
-            {/* 신청기간 */}
-            <Row>
-              <Col>
-                <FormGroup className="mb-3" controlId="applyStartDt">
-                  <FormLabel>신청 시작일</FormLabel>
-                  <FormControl
-                    type="datetime-local"
-                    name="applyStartDt"
-                    value={formData.applyStartDt}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-              <Col>
-                <FormGroup className="mb-3" controlId="applyEndDt">
-                  <FormLabel>신청 종료일</FormLabel>
-                  <FormControl
-                    type="datetime-local"
-                    name="applyEndDt"
-                    value={formData.applyEndDt}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-
-            <Row>
-              <Col>
-                {/* 역량 */}
-                <FormGroup className="mb-3" controlId="competency">
-                  <FormLabel>역량</FormLabel>
-                  <FormControl
-                    as="select" // select 태그로 변경
-                    name="competency"
-                    value={formData.competency}
-                    onChange={handleChange}
-                  >
-                    <option value="">역량을 선택하세요</option>
-                    {competencies.map((comp) => (
-                      <option key={comp.seq} value={comp.seq}>
-                        {/* 보이는 건 이름인데, 실제론 시퀀스 값이 넘어감 */}
-                        {comp.subCompetencyName}
-                      </option>
-                    ))}
-                  </FormControl>
-                </FormGroup>
-              </Col>
-              <Col>
-                {/* 장소 */}
-                <FormGroup className="mb-3" controlId="location">
-                  <FormLabel>장소</FormLabel>
-                  <FormControl
-                    type="text"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-              </Col>
-            </Row>
-
-            {/* 운영방식 */}
-            <FormGroup className="mb-3" controlId="operationType">
-              <FormLabel className="me-5">운영방식</FormLabel>
-              {["대면", "비대면", "혼합"].map((type) => (
-                <FormCheck
-                  key={type}
-                  inline
-                  type="radio"
-                  label={type}
-                  name="operationType"
-                  value={type}
-                  checked={formData.operationType === type}
+            <section className=" border p-4 mb-5">
+              {/* 프로그램 제목 */}
+              <FormGroup className="mb-3" controlId="title">
+                <FormLabel>제목</FormLabel>
+                <FormControl
+                  type="text"
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
                 />
-              ))}
-            </FormGroup>
+              </FormGroup>
 
-            {/* 신청 대상 학년 */}
-            <FormGroup className="mb-3" controlId="grades">
-              <FormLabel className="me-5">신청 대상 학년</FormLabel>
-              {[1, 2, 3, 4].map((grade) => (
-                <FormCheck
-                  key={grade}
-                  inline
-                  type="checkbox"
-                  label={`${grade}학년`}
-                  value={grade}
-                  checked={formData.grades.split(",").includes(`${grade}`)}
+              {/* 운영기간 */}
+              <Row>
+                <Col>
+                  <FormGroup className="mb-3" controlId="operateStartDt">
+                    <FormLabel>운영 시작일</FormLabel>
+                    <FormControl
+                      type="datetime-local"
+                      name="operateStartDt"
+                      value={formData.operateStartDt}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup className="mb-3" controlId="operateEndDt">
+                    <FormLabel>운영 종료일</FormLabel>
+                    <FormControl
+                      type="datetime-local"
+                      name="operateEndDt"
+                      value={formData.operateEndDt}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+
+              {/* 신청기간 */}
+              <Row>
+                <Col>
+                  <FormGroup className="mb-3" controlId="applyStartDt">
+                    <FormLabel>신청 시작일</FormLabel>
+                    <FormControl
+                      type="datetime-local"
+                      name="applyStartDt"
+                      value={formData.applyStartDt}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup className="mb-3" controlId="applyEndDt">
+                    <FormLabel>신청 종료일</FormLabel>
+                    <FormControl
+                      type="datetime-local"
+                      name="applyEndDt"
+                      value={formData.applyEndDt}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  {/* 역량 */}
+                  <FormGroup className="mb-3" controlId="competency">
+                    <FormLabel>역량</FormLabel>
+                    <FormControl
+                      as="select" // select 태그로 변경
+                      name="competency"
+                      value={formData.competency}
+                      onChange={handleChange}
+                    >
+                      <option value="">역량을 선택하세요</option>
+                      {competencies.map((comp) => (
+                        <option key={comp.seq} value={comp.seq}>
+                          {/* 보이는 건 이름인데, 실제론 시퀀스 값이 넘어감 */}
+                          {comp.subCompetencyName}
+                        </option>
+                      ))}
+                    </FormControl>
+                  </FormGroup>
+                </Col>
+                <Col>
+                  {/* 장소 */}
+                  <FormGroup className="mb-3" controlId="location">
+                    <FormLabel>장소</FormLabel>
+                    <FormControl
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </section>
+
+            <section className=" border p-4 mb-5">
+              {/* 운영방식 */}
+              <FormGroup className="mb-3" controlId="operationType">
+                <FormLabel className="me-5">운영방식</FormLabel>
+                {["대면", "비대면", "혼합"].map((type) => (
+                  <FormCheck
+                    key={type}
+                    inline
+                    type="radio"
+                    label={type}
+                    name="operationType"
+                    value={type}
+                    checked={formData.operationType === type}
+                    onChange={handleChange}
+                  />
+                ))}
+              </FormGroup>
+
+              {/* 신청 대상 학년 */}
+              <FormGroup className="mb-3" controlId="grades">
+                <FormLabel className="me-5">신청 대상 학년</FormLabel>
+                {[1, 2, 3, 4].map((grade) => (
+                  <FormCheck
+                    key={grade}
+                    inline
+                    type="checkbox"
+                    label={`${grade}학년`}
+                    value={grade}
+                    checked={formData.grades.split(",").includes(`${grade}`)}
+                    onChange={handleChange}
+                  />
+                ))}
+              </FormGroup>
+
+              {/* 기타 필드 */}
+              <Row>
+                <Col>
+                  <FormGroup className="mb-3" controlId="capacity">
+                    <FormLabel>모집 정원</FormLabel>
+                    <FormControl
+                      type="number"
+                      name="capacity"
+                      value={formData.capacity}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup className="mb-3" controlId="mileagePoints">
+                    <FormLabel>마일리지 점수</FormLabel>
+                    <FormControl
+                      type="number"
+                      name="mileagePoints"
+                      value={formData.mileagePoints}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+
+              {/* 담당자 */}
+              <Row>
+                <Col>
+                  <FormGroup className="mb-3" controlId="manager">
+                    <FormLabel>담당자</FormLabel>
+                    <FormControl
+                      type="text"
+                      name="manager"
+                      value={formData.manager}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+                <Col>
+                  <FormGroup className="mb-3" controlId="managerPhone">
+                    <FormLabel>담당자 연락처</FormLabel>
+                    <FormControl
+                      type="text"
+                      name="managerPhone"
+                      value={formData.managerPhone}
+                      onChange={handleChange}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </section>
+
+            <section className="border p-4 mb-5">
+              {/* 프로그램 내용 */}
+              <FormGroup className="mb-3" controlId="content">
+                <FormLabel>내용</FormLabel>
+                <FormControl
+                  as="textarea"
+                  rows={4}
+                  name="content"
+                  value={formData.content}
                   onChange={handleChange}
                 />
-              ))}
-            </FormGroup>
+              </FormGroup>
 
-            {/* 기타 필드 */}
-            <FormGroup className="mb-3" controlId="capacity">
-              <FormLabel>모집 정원</FormLabel>
-              <FormControl
-                type="number"
-                name="capacity"
-                value={formData.capacity}
-                onChange={handleChange}
-              />
-            </FormGroup>
+              {/* 썸네일 업로드 */}
+              <FormGroup className="mb-3" controlId="thumbnail">
+                <FormLabel>썸네일 이미지</FormLabel>
+                <FormControl
+                  type="file"
+                  name="thumbnail"
+                  accept="image/*"
+                  onChange={handleChange}
+                />
+              </FormGroup>
 
-            <FormGroup className="mb-3" controlId="manager">
-              <FormLabel>담당자</FormLabel>
-              <FormControl
-                type="text"
-                name="manager"
-                value={formData.manager}
-                onChange={handleChange}
-              />
-            </FormGroup>
-
-            <FormGroup className="mb-3" controlId="managerPhone">
-              <FormLabel>담당자 전화번호</FormLabel>
-              <FormControl
-                type="text"
-                name="managerPhone"
-                value={formData.managerPhone}
-                onChange={handleChange}
-              />
-            </FormGroup>
-
-            <FormGroup className="mb-3" controlId="mileagePoints">
-              <FormLabel>마일리지 점수</FormLabel>
-              <FormControl
-                type="number"
-                name="mileagePoints"
-                value={formData.mileagePoints}
-                onChange={handleChange}
-              />
-            </FormGroup>
-
-            {/* 썸네일 업로드 */}
-            <FormGroup className="mb-3" controlId="thumbnail">
-              <FormLabel>썸네일 이미지</FormLabel>
-              <FormControl
-                type="file"
-                name="thumbnail"
-                accept="image/*"
-                onChange={handleChange}
-              />
-            </FormGroup>
-
-            {/* 본문 이미지 업로드 */}
-            <FormGroup className="mb-3" controlId="contentImage">
-              <FormLabel>본문 이미지</FormLabel>
-              <FormControl
-                type="file"
-                name="contentImages"
-                accept="image/*"
-                multiple
-                onChange={handleChange}
-              />
-            </FormGroup>
+              {/* 본문 이미지 업로드 */}
+              <FormGroup className="mb-3" controlId="contentImage">
+                <FormLabel>본문 이미지</FormLabel>
+                <FormControl
+                  type="file"
+                  name="contentImages"
+                  accept="image/*"
+                  multiple
+                  onChange={handleChange}
+                />
+              </FormGroup>
+            </section>
 
             <FormGroup className="mb-3" controlId="author">
               <FormLabel>작성자</FormLabel>
               <FormControl
                 type="text"
                 name="author"
-                value={formData.author}
+                value={user.name}
                 onChange={handleChange}
+                disabled
               />
             </FormGroup>
 

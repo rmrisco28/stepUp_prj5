@@ -13,11 +13,13 @@ import {
   Image,
   Row,
   Spinner,
+  Table,
 } from "react-bootstrap";
 import axios from "axios";
 
 export function ExtraCurricularDetail() {
   const [program, setProgram] = useState(null);
+  const [applyStudents, setApplyStudents] = useState(null);
   const [params] = useSearchParams();
   const { seq } = useParams(); // URL 파라미터
 
@@ -37,8 +39,22 @@ export function ExtraCurricularDetail() {
     axios
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
-        console.log(res.data);
         setProgram(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        console.log("always");
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`/api/extracurricular/applyStudentList/${seq}`)
+      .then((res) => {
+        console.log(res.data);
+        setApplyStudents(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -81,33 +97,19 @@ export function ExtraCurricularDetail() {
 
   return (
     <Container className="mt-4 my-5" style={{ maxWidth: "1000px" }}>
-      <h3 className="text-success fw-bold mb-3">
+      <h3 className="text-success fw-bold mb-5">
         {program.seq}번 프로그램 정보
       </h3>
       <Form>
-        <section
-          style={{ backgroundColor: "#e9ecef" }}
-          className="px-3 py-3 rounded-4"
-        >
-          <Row className="mb-3">
-            <Col>
+        <Row className="mb-3">
+          <Col>
+            <section className="border px-4 py-4 mb-4">
               <FormGroup className="mb-3" controlId="title">
                 <FormLabel>제목</FormLabel>
                 <FormControl
                   type="text"
                   name="title"
                   value={program.title}
-                  readOnly
-                />
-              </FormGroup>
-
-              <FormGroup className="mb-3" controlId="content">
-                <FormLabel>내용</FormLabel>
-                <FormControl
-                  as="textarea"
-                  name="content"
-                  rows={5}
-                  value={program.content}
                   readOnly
                 />
               </FormGroup>
@@ -161,7 +163,9 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
+            </section>
 
+            <section className="border px-4 py-4 mb-4">
               <Row className="mb-3">
                 <Col>
                   <FormGroup controlId="competency">
@@ -211,7 +215,9 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
+            </section>
 
+            <section className="border px-4 py-4 mb-4">
               <Row className="mb-3">
                 <Col>
                   <FormGroup controlId="capacity">
@@ -305,7 +311,58 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
+            </section>
 
+            <section className="border px-4 py-4 mb-4">
+              <FormGroup className="mb-3" controlId="content">
+                <FormLabel>내용</FormLabel>
+                <FormControl
+                  as="textarea"
+                  name="content"
+                  rows={5}
+                  value={program.content}
+                  readOnly
+                />
+              </FormGroup>
+
+              <Row>
+                {/* 썸네일 사진 */}
+                <Col className="text-center">
+                  <div className="mb-3">썸네일</div>
+                  <img
+                    src={program.thumbnails}
+                    alt="썸네일 이미지"
+                    className="img-fluid rounded mb-3"
+                    style={{ width: "250px" }}
+                  />
+                </Col>
+
+                {/* 본문 사진 */}
+                <Col className="border-start border-dark">
+                  <div className="mb-3 text-center">본문 이미지</div>
+                  {contentImages.length > 0 && (
+                    <div className="d-flex flex-wrap gap-3 justify-content-center">
+                      {contentImages.map((imgUrl, index) => (
+                        <Card
+                          key={index}
+                          className="shadow-sm"
+                          style={{ width: "250px" }}
+                        >
+                          <Card.Img
+                            variant="bottom"
+                            src={imgUrl}
+                            alt={`프로그램 이미지 ${index + 1}`}
+                            className="img-fluid rounded"
+                          />
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </Col>
+              </Row>
+            </section>
+
+            <section className="border px-4 py-4 mb-4">
               <Row className="mb-3">
                 <Col>
                   <FormGroup controlId="author">
@@ -345,57 +402,9 @@ export function ExtraCurricularDetail() {
                   </FormGroup>
                 </Col>
               </Row>
-              <Row>
-                {/* 썸네일 사진 */}
-                <Col>
-                  <img
-                    src={program.thumbnails}
-                    alt="프로그램 포스터"
-                    className="img-fluid rounded"
-                  />
-                </Col>
-                {/* 본문 사진 */}
-                <Col>
-                  {contentImages.length > 0 && (
-                    <div className="d-flex flex-wrap gap-3 mt-3">
-                      {contentImages.map((imgUrl, index) => (
-                        <Card
-                          key={index}
-                          className="shadow-sm"
-                          style={{ width: "250px" }}
-                        >
-                          <Card.Img
-                            variant="bottom"
-                            src={imgUrl}
-                            alt={`프로그램 이미지 ${index + 1}`}
-                            className="img-fluid rounded"
-                          />
-                        </Card>
-                      ))}
-                    </div>
-                  )}
-                </Col>
-              </Row>
-
-              {/* 사용 여부 */}
-              <Row>
-                <Col>
-                  <FormGroup controlId="useYn">
-                    <FormLabel className="me-3">사용여부</FormLabel>
-                    <FormCheck
-                      inline
-                      type="checkbox"
-                      name="useYn"
-                      label="사용"
-                      checked={program.useYn}
-                      readOnly
-                    />
-                  </FormGroup>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </section>
+            </section>
+          </Col>
+        </Row>
         <Row className="text-end mt-3">
           <Col>
             <Button
@@ -420,6 +429,72 @@ export function ExtraCurricularDetail() {
           </Col>
         </Row>
       </Form>
+
+      {/*  프로그램 신청 학생 목록 */}
+      <h3 className="mt-5 mb-3">신청 학생 목록</h3>
+      {applyStudents && applyStudents.length > 0 ? (
+        <Table striped bordered hover responsive>
+          <thead className="table-success text-center">
+            <tr>
+              <th style={{ width: "20%" }}>번호</th>
+              <th style={{ width: "50%" }}>학생 이름</th>
+              <th style={{ width: "15%" }}>이수 확인</th>
+              <th style={{ width: "15%" }}>저장</th>
+            </tr>
+          </thead>
+          <tbody>
+            {applyStudents.map((student, index) => (
+              <tr key={student.seq} className="text-center">
+                <td>{index + 1}</td>
+                <td>{student.name}</td>
+                <td>
+                  <FormCheck
+                    type="checkbox"
+                    checked={student.completeStatus === 1}
+                    onChange={(e) => {
+                      // 체크 상태 변경 시, applyStudents 상태를 업데이트
+                      // 그리고 아래 저장 버튼에 따라서 취소되거나 선택되면 그것도 바로 화면에서 업데이트 되도록 표시 되나??
+                      setApplyStudents((prev) =>
+                        prev.map((s) =>
+                          s.seq === student.seq
+                            ? { ...s, completeStatus: e.target.checked ? 1 : 0 }
+                            : s,
+                        ),
+                      );
+                    }}
+                  />
+                </td>
+                <td>
+                  <Button
+                    size="sm"
+                    variant="outline-primary"
+                    onClick={() => {
+                      // 저장 버튼 클릭 시, 해당 학생의 seq와 completed 상태를 백엔드로 전송
+                      axios
+                        .post(`/api/extracurricular/updateComplete`, {
+                          applicationSeq: student.applicationSeq,
+                          memberSeq: student.seq,
+                          completeStatus: student.completeStatus,
+                        })
+                        .then((res) => {
+                          alert(`${student.name} 이수 상태가 저장되었습니다.`);
+                        })
+                        .catch((err) => {
+                          console.error(err);
+                          alert("저장 중 오류가 발생했습니다.");
+                        });
+                    }}
+                  >
+                    저장
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <p>신청한 학생이 없습니다.</p>
+      )}
     </Container>
   );
 }

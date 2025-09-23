@@ -7,6 +7,7 @@ export function CompetencyAssessmentTestReady() {
   const [title, setTitle] = useState("");
   const [endDttm, setEndDttm] = useState("");
   const [memberSeq, setMemberSeq] = useState("");
+  const [imposible, setimposible] = useState(true);
 
   const navigate = useNavigate();
 
@@ -30,13 +31,17 @@ export function CompetencyAssessmentTestReady() {
               `/api/competency/assessment/test/check/${assessmentSeq}?memberSeq=${res.data.memberSeq}`,
             )
             .then((response) => {
+              setimposible(response.data.data);
               if (response.data) {
                 // 검사 완료된 경우
                 alert("이미 진단검사를 완료하셨습니다.");
-                navigate("/competency/assessment"); // 다른 페이지로 이동
+                navigate(`/competency/assessment/test/result/${assessmentSeq}`); // 다른 페이지로 이동
+
+                console.log("과연", imposible);
               } else {
                 // 아직 검사하지 않은 경우
                 console.log("검사할 수 있는 상태입니다.");
+                console.log("과연", imposible);
               }
             })
             .catch((err) => {
@@ -56,7 +61,7 @@ export function CompetencyAssessmentTestReady() {
         setTitle(res.data.caTitle);
         setEndDttm(res.data.endDttm);
       });
-  });
+  }, [assessmentSeq]);
 
   return (
     <>
@@ -65,7 +70,7 @@ export function CompetencyAssessmentTestReady() {
           <h3 className=" d-flex justify-content-center mb-4">"{title}"</h3>
           <div className="mb-5"></div>
           <p className="d-flex justify-content-center mb-4">
-            답안 제출 가능 횟수: 1
+            답안 제출 가능 횟수: {imposible ? "0" : "1"}
           </p>
           <p className="d-flex justify-content-center mb-4">
             종료 일시: {endDttm}
@@ -84,7 +89,6 @@ export function CompetencyAssessmentTestReady() {
               variant="outline-secondary"
               onClick={() => navigate(`/competency/assessment`)}
             >
-              {" "}
               강좌로 돌아가기
             </Button>
           </div>

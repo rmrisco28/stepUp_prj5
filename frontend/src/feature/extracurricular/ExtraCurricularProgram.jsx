@@ -15,12 +15,15 @@ import {
 import axios from "axios";
 import { FaUserCheck } from "react-icons/fa6";
 import { FaUserClock } from "react-icons/fa6";
+import { useAuth } from "../../common/AuthContext.jsx";
 
 // 비교과 카드 누르면 나오는 컴포넌트
 export function ExtraCurricularProgram() {
+  const { user, loading, isAuthenticated } = useAuth();
+  const [memberSeq, setMemberSeq] = useState(null);
   const { seq } = useParams(); // URL에서 seq 받아오기
   const [program, setProgram] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const statusMap = {
@@ -30,19 +33,56 @@ export function ExtraCurricularProgram() {
   };
 
   useEffect(() => {
+    if (!loading && user) {
+      setMemberSeq(user.memberSeq);
+    }
+  }, [loading, user]);
+
+  useEffect(() => {
     axios
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
-        console.log(res.data);
         setProgram(res.data);
       })
       .catch((err) => {
         console.error("프로그램 상세 조회 실패", err);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setIsLoading(false));
   }, [seq]);
 
-  if (loading) {
+  function ETCDeleteButton() {
+    if (!isAuthenticated) {
+      alert("로그인 후 이용해주세요.");
+      navigate("/login");
+      return;
+    }
+    // 확인 창 띄우기
+    const confirmed = window.confirm(
+      "해당 비교과 프로그램 신청을 취소하시겠습니까?",
+    );
+    if (!confirmed) return; // 취소 시 종료
+
+    // 삭제 요청
+    axios
+      .delete("/api/extracurricular/applyDelete", {
+        headers: { "Content-Type": "application/json" },
+        data: {
+          programSeq: seq,
+          memberSeq: memberSeq,
+        },
+      })
+      .then((res) => {
+        alert(res.data.message);
+        navigate(-1);
+      })
+      .catch((err) => {
+        alert(err.response?.data.message || err.message);
+        console.error(err.response?.data || err.message);
+      })
+      .finally(() => {});
+  }
+
+  if (isLoading) {
     return (
       <div className="text-center my-5">
         <Spinner animation="border" />
@@ -158,11 +198,7 @@ export function ExtraCurricularProgram() {
                 <span className="fw-semibold">모집인원</span>
               </div>
               <div className="position-relative flex-grow-1">
-                <ProgressBar
-                  variant="info"
-                  now={applicantPercent}
-                  className="custom-progress"
-                />
+                <ProgressBar variant="info" now={applicantPercent} />
                 <span className="position-absolute top-50 start-50 translate-middle fw-bold">
                   {program.applicants}명 / {program.capacity}명
                 </span>
@@ -184,11 +220,7 @@ export function ExtraCurricularProgram() {
                 <span className="fw-semibold">대기인원</span>
               </div>
               <div className="position-relative flex-grow-1">
-                <ProgressBar
-                  variant="warning"
-                  now={waitingPercent}
-                  className="custom-progress"
-                />
+                <ProgressBar variant="warning" now={waitingPercent} />
                 <span className="position-absolute top-50 start-50 translate-middle fw-bold">
                   {program.waiting}명 / 10명
                 </span>
@@ -248,19 +280,31 @@ export function ExtraCurricularProgram() {
         </div>
 
         {/* 하단 버튼 */}
-        <div className="d-flex justify-content-center gap-2 my-3">
-          <Button
-            variant="primary"
-            onClick={() => navigate(`/extracurricular/application/${seq}`)}
-          >
-            신청하기
-          </Button>
+        <div className="d-flex justify-content-between my-3">
+          {/* 왼쪽: 목록보기 */}
           <Button
             variant="secondary"
             onClick={() => navigate("/extracurricular")}
           >
             목록보기
           </Button>
+
+          {/* 오른쪽: 신청하기 + 신청취소 */}
+          <div className="d-flex gap-2">
+            <Button
+              variant="outline-success"
+              onClick={() => navigate(`/extracurricular/application/${seq}`)}
+            >
+              신청하기
+            </Button>
+            <Button
+              type="button"
+              variant="outline-dark"
+              onClick={ETCDeleteButton}
+            >
+              신청취소
+            </Button>
+          </div>
         </div>
       </Container>
     </div>

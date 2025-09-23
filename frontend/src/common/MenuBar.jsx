@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
-import { Link } from "react-router";
+import { Link, useNavigate, useNavigation } from "react-router";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../css/menubar.css";
 import { AuthProvider } from "./AuthContext.jsx";
@@ -8,9 +8,11 @@ import { useAuth } from "./AuthContext.jsx";
 import axios from "axios";
 
 export function MenuBar() {
-  const { user, logout, isAuthenticated, isAdmin } = useAuth();
+  const { user, logout, isAuthenticated, isAdmin, isExtra } = useAuth();
   // const [isAdmin, setIsAdmin] = useState(false);
   const [activeMenu, setActiveMenu] = useState(null);
+
+  const navigate = useNavigate();
 
   const name = user?.name;
   const loginId = user?.loginId;
@@ -33,8 +35,11 @@ export function MenuBar() {
       path: "/extracurricular",
       subItems: [
         { name: "프로그램 신청", path: "/extracurricular" },
-        { name: "프로그램 관리", path: "/extracurricular/manage" },
-      ],
+        (isExtra() || isAdmin()) && {
+          name: "프로그램 관리",
+          path: "/extracurricular/manage",
+        },
+      ].filter(Boolean),
     },
     {
       name: "핵심역량",
@@ -55,8 +60,15 @@ export function MenuBar() {
       path: "/activity",
       subItems: [
         { name: "비교과 내역", path: "/activity/etclog" },
-        { name: "마일리지 내역", path: "/activity/mileage" },
-      ],
+        // { name: "마일리지 내역", path: "/activity/mileage" },
+        { name: "역량진단 결과", path: "/competency/assessment" },
+        isAuthenticated && {
+          name: "비밀번호 변경",
+          path: "/activity/changePw",
+        },
+        // isAdmin() && { name: "학생 계정 관리", path: "/activity/stdAccess" },
+        // { name: "학생 계정 관리", path: "/activity/stdAccess" },
+      ].filter(Boolean),
     },
     {
       name: "안내",
@@ -71,40 +83,54 @@ export function MenuBar() {
 
   // const logo = "../image/stepUp_logo_수정.png";
 
+  function logoutButton() {
+    alert("로그아웃 되었습니다.");
+    logout();
+    navigate("/");
+  }
+
   return (
     <>
-      <Navbar bg="success" className="py-0 border-bottom shadow-sm">
+      <Navbar
+        bg="success"
+        className="py-0 border-bottom shadow-sm"
+        style={{ height: "47px" }}
+      >
         <Container className="justify-content-end">
-          <Nav>
-            <Nav.Link
-              as={Link}
-              to={isAuthenticated ? "#" : "/login"}
-              onClick={isAuthenticated ? logout : null}
-              className="text-white"
-            >
-              {isAuthenticated ? (
-                <>
-                  <span className="me-3" style={{ cursor: "default" }}>
-                    [ {name}({loginId}) ] 님 환영합니다.
-                  </span>
+          <Nav className="align-items-center" style={{ height: "47px" }}>
+            {isAuthenticated ? (
+              <div
+                className="d-flex align-items-center text-white"
+                style={{ height: "47px" }}
+              >
+                <span className="me-3">
+                  [ {name}({loginId}) ] 님 환영합니다.
+                </span>
+                <Button
+                  variant="outline-light"
+                  size="sm"
+                  className="px-3 rounded-pill shadow-sm"
+                  onClick={logoutButton}
+                >
+                  <b>로그아웃</b>
+                </Button>
+              </div>
+            ) : (
+              <div
+                className="d-flex align-items-center"
+                style={{ height: "47px" }}
+              >
+                <Nav.Link as={Link} to="/login" className="text-white p-0">
                   <Button
                     variant="outline-light"
                     size="sm"
                     className="px-3 rounded-pill shadow-sm"
                   >
-                    <b>로그아웃</b>
+                    <b>로그인</b>
                   </Button>
-                </>
-              ) : (
-                <Button
-                  variant="outline-light"
-                  size="sm"
-                  className="px-3 rounded-pill shadow-sm"
-                >
-                  <b>로그인</b>
-                </Button>
-              )}
-            </Nav.Link>
+                </Nav.Link>
+              </div>
+            )}
           </Nav>
         </Container>
       </Navbar>

@@ -153,7 +153,6 @@ public class AssessmentController {
     // 선택지 보내기
     @GetMapping("test/choiceList/{seq}")
     public List<?> choiceList(@PathVariable int seq) {
-        System.out.println("seq = " + seq);
         return assessmentService.choiceList(seq);
     }
 
@@ -183,6 +182,24 @@ public class AssessmentController {
         System.out.println("seq = " + seq);
         System.out.println("dtoList = " + dtoList);
         return assessmentService.resultSave(seq, dtoList);
+    }
+
+    // 세부 결과 저장 내용 전달
+    @GetMapping("test/result/{seq}")
+    public List<?> resultData(
+            @PathVariable int seq,
+            @RequestParam int memberSeq) {
+        System.out.println("seq = " + seq);
+        System.out.println("memberSeq = " + memberSeq);
+        return assessmentService.result(seq, memberSeq);
+    }
+
+    // 세부 결과 계산을 위한 문제 정보 전달
+    @GetMapping("test/resultQuestion/{seq}")
+    public List<?> resultQuestion(@PathVariable int seq) {
+        List<QuestionListDto> questionList = assessmentService.resultQuestionList(seq);
+        System.out.println("questionList 문항 정보 = " + questionList);
+        return questionList;
     }
 
 

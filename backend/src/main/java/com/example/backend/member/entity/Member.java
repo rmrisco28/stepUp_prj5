@@ -5,6 +5,8 @@ import com.example.backend.batch.student.entity.Student;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @ToString
@@ -25,8 +27,14 @@ public class Member {
     @Column(name = "password")
     private String password;
 
-    @Column(name = "user_yn")
+    @Column(name = "user_yn", insertable = false)
     private Integer userYn;
+
+    @Column(name = "change_pw_cnt", insertable = false)
+    private Integer changePwCnt;
+
+    @Column(name = "change_pw_at", insertable = false)
+    private LocalDateTime changePwAt;
 
     @OneToOne(mappedBy = "memberSeq")
     private Student student;

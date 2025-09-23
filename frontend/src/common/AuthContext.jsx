@@ -44,6 +44,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.login(loginId, password);
       if (response.success) {
+        if (response.pwNotice) {
+          alert(response.pwNotice);
+        }
         setUser({
           memberSeq: response.memberSeq,
           loginId: response.loginId,
@@ -73,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
   const isAdmin = () => user?.authName?.includes("admin");
   const isExtra = () => user?.authName?.includes("extra");
-  const isStd = () => user?.authName?.includes("std"); // 얘는 쓰려나?
+  const isStd = () => user?.authName?.includes("student"); // 얘는 쓰려나?
 
   const value = {
     user,

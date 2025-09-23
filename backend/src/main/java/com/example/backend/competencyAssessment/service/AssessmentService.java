@@ -92,11 +92,11 @@ public class AssessmentService {
     public Map<String, Object> questionList(int seq, Integer pageNumber) {
 //        List<QuestionListDto> questionList = questionRepository.findByCaSeqSeq(seq);
 
-        Pageable pageable = PageRequest.of(pageNumber - 1, 20);  // 한 페이지당 20개의 문항
+        Pageable pageable = PageRequest.of(pageNumber - 1, 10);  // 한 페이지당 10개 문항
         Page<QuestionListDto> questionListPage = questionRepository.findByCaSeqSeq(seq, pageable);
         int totalPages = questionListPage.getTotalPages();
-        int rightPageNumber = ((pageNumber - 1) / 20 + 1) * 20;
-        int leftPageNumber = rightPageNumber - 19;
+        int rightPageNumber = ((pageNumber - 1) / 10 + 1) * 10;
+        int leftPageNumber = rightPageNumber - 9;
         rightPageNumber = Math.min(rightPageNumber, totalPages);
         leftPageNumber = Math.max(leftPageNumber, 1);
 
@@ -393,5 +393,16 @@ public class AssessmentService {
             savedList.add(resultRepository.save(result));
         });
         return ResponseEntity.ok(savedList);
+    }
+
+    public List<?> result(int seq, int memberSeq) {
+        List<ResultDto> resultDto = resultRepository.findBySeq(seq, memberSeq);
+        System.out.println("resultDto = " + resultDto);
+        return resultDto;
+    }
+
+    public List<QuestionListDto> resultQuestionList(int seq) {
+        List<QuestionListDto> resultQuestionList = questionRepository.findByCaSeqSeq(seq);
+        return resultQuestionList;
     }
 }

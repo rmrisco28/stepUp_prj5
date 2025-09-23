@@ -1,20 +1,15 @@
 package com.example.backend.extracurricular.service;
 
 import com.example.backend.batch.student.repository.StudentRepository;
-import com.example.backend.competency.entity.Competency;
 import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.extracurricular.dto.*;
 import com.example.backend.extracurricular.entity.*;
 import com.example.backend.extracurricular.enums.OperationType;
-import com.example.backend.extracurricular.repository.ExtraCurricularApplicationRepository;
-import com.example.backend.extracurricular.repository.ExtraCurricularImageContentRepository;
-import com.example.backend.extracurricular.repository.ExtraCurricularImageThumbRepository;
-import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepository;
+import com.example.backend.extracurricular.repository.*;
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -43,8 +38,9 @@ public class ExtraCurricularService {
     private final ExtraCurricularImageContentRepository extraCurricularImageContentRepository;
     private final S3Client s3Client;
     private final ExtraCurricularApplicationRepository extraCurricularApplicationRepository;
+    private final ExtraCurricularCompleteRepository extraCurricularCompleteRepository;
 
-    private final StudentRepository studentRepository;
+
     private final MemberRepository memberRepository;
     private final SubCompetencyRepository subCompetencyRepository;
 
@@ -171,11 +167,26 @@ public class ExtraCurricularService {
     }
 
     // 프로그램 목록(관리자 화면)
-    public Map<String, Object> list(Integer pageNumber, String keyword) {
+    public Map<String, Object> list(Integer pageNumber, String keyword,
+                                    Integer competency, String operationTypeLabel, String grade) {
 
+        // 한글 운영방식 → Enum 변환
+        OperationType operationType = null;
+        if (operationTypeLabel != null && !operationTypeLabel.isEmpty()) {
+            switch (operationTypeLabel) {
+                case "대면" -> operationType = OperationType.OFFLINE;
+                case "비대면" -> operationType = OperationType.ONLINE;
+                case "혼합" -> operationType = OperationType.HYBRID;
+            }
+        }
+
+        // 검색 + 페이지네이션
         Page<ETCListDto> programPage = extraCurricularProgramRepository.findAllBy(
                 PageRequest.of(pageNumber - 1, 10),
-                keyword
+                keyword,
+                competency,
+                operationType,
+                grade
         );
 
         // 프로그램 seq 조회
@@ -192,8 +203,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                     + t.getId().getProgramSeq() + "/"
-                                     + t.getId().getName(), // URL 조합
+                                        + t.getId().getProgramSeq() + "/"
+                                        + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
@@ -280,7 +291,6 @@ public class ExtraCurricularService {
         dto.setAuthor(data.getAuthor());
         dto.setCreatedAt(data.getCreatedAt());
         dto.setUpdatedAt(data.getUpdatedAt());
-        dto.setUseYn(data.getUseYn());
         dto.setThumbnails(thumbnailUrl);
         dto.setContentImages(contentUrl);
 
@@ -333,7 +343,6 @@ public class ExtraCurricularService {
         data.setManagerPhone(form.getManagerPhone());
         data.setMileagePoints(form.getMileagePoints());
         data.setAuthor(form.getAuthor());
-        data.setUseYn(form.getUseYn());
         data.setUpdatedAt(LocalDateTime.now());
 
         // --- 2. 썸네일 교체 ---
@@ -448,40 +457,39 @@ public class ExtraCurricularService {
             throw new RuntimeException("이미 신청한 프로그램입니다.");
         }
 
-        // 회원 시퀀스
-        // 프로그램 시퀀스
-        // 신청 테이블에 저장하기
-        ExtraCurricularApplication eca = new ExtraCurricularApplication();
-
+        // 회원, 프로그램 조회
         ExtraCurricularProgram ecp = extraCurricularProgramRepository.findById(dto.getProgramSeq())
                 .orElseThrow(() -> new RuntimeException("프로그램 정보가 없습니다."));
         Member mb = memberRepository.findById(dto.getMemberSeq())
                 .orElseThrow(() -> new RuntimeException("회원 정보가 없습니다."));
 
+        // 신청 테이블에 저장
+        ExtraCurricularApplication eca = new ExtraCurricularApplication();
         eca.setProgramSeq(ecp);
         eca.setMemberSeq(mb);
         eca.setMotive(dto.getMotive());
 
-        // 모집정원 기준 체크
         if (ecp.getApplicants() < ecp.getCapacity()) {
-            // 정원 내면 신청자 수 증가
             ecp.setApplicants(ecp.getApplicants() + 1);
-            // status 1 = 신청
-            eca.setStatus(1);
+            eca.setStatus(1); // 신청
         } else {
-            // 정원 초과면 대기자 수 증가
             ecp.setWaiting(ecp.getWaiting() + 1);
-            // status 2 = 대기
-            eca.setStatus(2);
+            eca.setStatus(2); // 대기
         }
 
-        // 신청 테이블 저장
-        extraCurricularApplicationRepository.save(eca);
-
-        // 프로그램 테이블 저장
+        ExtraCurricularApplication savedApplication = extraCurricularApplicationRepository.save(eca);
         extraCurricularProgramRepository.save(ecp);
 
+        // ✅ 비교과 내역 테이블에도 저장
+        ExtraCurricularComplete complete = new ExtraCurricularComplete();
+        complete.setProgramSeq(ecp);
+        complete.setApplicationSeq(savedApplication);
+        complete.setMemberSeq(mb);
+        complete.setCompleteStatus(0); // 0 = 미이수
+
+        extraCurricularCompleteRepository.save(complete);
     }
+
 
     public void applyDelete(ETCApplyForm dto) {
         // 이미 신청했는지 확인
@@ -498,5 +506,72 @@ public class ExtraCurricularService {
                 .orElseThrow(() -> new RuntimeException("존재하지 않은 신청내역입니다"));
 
         extraCurricularApplicationRepository.delete(eca);
+    }
+
+    // 회원별 비교과 내역 조회
+    public List<ETCCompleteDto> complete(Integer memberSeq) {
+        return extraCurricularCompleteRepository.findByMemberSeq(memberSeq);
+    }
+
+    public List<applyStudentDto> applyStudentList(Integer seq) {
+        // 프로그램 객체를 먼저 선언해야겠다.
+        // pathVariable로 받은 program_seq를 통해
+        // 테이블에서 program_seq를 가진 행들을 찾아서
+        // 그 행에 있는 member_seq들을 찾아서
+        // member 테이블에 있는 학생 또는 교직원과 연결해서
+        // 그때의 이름을 가져오기.
+
+        // 프로그램 시퀀스로 프로그램 객체 찾기(가져오기)
+        ExtraCurricularProgram ep = extraCurricularProgramRepository
+                .findBySeq(seq);
+
+        // 프로그램 객체로(실제론 시퀀스로 연결이 알아서 되는 것?)
+        // 그 프로그램 시퀀스가 있는 신청 목록 가져오기
+        List<ExtraCurricularApplication> etca = extraCurricularApplicationRepository
+                .findByProgramSeq(ep);
+
+        // extraCurricularApplication의 pk를 통해
+        // extraCurricularComplete 테이블의 completeStatus를 가져오기
+        // 값을 그냥 가져와야할듯!!! .
+
+        return etca.stream()
+                .map(etcas -> {
+                    Optional<ExtraCurricularComplete> complete =
+                            extraCurricularCompleteRepository.findByApplicationSeq(etcas);
+                    Integer completeStatus = complete
+                            .map(ExtraCurricularComplete::getCompleteStatus)
+                            .orElse(0);
+
+                    return applyStudentDto.builder()
+                            .seq(etcas.getMemberSeq().getId())
+                            .name(etcas.getMemberSeq().getStudent().getName())
+                            .completeStatus(completeStatus)
+                            .applicationSeq(etcas.getId())
+                            .build();
+                })
+                .collect(Collectors.toList());
+    }
+
+    public void updateComplete(updateETCCompleteDto dto) {
+        // dto에는 Integer 타입의 memberSeq랑 CompleteStatus가 있고
+        // 그 memberSeq를 통해 member를 조회해서
+        // 위의 member를 통해 ECComplete 테이블을 조회해서
+        // dto로 받은 CompleteStatus를 그 행의 completeStatus를 저장.
+
+        // 이건 필요 없을지도 ?
+        Member mb = memberRepository.findById(dto.getMemberSeq())
+                .orElseThrow(() -> new RuntimeException("회원이 존재하지 않음"));
+
+        // 신청 seq를 통해 신청 객체 조회
+        ExtraCurricularApplication eca = extraCurricularApplicationRepository
+                .findById(dto.getApplicationSeq())
+                .orElseThrow(() -> new RuntimeException("신청한 내역이 없습니다."));
+
+        // 객체를 통해 이수 객체 조회
+        ExtraCurricularComplete ecc = extraCurricularCompleteRepository
+                .findByApplicationSeq(eca)
+                .orElseThrow(() -> new RuntimeException("이수 내역이 없습니다."));
+        ecc.setCompleteStatus(dto.getCompleteStatus());
+        extraCurricularCompleteRepository.save(ecc);
     }
 }

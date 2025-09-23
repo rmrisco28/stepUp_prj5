@@ -4,8 +4,8 @@ import { Col, FormControl, Row, Button, Container } from "react-bootstrap";
 import axios from "axios";
 
 export function FaqAdd() {
-  const [question, setQuestion] = useState(null);
-  const [answer, setAnswer] = useState(null);
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
 
@@ -14,7 +14,6 @@ export function FaqAdd() {
     axios
       .post("/api/faq/add", { question, answer })
       .then((response) => {
-        console.log("Faq added successfully:", response.data);
         navigate("/board/faq/manage");
       })
       .catch((error) => {

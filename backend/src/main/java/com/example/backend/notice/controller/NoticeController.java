@@ -25,9 +25,15 @@ public class NoticeController {
                 ));
     }
 
-    @GetMapping("/list")
-    public List<NoticeListInfo> getNoticeList() {
-        return noticeService.listNotice();
+//    @GetMapping("/list")
+//    public List<NoticeListInfo> getNoticeList() {
+//        return noticeService.listNotice();
+//    }
+
+    @GetMapping("list")
+    public Map<String, Object> getNoticeList(
+            @RequestParam(value = "page", defaultValue = "1") Integer num) {
+        return noticeService.listNotice(num);
     }
 
     @GetMapping("/{id}")

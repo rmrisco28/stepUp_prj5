@@ -37,7 +37,6 @@ export function ExtraCurricularEdit() {
     managerPhone: "",
     mileagePoints: 0,
     author: "",
-    useYn: true,
     thumbnail: null, // 새 썸네일
     newContentImages: [], // 새 본문 이미지
     deleteContentImageNames: [], // 삭제할 이미지
@@ -58,30 +57,27 @@ export function ExtraCurricularEdit() {
     axios
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
-        const data = res.data;
-        console.log("데이터 불러오기 성공");
         setFormData({
-          title: data.title || "",
-          content: data.content || "",
-          operateStartDt: data.operateStartDt?.slice(0, 16) || "",
-          operateEndDt: data.operateEndDt?.slice(0, 16) || "",
-          applyStartDt: data.applyStartDt?.slice(0, 16) || "",
-          applyEndDt: data.applyEndDt?.slice(0, 16) || "",
-          competency: data.competency || "",
-          location: data.location || "",
-          operationType: data.operationType || "대면",
-          grades: data.grades ? data.grades.split(",") : [],
-          capacity: data.capacity || 0,
-          status: data.status || "DRAFT",
-          manager: data.manager || "",
-          managerPhone: data.managerPhone || "",
-          mileagePoints: data.mileagePoints || 0,
-          author: data.author || "",
-          useYn: data.useYn ?? true,
+          title: res.data.title || "",
+          content: res.data.content || "",
+          operateStartDt: res.data.operateStartDt?.slice(0, 16) || "",
+          operateEndDt: res.data.operateEndDt?.slice(0, 16) || "",
+          applyStartDt: res.data.applyStartDt?.slice(0, 16) || "",
+          applyEndDt: res.data.applyEndDt?.slice(0, 16) || "",
+          competency: res.data.competency || "",
+          location: res.data.location || "",
+          operationType: res.data.operationType || "대면",
+          grades: res.data.grades ? res.data.grades.split(",") : [],
+          capacity: res.data.capacity || 0,
+          status: res.data.status || "DRAFT",
+          manager: res.data.manager || "",
+          managerPhone: res.data.managerPhone || "",
+          mileagePoints: res.data.mileagePoints || 0,
+          author: res.data.author || "",
         });
-        setExistingThumbnail(data.thumbnail); // 기존 썸네일 URL
+        setExistingThumbnail(res.data.thumbnail); // 기존 썸네일 URL
         setExistingContentImages(
-          (data.contentImages || []).map((img) =>
+          (res.data.contentImages || []).map((img) =>
             typeof img === "string" ? { name: img, path: img } : img,
           ),
         );
@@ -92,7 +88,6 @@ export function ExtraCurricularEdit() {
         navigate(-1);
       })
       .finally(() => {
-        console.log("데이터 불러오기 완료");
         setLoading(false);
       });
   }, [seq, navigate]);
@@ -108,6 +103,18 @@ export function ExtraCurricularEdit() {
         console.error("역량 목록을 불러오는 데 실패했습니다.", error);
       });
   }, []);
+
+  // 3. competencies와 formData.competency 문자열이 준비되면 seq로 변환
+  useEffect(() => {
+    if (competencies.length > 0 && formData.competency) {
+      const matched = competencies.find(
+        (c) => c.subCompetencyName === formData.competency,
+      );
+      if (matched) {
+        setFormData((prev) => ({ ...prev, competency: matched.seq }));
+      }
+    }
+  }, [competencies, formData.competency]);
 
   // 모든 입력값 처리 (텍스트, 날짜, 셀렉트 전용)
   const handleChange = (e) => {
@@ -141,6 +148,10 @@ export function ExtraCurricularEdit() {
   // 폼 제출
   function handleEditButtonClick(e) {
     e.preventDefault();
+
+    if (!window.confirm("프로그램을 수정하시겠습니까?")) {
+      return; // 사용자가 취소 누르면 실행 중단
+    }
 
     const fd = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -393,21 +404,6 @@ export function ExtraCurricularEdit() {
               </FormControl>
             </FormGroup>
 
-            {/* 사용 여부 */}
-            <FormGroup className="mb-3" controlId="useYn">
-              <FormLabel className="me-3">사용여부</FormLabel>
-              <FormCheck
-                inline
-                type="checkbox"
-                name="useYn"
-                label="사용"
-                checked={formData.useYn}
-                onChange={(e) =>
-                  setFormData({ ...formData, useYn: e.target.checked })
-                }
-              />
-            </FormGroup>
-
             {existingThumbnail && (
               <ListGroup className="mb-3">
                 <ListGroupItem>
@@ -504,7 +500,6 @@ export function ExtraCurricularEdit() {
                           alt={`content-${idx}`}
                           fluid
                           style={{
-                            width: "100px",
                             height: "auto",
                             objectFit: "cover",
                             filter: formData.deleteContentImageNames?.includes(

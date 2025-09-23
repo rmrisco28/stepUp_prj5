@@ -1,6 +1,7 @@
 package com.example.backend.extracurricular.repository;
 
 import com.example.backend.extracurricular.entity.ExtraCurricularApplication;
+import com.example.backend.extracurricular.entity.ExtraCurricularProgram;
 import com.example.backend.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,7 @@ public interface ExtraCurricularApplicationRepository extends JpaRepository<Extr
 
     // 삭제할 신청 프로그램 찾기
     Optional<ExtraCurricularApplication> findByMemberSeq_IdAndProgramSeq_Seq(Integer memberSeq, Integer programSeq);
+
+    // 프로그램 시퀀스를 통해, 그 시퀀스에 해당하는 프로그램 신청 내역 목록 가져오기
+    List<ExtraCurricularApplication> findByProgramSeq(ExtraCurricularProgram programSeq);
 }

@@ -78,26 +78,29 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     List<Question> findAllByCaSeqSeq(int seq);
 
 
-//    List<QuestionDto> findByCaSeq(int seq);
+    @Query(value = """
+            SELECT new com.example.backend.competencyAssessment.dto.QuestionListDto(
+                    q.seq,
+                    q.caSeq.seq,
+                    q.caSeq.caTitle,
+                    q.caSeq.useYn,
+                    q.subCompetencySeq.seq,
+                    q.subCompetencySeq.competencySeq.seq,
+                    q.subCompetencySeq.competencySeq.competencyName,
+                    q.subCompetencySeq.competencySeq.useYn,
+                    q.subCompetencySeq.subCompetencyName,
+                    q.subCompetencySeq.useYn,
+                    q.questionNum,
+                    q.question,
+                    q.score)
+            FROM Question q
+            WHERE q.caSeq.seq = :seq
+            AND q.caSeq.useYn = true
+            AND q.subCompetencySeq.useYn = true
+            AND q.subCompetencySeq.competencySeq.useYn = true
+            ORDER BY q.questionNum
+            """)
+    List<QuestionListDto> findByCaSeqSeq(int seq);
 
 
-//    @Query(value = """
-//            SELECT new com.example.backend.competencyAssessment.dto.QuestionDto(
-//                q.seq,
-//                q.caSeq.seq,
-//                q.caSeq.caTitle,
-//                q.caSeq.useYn,
-//
-//                q.subCompetencySeq.seq,
-//                q.subCompetencySeq.subCompetencyName,
-//                q.subCompetencySeq.useYn,
-//
-//                q.questionNum,
-//                q.question,
-//                q.score
-//            )FROM Question q
-//                        WHERE q.caSeq.useYn =true
-//                     AND q.subCompetencySeq.useYn= true
-//                     ORDER By q.questionNum
-//            """)
 }

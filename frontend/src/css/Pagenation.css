@@ -1,0 +1,17 @@
+/* 활성 페이지 배경/테두리 색상 변경 */
+.page-item.active .page-link {
+    background-color: #28a745; /* 초록색 */
+    border-color: #28a745; /* 테두리도 동일 색상 */
+    color: white; /* 글자 색상 */
+}
+
+/* 마우스 오버 시 색상 변경 (선택사항) */
+.page-item .page-link:hover {
+    background-color: #218838; /* 조금 더 진한 초록 */
+    border-color: #218838;
+    color: white;
+}
+
+.page-item .page-link {
+    color: black;
+}

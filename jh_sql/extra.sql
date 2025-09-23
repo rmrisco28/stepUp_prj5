@@ -11,7 +11,7 @@ CREATE TABLE `extra_curricular_program`
     apply_start_dt   DATETIME                       NOT NULL,
     apply_end_dt     DATETIME                       NOT NULL,
     location         VARCHAR(250)                   NULL,
-    competency                                      NOT NULL,
+    competency       INT                            NOT NULL,
     operation_type   VARCHAR(100)                   NOT NULL,
     grades           VARCHAR(100)                   NULL,
     capacity         INT                            NOT NULL DEFAULT 0,
@@ -23,9 +23,14 @@ CREATE TABLE `extra_curricular_program`
     mileage_points   INT                            NULL     DEFAULT 0,
     view             INT                            NULL     DEFAULT 0,
     created_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    use_yn           BOOLEAN                        NOT NULL DEFAULT TRUE
+    updated_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+SHOW CREATE TABLE extra_curricular_program;
+
+ALTER TABLE extra_curricular_program
+    DROP COLUMN use_yn;
+
 
 DROP TABLE extra_curricular_program;
 
@@ -66,6 +71,7 @@ CREATE TABLE `extra_curricular_application`
 );
 
 DROP TABLE extra_curricular_application;
+SHOW CREATE TABLE extra_curricular_application;
 
 CREATE TABLE faq
 (
@@ -77,3 +83,16 @@ CREATE TABLE faq
 
 DROP TABLE faq;
 
+CREATE TABLE extra_curricular_complete
+(
+    complete_seq    INT AUTO_INCREMENT PRIMARY KEY,
+    program_seq     INT    NOT NULL,
+    application_seq INT    NOT NULL,
+    member_seq      INT    NOT NULL,
+    complete_status INT(1) NOT NULL DEFAULT 0 COMMENT '0=미신청, 1=신청',
+    FOREIGN KEY (program_seq) REFERENCES extra_curricular_program (program_seq) ON DELETE CASCADE,
+    FOREIGN KEY (application_seq) REFERENCES extra_curricular_application (application_seq) ON DELETE CASCADE,
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq) ON DELETE CASCADE
+);
+
+DROP TABLE extra_curricular_complete;

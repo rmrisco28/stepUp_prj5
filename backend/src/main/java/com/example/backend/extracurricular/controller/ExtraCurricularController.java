@@ -1,15 +1,16 @@
 package com.example.backend.extracurricular.controller;
 
-import com.example.backend.extracurricular.dto.ApplicationRequestDto;
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCApplyForm;
+import com.example.backend.extracurricular.dto.ETCCompleteDto;
 import com.example.backend.extracurricular.dto.ETCEditForm;
+import com.example.backend.extracurricular.dto.updateETCCompleteDto;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -44,9 +45,12 @@ public class ExtraCurricularController {
     @GetMapping("list")
     public Map<String, Object> list(
             @RequestParam(value = "page", defaultValue = "1") Integer pageNumber,
-            @RequestParam(value = "q", defaultValue = "") String keyword
+            @RequestParam(value = "q", defaultValue = "") String keyword,
+            @RequestParam(value = "competency", required = false) Integer competency,
+            @RequestParam(value = "operationType", required = false) String operationType,
+            @RequestParam(value = "grade", required = false) String grade
     ) {
-        return extraCurricularService.list(pageNumber, keyword);
+        return extraCurricularService.list(pageNumber, keyword, competency, operationType, grade);
     }
 
     // 프로그램 상세 보기(관리자)
@@ -89,6 +93,7 @@ public class ExtraCurricularController {
                         "text", seq + "번 프로그램이 삭제되었습니다.")));
     }
 
+    // 신청화면에서 프로그램 정보중에서 몇 개 가져오는거
     @GetMapping("/applicationList/{seq}")
     public ResponseEntity<?> AppList(@PathVariable Integer seq) {
         return ResponseEntity.ok().body(extraCurricularService.appList(seq));
@@ -126,6 +131,25 @@ public class ExtraCurricularController {
             ));
             // 추후 마감 지남 등의 예외 추가하기
         }
+    }
+
+    // 비교과 내역
+    @GetMapping("/complete/{memberSeq}")
+    public List<ETCCompleteDto> complete(@PathVariable Integer memberSeq) {
+        return extraCurricularService.complete(memberSeq);
+    }
+
+    // 프로그램 신청한 학생 정보 가져오기
+    @GetMapping("applyStudentList/{seq}")
+    public ResponseEntity<?> applyStudentList(@PathVariable Integer seq) {
+        return ResponseEntity.ok(extraCurricularService.applyStudentList(seq));
+    }
+
+    // 이수 확인 요청
+    @PostMapping("updateComplete")
+    public void updateComplete(@RequestBody updateETCCompleteDto dto) {
+        extraCurricularService.updateComplete(dto);
+//        return ResponseEntity.ok();
     }
 
 }

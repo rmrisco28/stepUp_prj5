@@ -25,7 +25,6 @@ export function FaqEdit() {
     axios
       .get(`/api/faq/${seq}`)
       .then((res) => {
-        console.log(res.data);
         setFaq(res.data);
       })
       .catch((err) => {
@@ -48,10 +47,6 @@ export function FaqEdit() {
         headers: { "Content-Type": "multipart/form-data" },
       })
       .then((res) => {
-        const message = res.data.message || {
-          text: "게시물이 성공적으로 수정되었습니다.",
-          type: "success",
-        };
         navigate(`/board/faq/${faq.seq}`); // 수정 후 상세 보기 페이지 이동
       })
       .catch((err) => {
