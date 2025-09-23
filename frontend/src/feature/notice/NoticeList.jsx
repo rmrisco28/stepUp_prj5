@@ -40,6 +40,7 @@ export function NoticeList() {
               <th>번호</th>
               <th>제목</th>
               <th>작성일</th>
+              <th>작성자</th>
             </tr>
           </thead>
           <tbody>
@@ -66,6 +67,7 @@ export function NoticeList() {
                     {notice.title}
                   </td>
                   <td>{notice.insertedAt}</td>
+                  <td>{notice.author.employee.name}</td>
                 </tr>
               ))
             )}

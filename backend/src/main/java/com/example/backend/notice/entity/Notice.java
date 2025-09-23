@@ -34,6 +34,6 @@ public class Notice {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "author_seq", nullable = false)
-    private Member authorSeq;
+    private Member author;
 
 }

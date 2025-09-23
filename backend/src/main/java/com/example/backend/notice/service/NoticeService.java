@@ -29,7 +29,7 @@ public class NoticeService {
         Notice notice = new Notice();
         notice.setTitle(dto.getTitle());
         notice.setContent(dto.getContent());
-        notice.setAuthorSeq(mb);
+        notice.setAuthor(mb);
         noticeRepository.save(notice);
     }
 
