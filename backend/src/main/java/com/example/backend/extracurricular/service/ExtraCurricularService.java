@@ -510,18 +510,7 @@ public class ExtraCurricularService {
 
     // 회원별 비교과 내역 조회
     public List<ETCCompleteDto> complete(Integer memberSeq) {
-        return extraCurricularCompleteRepository.findByMemberSeq_Id(memberSeq)
-                .stream()
-                .map(c -> {
-                    ETCCompleteDto dto = new ETCCompleteDto();
-                    dto.setSeq(c.getSeq());
-                    dto.setTitle(c.getProgramSeq().getTitle());
-                    dto.setOperateStartDt(c.getProgramSeq().getOperateStartDt());
-                    dto.setOperateEndDt(c.getProgramSeq().getOperateEndDt());
-                    dto.setCompleteStatus(c.getCompleteStatus() == 1 ? "이수" : "미이수");
-                    return dto;
-                })
-                .collect(Collectors.toList());
+        return extraCurricularCompleteRepository.findByMemberSeq(memberSeq);
     }
 
     public List<applyStudentDto> applyStudentList(Integer seq) {

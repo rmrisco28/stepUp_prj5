@@ -2,12 +2,14 @@ package com.example.backend.extracurricular.controller;
 
 import com.example.backend.extracurricular.dto.ETCAddForm;
 import com.example.backend.extracurricular.dto.ETCApplyForm;
+import com.example.backend.extracurricular.dto.ETCCompleteDto;
 import com.example.backend.extracurricular.dto.ETCEditForm;
 import com.example.backend.extracurricular.service.ExtraCurricularService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -131,9 +133,9 @@ public class ExtraCurricularController {
     }
 
     // 비교과 내역
-    @GetMapping("complete/{seq}")
-    public ResponseEntity<?> complete(@PathVariable Integer memberSeq) {
-        return ResponseEntity.ok(extraCurricularService.complete(memberSeq));
+    @GetMapping("/complete/{memberSeq}")
+    public List<ETCCompleteDto> complete(@PathVariable Integer memberSeq) {
+        return extraCurricularService.complete(memberSeq);
     }
 
     // 프로그램 신청한 학생 정보 가져오기

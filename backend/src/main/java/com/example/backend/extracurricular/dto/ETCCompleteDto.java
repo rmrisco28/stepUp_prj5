@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ETCCompleteDto {
     private Integer seq;
+    private Integer programSeq;
     private String title;
     private LocalDateTime operateStartDt;
     private LocalDateTime operateEndDt;
