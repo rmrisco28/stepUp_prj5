@@ -114,9 +114,12 @@ export function ExtraCurricularCardList({ programs }) {
                         </span>
                       </>
                     ) : (
-                      <span className="fw-bold">
-                        {p.applicants}명 / 모집인원 미정
-                      </span>
+                      <>
+                        <ProgressBar variant="warning" />
+                        <span className="position-absolute top-50 start-50 translate-middle fw-bold">
+                          {p.applicants}명 / 0명
+                        </span>
+                      </>
                     )}
                   </div>
                 </div>

@@ -100,7 +100,7 @@ export function ExtraCurricularManage() {
         <Table hover striped className="text-center">
           <thead>
             <tr>
-              <th>#</th>
+              <th>번호</th>
               <th>프로그램명</th>
               <th>등록일시</th>
               <th>상태</th>
