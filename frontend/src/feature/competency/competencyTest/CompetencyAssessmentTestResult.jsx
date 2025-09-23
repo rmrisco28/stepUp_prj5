@@ -93,6 +93,10 @@ export function CompetencyAssessmentTestResult() {
       )
       .then((res) => {
         console.log("불러오기 성공", res.data);
+        if (res.data.length === 0) {
+          alert("진단검사 결과가 없습니다.");
+          navigate("/competency/assessment");
+        }
         setResultData(res.data);
         console.log("실험", res.data[0].memberSeqStudentMajor);
         setMemberMajor(res.data[0].memberSeqStudentMajor);
@@ -129,7 +133,9 @@ export function CompetencyAssessmentTestResult() {
   const studentScores = {}; // 하위역량별 학생 점수
   resultData.forEach((r) => {
     const sub = r.subCompetencySeqSubCompetencyName;
-    studentScores[sub] = (studentScores[sub] || 0) + r.score;
+    const question = questionList.find((q) => q.caSeqSeq === r.caSeqSeq);
+    const actualScore = question ? question.score * r.score : 0;
+    studentScores[sub] = (studentScores[sub] || 0) + actualScore;
   });
 
   // Object.values로 배열 변환
@@ -192,7 +198,11 @@ export function CompetencyAssessmentTestResult() {
           학과: {memberMajor}
           <br />
           <hr />
-          <Bar data={data} options={options} className="mb-5" />
+          <Row className="justify-content-center">
+            <Col xs={12} md={10} lg={8}>
+              <Bar data={data} options={options} className="mb-5" />
+            </Col>
+          </Row>
           <hr className="mb-5" />
           <h3 className="mb-3">역량 별 세부 결과</h3>
           {/* 역량 별 데이터 보여주기*/}
