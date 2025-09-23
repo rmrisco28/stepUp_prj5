@@ -52,17 +52,18 @@ export function MyETC() {
               </tr>
             </thead>
             <tbody>
-              {loading ? (
+              {!user ? ( // 로그인 안 됐을 때
                 <tr>
-                  <td colSpan="4">
-                    <Spinner animation="border" size="sm" /> 로딩 중...
+                  <td colSpan="4" className="fw-bold">
+                    로그인 후 이용해주세요.
                   </td>
                 </tr>
-              ) : etcList.length === 0 ? (
+              ) : etcList.length === 0 ? ( // 로그인 했는데 데이터 없음
                 <tr>
                   <td colSpan="4">등록된 내역이 없습니다.</td>
                 </tr>
               ) : (
+                // 로그인 했고 데이터 있음
                 etcList.map((etc, idx) => (
                   <tr key={etc.seq}>
                     <td>{idx + 1}</td>
