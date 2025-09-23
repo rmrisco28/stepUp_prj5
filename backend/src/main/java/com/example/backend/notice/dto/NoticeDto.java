@@ -12,6 +12,5 @@ public class NoticeDto {
     private String title;
     private String content;
     private LocalDateTime insertedAt;
-//    private Integer authorSeq;
-
+    private String author;
 }

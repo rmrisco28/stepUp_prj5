@@ -48,6 +48,7 @@ public class NoticeService {
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .insertedAt(notice.getInsertedAt())
+                .author(notice.getAuthor().getEmployee().getName())
                 .build();
     }
 

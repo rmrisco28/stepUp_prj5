@@ -56,13 +56,11 @@ export function NoticeDetail() {
         <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
           <div className="d-flex align-items-center">
             <div>
-              {/*작성자 이름 부분인데 아직 안 보내는 중*/}
-              {/*<p className="mb-0 fw-bold">{notice.writer}</p>*/}
               <small className="text-muted">{notice.insertedAt}</small>
             </div>
           </div>
           <div>
-            <p className="mb-0">번호: {notice.seq}</p>
+            <small className="mb-0">작성자: {notice.author}</small>
           </div>
         </div>
 
