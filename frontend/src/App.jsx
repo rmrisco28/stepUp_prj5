@@ -28,6 +28,8 @@ import { ExtraCurricularApplication } from "./feature/extracurricular/ExtraCurri
 import { MyETC } from "./feature/activity/MyETC.jsx";
 import { NoticeAdd } from "./feature/notice/NoticeAdd.jsx";
 import { NoticeDetail } from "./feature/notice/NoticeDetail.jsx";
+import { CompetencyAssessmentTestComplete } from "./feature/competency/competencyTest/CompetencyAssessmentTestComplete.jsx";
+import { CompetencyAssessmentTestResult } from "./feature/competency/competencyTest/CompetencyAssessmentTestResult.jsx";
 import { NoticeEdit } from "./feature/notice/NoticeEdit.jsx";
 import { Faq } from "./feature/faq/Faq.jsx";
 import { FaqAdd } from "./feature/faq/FaqAdd.jsx";
@@ -40,6 +42,9 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/*로그인*/}
+          <Route path="login" element={<Login />} />
+
           {/*전체 구조*/}
           <Route path="/" element={<MainLayout />}>
             {/*메인 페이지*/}
@@ -125,6 +130,18 @@ function App() {
               element={<CompetencyAssessmentTestStart />}
             />
 
+            {/*------------------역량 진단 결과----------------*/}
+            <Route
+              path="/competency/assessment/test/complete/:assessmentSeq"
+              element={<CompetencyAssessmentTestComplete />}
+            />
+
+            {/*진단검사 세부결과*/}
+            <Route
+              path="/competency/assessment/test/result/:assessmentSeq"
+              element={<CompetencyAssessmentTestResult />}
+            />
+
             {/*나의 활동*/}
             <Route path="activity" element={<MyETC />} />
             <Route path="activity/mileage" element={<Mileage />} />
@@ -143,9 +160,6 @@ function App() {
             <Route path="board/faq/edit/:seq" element={<FaqEdit />} />
             <Route path="board/faq/manage" element={<FaqManage />} />
             <Route path="board/faq/:seq" element={<FaqDetail />} />
-
-            {/*로그인*/}
-            <Route path="login" element={<Login />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -192,8 +192,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                        + t.getId().getProgramSeq() + "/"
-                                        + t.getId().getName(), // URL 조합
+                                     + t.getId().getProgramSeq() + "/"
+                                     + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
@@ -461,6 +461,42 @@ public class ExtraCurricularService {
         eca.setProgramSeq(ecp);
         eca.setMemberSeq(mb);
         eca.setMotive(dto.getMotive());
+
+        // 모집정원 기준 체크
+        if (ecp.getApplicants() < ecp.getCapacity()) {
+            // 정원 내면 신청자 수 증가
+            ecp.setApplicants(ecp.getApplicants() + 1);
+            // status 1 = 신청
+            eca.setStatus(1);
+        } else {
+            // 정원 초과면 대기자 수 증가
+            ecp.setWaiting(ecp.getWaiting() + 1);
+            // status 2 = 대기
+            eca.setStatus(2);
+        }
+
+        // 신청 테이블 저장
         extraCurricularApplicationRepository.save(eca);
+
+        // 프로그램 테이블 저장
+        extraCurricularProgramRepository.save(ecp);
+
+    }
+
+    public void applyDelete(ETCApplyForm dto) {
+        // 이미 신청했는지 확인
+        boolean alreadyApplied = extraCurricularApplicationRepository
+                .existsByMemberSeq_IdAndProgramSeq_SeqAndStatus(dto.getMemberSeq(), dto.getProgramSeq(), 1);
+        // 신청 안 했는데 하려고 하면
+        if (!alreadyApplied) {
+            throw new RuntimeException("신청한 적이 없는 프로그램입니다.");
+        }
+
+        // 프로그램 seq, 사용자 seq로 확인
+        ExtraCurricularApplication eca = extraCurricularApplicationRepository
+                .findByMemberSeq_IdAndProgramSeq_Seq(dto.getMemberSeq(), dto.getProgramSeq())
+                .orElseThrow(() -> new RuntimeException("존재하지 않은 신청내역입니다"));
+
+        extraCurricularApplicationRepository.delete(eca);
     }
 }

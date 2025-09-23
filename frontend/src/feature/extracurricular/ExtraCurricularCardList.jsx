@@ -14,11 +14,7 @@ export function ExtraCurricularCardList({ programs }) {
     <Row className="g-4">
       {programs.map((p) => (
         <Col key={p.seq} md={6} lg={4}>
-          <Card
-            className="h-100"
-            style={{ borderRadius: "10px", cursor: "pointer" }}
-            onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
-          >
+          <Card className="h-100" style={{ borderRadius: "10px" }}>
             <div
               style={{
                 width: "100%",
@@ -36,7 +32,9 @@ export function ExtraCurricularCardList({ programs }) {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
+                    cursor: "pointer",
                   }}
+                  onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
                 />
               ) : (
                 <div
@@ -55,29 +53,35 @@ export function ExtraCurricularCardList({ programs }) {
             </div>
             <Card.Body>
               <div className="d-flex justify-content-between align-items-start mb-3">
-                <Card.Title className="fw-bold flex-grow-1 me-2">
+                <Card.Title
+                  className="fw-bold me-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
+                >
                   {p.title}
                 </Card.Title>
                 <Badge bg="secondary">{statusMap[p.status] || p.status}</Badge>
               </div>
-
-              <Card.Text className="text-muted small mb-3">설명</Card.Text>
-
               <div className="text-muted small mb-3">
                 <div className="mb-2">
-                  모집기간:{" "}
+                  모집기간 :{" "}
                   {new Date(p.applyStartDt).toISOString().slice(0, 10)} ~{" "}
                   {new Date(p.applyEndDt).toISOString().slice(0, 10)}
                 </div>
                 <div className="mb-2">
-                  활동기간:{" "}
+                  활동기간 :{" "}
                   {new Date(p.operateStartDt).toISOString().slice(0, 10)} ~{" "}
                   {new Date(p.operateEndDt).toISOString().slice(0, 10)}
                 </div>
-                <div>모집인원: {p.capacity}명</div>
+                <div className="mb-2">모집인원 : {p.capacity}명</div>
+                <div>신청인원 : {p.applicants}명</div>
               </div>
 
-              <Button variant="primary" className="w-100 rounded-pill">
+              <Button
+                variant="primary"
+                className="w-100 rounded-pill"
+                onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
+              >
                 신청하기
               </Button>
             </Card.Body>

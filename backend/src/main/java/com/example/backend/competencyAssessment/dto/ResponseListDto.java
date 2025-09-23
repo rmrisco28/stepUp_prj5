@@ -11,10 +11,9 @@ import java.io.Serializable;
  */
 @Data
 @AllArgsConstructor
-public class ResponseDto implements Serializable {
+public class ResponseListDto implements Serializable {
     Integer seq;
-    Integer memberSeq;
+    Integer memberSeqId;
     Integer questionSeqSeq;
-    Integer questionSeqQuestionNum;
     Integer choiceSeqSeq;
 }

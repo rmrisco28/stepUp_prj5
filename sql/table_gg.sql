@@ -98,47 +98,51 @@ DROP TABLE choice;
 CREATE TABLE `response`
 (
     `response_seq` INT AUTO_INCREMENT NOT NULL,
-    `student_seq`  INT                NOT NULL,
+    `member_seq`   INTEGER            NOT NULL,
     `question_seq` INT                NOT NULL,
     `choice_seq`   INT                NOT NULL,
     CONSTRAINT pk_response primary key (response_seq),
-    FOREIGN KEY (student_seq) REFERENCES student (student_seq),
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq),
     FOREIGN KEY (question_seq) REFERENCES question (question_seq),
     FOREIGN KEY (choice_seq) REFERENCES choice (choice_seq)
 );
 
 DROP TABLE IF EXISTS `response`;
 
-# 결과 테이블
-CREATE TABLE `result`
+# 완료 테이블
+CREATE TABLE `complete`
 (
-    `result_seq`     INT AUTO_INCREMENT NOT NULL,
-    `student_seq`    INT                NOT NULL COMMENT '회원 ID',
+    `complete_seq`   INT AUTO_INCREMENT NOT NULL,
+    `member_seq`     INT                NOT NULL COMMENT '회원 ID',
     `ca_seq`         INT                NOT NULL COMMENT '역량 진단 제목',
-    `response_seq`   INT                NOT NULL,
-    `assessmentDttm` DateTime           NOT NULL,
-    CONSTRAINT pk_result PRIMARY KEY (result_seq),
-    FOREIGN KEY (student_seq) REFERENCES student (student_seq),
-    FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq),
-    FOREIGN KEY (response_seq) REFERENCES response (response_seq)
-
+    `assessmentDttm` DateTime           NOT NULL DEFAULT NOW(),
+    CONSTRAINT pk_complete PRIMARY KEY (complete_seq),
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq),
+    FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq)
 );
 
-# 상세결과 테이블
-DROP TABLE IF EXISTS `result_detail`;
+DROP TABLE complete;
 
-CREATE TABLE `result_detail`
+
+
+DROP TABLE IF EXISTS `complete`;
+
+
+# 상세결과 테이블
+DROP TABLE IF EXISTS `result`;
+
+CREATE TABLE `result`
 (
-    `result_detail_seq`  INT AUTO_INCREMENT NOT NULL,
-    `result_seq`         INT                NOT NULL, # 학생 정보 가져오기
+    `result_seq`         INT AUTO_INCREMENT NOT NULL,
+    `member_seq`         INT                NOT NULL, # 학생 정보 가져오기
     `sub_competency_seq` INT                NOT NULL COMMENT '역량',
     `ca_seq`             INT                NOT NULL COMMENT '역량 진단 제목',
-    `score`              VARCHAR            NOT NULL,
-    CONSTRAINT pk_result_detail PRIMARY KEY (result_detail_seq),
-    FOREIGN KEY (result_seq) REFERENCES result (result_seq),
+    `score`              DOUBLE             NOT NULL,
+    CONSTRAINT pk_result PRIMARY KEY (result_seq),
+    FOREIGN KEY (member_seq) REFERENCES member (member_seq),
     FOREIGN KEY (sub_competency_seq) REFERENCES sub_competency (sub_competency_seq),
     FOREIGN KEY (ca_seq) REFERENCES assessment (ca_seq)
 );
 
-
+DROP TABLE result;
 

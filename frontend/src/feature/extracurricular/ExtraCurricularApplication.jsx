@@ -57,6 +57,8 @@ export function ExtraCurricularApplication() {
 
   // 이중에서도 학생만 접근 되도록?
   if (!user) {
+    // alert("로그인이 필요합니다.");
+    // navigate("/login");
     return (
       <Container>
         <Row className="justify-content-center">
@@ -96,7 +98,32 @@ export function ExtraCurricularApplication() {
   }
 
   function ETCDeleteButton() {
-    // 신청 취소 버튼, db에서 사라지게 하기
+    // 확인 창 띄우기
+    const confirmed = window.confirm(
+      "해당 비교과 프로그램 신청을 취소하시겠습니까?",
+    );
+    if (!confirmed) return; // 취소 시 종료
+
+    // 삭제 요청
+    axios
+      .delete("/api/extracurricular/applyDelete", {
+        headers: { "Content-Type": "application/json" },
+        data: {
+          programSeq: ApplicationInfo.seq,
+          memberSeq: user.memberSeq,
+        },
+      })
+      .then((res) => {
+        alert(res.data.message);
+        navigate(-1);
+      })
+      .catch((err) => {
+        alert(err.response?.data.message || err.message);
+        console.error(err.response?.data || err.message);
+      })
+      .finally(() => {
+        console.log("always");
+      });
   }
 
   return (

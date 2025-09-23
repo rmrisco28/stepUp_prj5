@@ -2,8 +2,10 @@ import { Col, Row, Table, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
+import { useAuth } from "../../common/AuthContext.jsx";
 
 export function NoticeList() {
+  const { user, isAdmin } = useAuth();
   const [noticeList, setNoticeList] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
@@ -69,9 +71,11 @@ export function NoticeList() {
             )}
           </tbody>
         </Table>
-        <Button onClick={NoticeAddButton} className="mt-3">
-          공지사항 추가
-        </Button>
+        {isAdmin() && (
+          <Button onClick={NoticeAddButton} className="mt-3">
+            공지사항 추가
+          </Button>
+        )}
       </Col>
     </Row>
   );

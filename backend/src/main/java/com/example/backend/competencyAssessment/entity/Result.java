@@ -1,5 +1,6 @@
 package com.example.backend.competencyAssessment.entity;
 
+import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,11 +11,11 @@ import lombok.ToString;
 @Setter
 @ToString
 @Entity
-@Table(name = "response", schema = "prj5")
-public class Response {
+@Table(name = "result", schema = "prj5")
+public class Result {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "response_seq", nullable = false)
+    @Column(name = "result_seq", nullable = false)
     private Integer seq;
 
     @ManyToOne(optional = false)
@@ -22,11 +23,14 @@ public class Response {
     private Member memberSeq;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "question_seq", nullable = false)
-    private Question questionSeq;
+    @JoinColumn(name = "sub_competency_seq", nullable = false)
+    private SubCompetency subCompetencySeq;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "choice_seq", nullable = false)
-    private Choice choiceSeq;
+    @JoinColumn(name = "ca_seq", nullable = false)
+    private Assessment caSeq;
+
+    @Column(name = "score", nullable = false)
+    private Double score;
 
 }

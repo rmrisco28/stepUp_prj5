@@ -20,3 +20,5 @@ SET FOREIGN_KEY_CHECKS = 1;
 # 신청 상태 변경
 ALTER TABLE extra_curricular_application
     MODIFY COLUMN status INT(1) NOT NULL DEFAULT 1 COMMENT '0=미신청, 1=신청';
+
+# dev check 주석
