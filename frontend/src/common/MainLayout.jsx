@@ -24,9 +24,11 @@ export function MainLayout() {
           top: 0,
           zIndex: 1000,
           boxShadow: "0 2px 20px rgba(0, 0, 0, 0.1)",
+          // boxShadow: "none", // 이거로 바꾸면 그림자가 없어짐
           backdropFilter: "blur(10px)",
           background: "rgba(255, 255, 255, 0.95)",
           borderBottom: "none", // 이거 해도 안 없어짐
+          height: "120px",
         }}
       >
         <MenuBar />
