@@ -394,4 +394,15 @@ public class AssessmentService {
         });
         return ResponseEntity.ok(savedList);
     }
+
+    public List<?> result(int seq, int memberSeq) {
+        List<ResultDto> resultDto = resultRepository.findBySeq(seq, memberSeq);
+        System.out.println("resultDto = " + resultDto);
+        return resultDto;
+    }
+
+    public List<QuestionListDto> resultQuestionList(int seq) {
+        List<QuestionListDto> resultQuestionList = questionRepository.findByCaSeqSeq(seq);
+        return resultQuestionList;
+    }
 }
