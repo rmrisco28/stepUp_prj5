@@ -9,9 +9,10 @@ import {
   FormLabel,
   Row,
 } from "react-bootstrap";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { useAuth } from "../../common/AuthContext.jsx";
 
 export function ExtraCurricularRegister() {
   const [formData, setFormData] = useState({
@@ -29,13 +30,14 @@ export function ExtraCurricularRegister() {
     manager: "",
     managerPhone: "",
     mileagePoints: 0,
-    author: "",
     thumbnail: null, // 썸네일 파일
     contentImages: [], // 본문 이미지 파일
   });
   const [competencies, setCompetencies] = useState([]); // 역량 목록을 저장할 상태
 
   const navigate = useNavigate();
+
+  const { user } = useAuth();
 
   // 역량 목록 가져옴. 추후 작성자도 가져오게 하면 될 듯!
   useEffect(() => {
@@ -99,6 +101,9 @@ export function ExtraCurricularRegister() {
       submitData.append("contentImages", file);
     });
 
+    // 작성자(user.name) 추가
+    submitData.append("author", user.name);
+
     axios
       .postForm("/api/extracurricular/register", submitData)
       .then(() => {
@@ -121,7 +126,6 @@ export function ExtraCurricularRegister() {
           manager: "",
           managerPhone: "",
           mileagePoints: 0,
-          author: "",
           thumbnail: null,
           contentImages: [],
         });
@@ -356,8 +360,9 @@ export function ExtraCurricularRegister() {
               <FormControl
                 type="text"
                 name="author"
-                value={formData.author}
+                value={user.name}
                 onChange={handleChange}
+                disabled
               />
             </FormGroup>
 
