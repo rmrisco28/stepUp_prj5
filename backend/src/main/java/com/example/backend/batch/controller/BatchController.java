@@ -24,7 +24,7 @@ public class BatchController implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        boolean batch = true;
+        boolean batch = false;
 
         if (batch) {
             log.info("=== Backend Application Started ===");
