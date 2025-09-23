@@ -192,8 +192,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                        + t.getId().getProgramSeq() + "/"
-                                        + t.getId().getName(), // URL 조합
+                                     + t.getId().getProgramSeq() + "/"
+                                     + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
@@ -461,7 +461,26 @@ public class ExtraCurricularService {
         eca.setProgramSeq(ecp);
         eca.setMemberSeq(mb);
         eca.setMotive(dto.getMotive());
+
+        // 모집정원 기준 체크
+        if (ecp.getApplicants() < ecp.getCapacity()) {
+            // 정원 내면 신청자 수 증가
+            ecp.setApplicants(ecp.getApplicants() + 1);
+            // status 1 = 신청
+            eca.setStatus(1);
+        } else {
+            // 정원 초과면 대기자 수 증가
+            ecp.setWaiting(ecp.getWaiting() + 1);
+            // status 2 = 대기
+            eca.setStatus(2);
+        }
+
+        // 신청 테이블 저장
         extraCurricularApplicationRepository.save(eca);
+
+        // 프로그램 테이블 저장
+        extraCurricularProgramRepository.save(ecp);
+
     }
 
     public void applyDelete(ETCApplyForm dto) {
