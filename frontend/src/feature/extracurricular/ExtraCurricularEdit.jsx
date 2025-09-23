@@ -37,7 +37,6 @@ export function ExtraCurricularEdit() {
     managerPhone: "",
     mileagePoints: 0,
     author: "",
-    useYn: true,
     thumbnail: null, // 새 썸네일
     newContentImages: [], // 새 본문 이미지
     deleteContentImageNames: [], // 삭제할 이미지
@@ -77,7 +76,6 @@ export function ExtraCurricularEdit() {
           managerPhone: data.managerPhone || "",
           mileagePoints: data.mileagePoints || 0,
           author: data.author || "",
-          useYn: data.useYn ?? true,
         });
         setExistingThumbnail(data.thumbnail); // 기존 썸네일 URL
         setExistingContentImages(
@@ -108,6 +106,18 @@ export function ExtraCurricularEdit() {
         console.error("역량 목록을 불러오는 데 실패했습니다.", error);
       });
   }, []);
+
+  // 3. competencies와 formData.competency 문자열이 준비되면 seq로 변환
+  useEffect(() => {
+    if (competencies.length > 0 && formData.competency) {
+      const matched = competencies.find(
+        (c) => c.subCompetencyName === formData.competency,
+      );
+      if (matched) {
+        setFormData((prev) => ({ ...prev, competency: matched.seq }));
+      }
+    }
+  }, [competencies, formData.competency]);
 
   // 모든 입력값 처리 (텍스트, 날짜, 셀렉트 전용)
   const handleChange = (e) => {
@@ -141,6 +151,10 @@ export function ExtraCurricularEdit() {
   // 폼 제출
   function handleEditButtonClick(e) {
     e.preventDefault();
+
+    if (!window.confirm("프로그램을 수정하시겠습니까?")) {
+      return; // 사용자가 취소 누르면 실행 중단
+    }
 
     const fd = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -393,21 +407,6 @@ export function ExtraCurricularEdit() {
               </FormControl>
             </FormGroup>
 
-            {/* 사용 여부 */}
-            <FormGroup className="mb-3" controlId="useYn">
-              <FormLabel className="me-3">사용여부</FormLabel>
-              <FormCheck
-                inline
-                type="checkbox"
-                name="useYn"
-                label="사용"
-                checked={formData.useYn}
-                onChange={(e) =>
-                  setFormData({ ...formData, useYn: e.target.checked })
-                }
-              />
-            </FormGroup>
-
             {existingThumbnail && (
               <ListGroup className="mb-3">
                 <ListGroupItem>
@@ -504,7 +503,6 @@ export function ExtraCurricularEdit() {
                           alt={`content-${idx}`}
                           fluid
                           style={{
-                            width: "100px",
                             height: "auto",
                             objectFit: "cover",
                             filter: formData.deleteContentImageNames?.includes(

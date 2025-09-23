@@ -158,11 +158,7 @@ export function ExtraCurricularProgram() {
                 <span className="fw-semibold">모집인원</span>
               </div>
               <div className="position-relative flex-grow-1">
-                <ProgressBar
-                  variant="info"
-                  now={applicantPercent}
-                  className="custom-progress"
-                />
+                <ProgressBar variant="info" now={applicantPercent} />
                 <span className="position-absolute top-50 start-50 translate-middle fw-bold">
                   {program.applicants}명 / {program.capacity}명
                 </span>
@@ -184,11 +180,7 @@ export function ExtraCurricularProgram() {
                 <span className="fw-semibold">대기인원</span>
               </div>
               <div className="position-relative flex-grow-1">
-                <ProgressBar
-                  variant="warning"
-                  now={waitingPercent}
-                  className="custom-progress"
-                />
+                <ProgressBar variant="warning" now={waitingPercent} />
                 <span className="position-absolute top-50 start-50 translate-middle fw-bold">
                   {program.waiting}명 / 10명
                 </span>

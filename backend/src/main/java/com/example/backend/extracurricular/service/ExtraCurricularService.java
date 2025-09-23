@@ -1,7 +1,6 @@
 package com.example.backend.extracurricular.service;
 
 import com.example.backend.batch.student.repository.StudentRepository;
-import com.example.backend.competency.entity.Competency;
 import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competency.repository.SubCompetencyRepository;
 import com.example.backend.extracurricular.dto.*;
@@ -14,7 +13,6 @@ import com.example.backend.extracurricular.repository.ExtraCurricularProgramRepo
 import com.example.backend.member.entity.Member;
 import com.example.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -280,7 +278,6 @@ public class ExtraCurricularService {
         dto.setAuthor(data.getAuthor());
         dto.setCreatedAt(data.getCreatedAt());
         dto.setUpdatedAt(data.getUpdatedAt());
-        dto.setUseYn(data.getUseYn());
         dto.setThumbnails(thumbnailUrl);
         dto.setContentImages(contentUrl);
 
@@ -333,7 +330,6 @@ public class ExtraCurricularService {
         data.setManagerPhone(form.getManagerPhone());
         data.setMileagePoints(form.getMileagePoints());
         data.setAuthor(form.getAuthor());
-        data.setUseYn(form.getUseYn());
         data.setUpdatedAt(LocalDateTime.now());
 
         // --- 2. 썸네일 교체 ---

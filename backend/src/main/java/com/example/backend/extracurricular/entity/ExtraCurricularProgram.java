@@ -97,9 +97,6 @@ public class ExtraCurricularProgram {
     @Column(name = "updated_at", nullable = false, insertable = false)
     private LocalDateTime updatedAt;
 
-    @ColumnDefault("1")
-    @Column(name = "use_yn", nullable = false)
-    private Boolean useYn = true;
 
     // 썸네일 이미지
     @OneToOne(mappedBy = "program", cascade = CascadeType.ALL)

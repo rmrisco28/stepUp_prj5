@@ -32,7 +32,6 @@ public class ETCDetailDto {
     private String Author;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private Boolean useYn;
 
     private String thumbnails;
     private List<String> contentImages;
@@ -46,8 +45,7 @@ public class ETCDetailDto {
                         String competency, String location, String operationType,
                         String grades, Integer capacity, Integer applicants, Integer waiting,
                         String status, Integer mileagePoints, String manager, String managerPhone,
-                        String author, LocalDateTime createdAt, LocalDateTime updatedAt,
-                        Boolean useYn) {
+                        String author, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.seq = seq;
         this.title = title;
         this.content = content;
@@ -69,6 +67,5 @@ public class ETCDetailDto {
         this.Author = author;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.useYn = useYn;
     }
 }

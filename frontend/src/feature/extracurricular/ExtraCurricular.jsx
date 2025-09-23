@@ -40,6 +40,11 @@ export function ExtraCurricular() {
     );
   }
 
+  // 상태 필터링: OPEN, CLOSED만 표시
+  const visiblePrograms = programs.filter(
+    (p) => p.status === "OPEN" || p.status === "CLOSED",
+  );
+
   return (
     <Container className="my-5">
       <div className="mx-auto" style={{ maxWidth: "1000px" }}>
@@ -49,7 +54,7 @@ export function ExtraCurricular() {
             <h3 className="text-success fw-bold">비교과 프로그램</h3>
           </Col>
           <Col xs="auto">
-            <Badge bg="secondary">총 {programs.length}개 프로그램</Badge>
+            <Badge bg="secondary">총 {visiblePrograms.length}개 프로그램</Badge>
           </Col>
         </Row>
 

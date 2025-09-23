@@ -11,7 +11,7 @@ CREATE TABLE `extra_curricular_program`
     apply_start_dt   DATETIME                       NOT NULL,
     apply_end_dt     DATETIME                       NOT NULL,
     location         VARCHAR(250)                   NULL,
-    competency                                      NOT NULL,
+    competency       INT                            NOT NULL,
     operation_type   VARCHAR(100)                   NOT NULL,
     grades           VARCHAR(100)                   NULL,
     capacity         INT                            NOT NULL DEFAULT 0,
@@ -23,9 +23,14 @@ CREATE TABLE `extra_curricular_program`
     mileage_points   INT                            NULL     DEFAULT 0,
     view             INT                            NULL     DEFAULT 0,
     created_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    use_yn           BOOLEAN                        NOT NULL DEFAULT TRUE
+    updated_at       DATETIME                       NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+SHOW CREATE TABLE extra_curricular_program;
+
+ALTER TABLE extra_curricular_program
+    DROP COLUMN use_yn;
+
 
 DROP TABLE extra_curricular_program;
 
