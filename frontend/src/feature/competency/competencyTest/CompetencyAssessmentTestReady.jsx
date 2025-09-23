@@ -35,7 +35,7 @@ export function CompetencyAssessmentTestReady() {
               if (response.data) {
                 // 검사 완료된 경우
                 alert("이미 진단검사를 완료하셨습니다.");
-                navigate("/competency/assessment"); // 다른 페이지로 이동
+                navigate(`/competency/assessment/test/result/${assessmentSeq}`); // 다른 페이지로 이동
 
                 console.log("과연", imposible);
               } else {

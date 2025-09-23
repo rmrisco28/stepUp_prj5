@@ -125,7 +125,9 @@ export function CompetencyAssessmentTestResult() {
   const studentScores = {}; // 하위역량별 학생 점수
   resultData.forEach((r) => {
     const sub = r.subCompetencySeqSubCompetencyName;
-    studentScores[sub] = (studentScores[sub] || 0) + r.score;
+    const question = questionList.find((q) => q.caSeqSeq === r.caSeqSeq);
+    const actualScore = question ? question.score * r.score : 0;
+    studentScores[sub] = (studentScores[sub] || 0) + actualScore;
   });
 
   // Object.values로 배열 변환
