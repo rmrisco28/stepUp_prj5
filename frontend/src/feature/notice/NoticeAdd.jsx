@@ -5,7 +5,7 @@ import axios from "axios";
 import { useAuth } from "../../common/AuthContext.jsx";
 
 export function NoticeAdd() {
-  const { user, loading } = useAuth();
+  const { user, loading, isAuthenticated } = useAuth();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [memberSeq, setMemberSeq] = useState(0);
@@ -13,13 +13,19 @@ export function NoticeAdd() {
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
 
+  // 로그인 안 한 사용자는 로그인 페이지로 보냄
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading && !isAuthenticated) {
+      navigate("/login", { replace: true });
+    }
+  }, [loading, isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (!loading && isAuthenticated && user) {
       setAuthor(user.name);
       setMemberSeq(user.memberSeq);
-      if (!user) alert("관리자만 이용 가능합니다.");
     }
-  }, [loading, user]);
+  }, [loading, isAuthenticated, user]);
 
   const isDisabled = isProcessing || !title.trim() || !content.trim();
 
