@@ -14,6 +14,7 @@ export function MainPage() {
     axios
       .get("/api/extracurricular/list")
       .then((res) => {
+        console.log(res.data.programList);
         setPrograms(res.data.programList);
       })
       .catch((err) => console.error("목록 불러오기 실패", err))
@@ -60,8 +61,9 @@ export function MainPage() {
         {/*<p>{loginStatus}</p>*/}
         <div style={{ width: 100, height: 100 }}> 뭐 넣지 </div>
         {/* 캐루셀로 뭐 보이게? 근데 이러면 세션 그거 해야함 !! 흠*/}
+        <h3 className="mb-4">최신 등록 비교과 프로그램</h3>
         {programs.length > 0 ? (
-          <ExtraCurricularCardList programs={programs} />
+          <ExtraCurricularCardList programs={programs.slice(0, 6)} />
         ) : (
           <div>프로그램이 없습니다.</div>
         )}

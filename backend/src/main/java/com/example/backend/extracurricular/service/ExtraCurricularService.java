@@ -190,8 +190,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                     + t.getId().getProgramSeq() + "/"
-                                     + t.getId().getName(), // URL 조합
+                                        + t.getId().getProgramSeq() + "/"
+                                        + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
