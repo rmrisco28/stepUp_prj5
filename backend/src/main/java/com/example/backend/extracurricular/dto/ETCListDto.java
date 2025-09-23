@@ -1,11 +1,10 @@
 package com.example.backend.extracurricular.dto;
 
+import com.example.backend.extracurricular.enums.OperationType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Data
@@ -22,6 +21,8 @@ public class ETCListDto {
     private final Integer capacity;
     private final LocalDateTime createdAt;
     private final String status;
+    private final String grades;
+    private final OperationType operationType;
 
     private String thumbUrl;
 
