@@ -13,11 +13,13 @@ import {
   Image,
   Row,
   Spinner,
+  Table,
 } from "react-bootstrap";
 import axios from "axios";
 
 export function ExtraCurricularDetail() {
   const [program, setProgram] = useState(null);
+  const [applyStudents, setApplyStudents] = useState(null);
   const [params] = useSearchParams();
   const { seq } = useParams(); // URL 파라미터
 
@@ -39,6 +41,21 @@ export function ExtraCurricularDetail() {
       .then((res) => {
         console.log(res.data);
         setProgram(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        console.log("always");
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(`/api/extracurricular/applyStudentList/${seq}`)
+      .then((res) => {
+        console.log(res.data);
+        setApplyStudents(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -413,6 +430,30 @@ export function ExtraCurricularDetail() {
           </Col>
         </Row>
       </Form>
+
+      {/*  프로그램 신청 학생 목록 */}
+      {/*  프로그램 신청 학생 목록 */}
+      <h3 className="mt-5 mb-3">신청 학생 목록</h3>
+      {applyStudents && applyStudents.length > 0 ? (
+        <Table striped bordered hover responsive>
+          <thead className="table-success text-center">
+            <tr>
+              <th style={{ width: "20%" }}>번호</th>
+              <th style={{ width: "80%" }}>학생 이름</th>
+            </tr>
+          </thead>
+          <tbody>
+            {applyStudents.map((student, index) => (
+              <tr key={student.seq} className="text-center">
+                <td>{index + 1}</td>
+                <td>{student.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      ) : (
+        <p>신청한 학생이 없습니다.</p>
+      )}
     </Container>
   );
 }

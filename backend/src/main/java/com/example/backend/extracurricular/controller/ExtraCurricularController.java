@@ -90,6 +90,7 @@ public class ExtraCurricularController {
                         "text", seq + "번 프로그램이 삭제되었습니다.")));
     }
 
+    // 신청화면에서 프로그램 정보중에서 몇 개 가져오는거
     @GetMapping("/applicationList/{seq}")
     public ResponseEntity<?> AppList(@PathVariable Integer seq) {
         return ResponseEntity.ok().body(extraCurricularService.appList(seq));
@@ -133,6 +134,12 @@ public class ExtraCurricularController {
     @GetMapping("complete/{seq}")
     public ResponseEntity<?> complete(@PathVariable Integer memberSeq) {
         return ResponseEntity.ok(extraCurricularService.complete(memberSeq));
+    }
+
+    // 프로그램 신청한 학생 정보 가져오기
+    @GetMapping("applyStudentList/{seq}")
+    public ResponseEntity<?> applyStudentList(@PathVariable Integer seq) {
+        return ResponseEntity.ok(extraCurricularService.applyStudentList(seq));
     }
 
 }

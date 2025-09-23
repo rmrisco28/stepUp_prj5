@@ -203,8 +203,8 @@ public class ExtraCurricularService {
                         t -> t.getId().getProgramSeq(),
                         Collectors.mapping(
                                 t -> imagePrefix + "prj5/ETC_Thumb/"
-                                     + t.getId().getProgramSeq() + "/"
-                                     + t.getId().getName(), // URL 조합
+                                        + t.getId().getProgramSeq() + "/"
+                                        + t.getId().getName(), // URL 조합
                                 Collectors.toList()
                         )
                 ));
@@ -520,6 +520,33 @@ public class ExtraCurricularService {
                     dto.setOperateEndDt(c.getProgramSeq().getOperateEndDt());
                     dto.setCompleteStatus(c.getCompleteStatus() == 1 ? "이수" : "미이수");
                     return dto;
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<applyStudentDto> applyStudentList(Integer seq) {
+        // 프로그램 객체를 먼저 선언해야겠다.
+        // pathVariable로 받은 program_seq를 통해
+        // 테이블에서 program_seq를 가진 행들을 찾아서
+        // 그 행에 있는 member_seq들을 찾아서
+        // member 테이블에 있는 학생 또는 교직원과 연결해서
+        // 그때의 이름을 가져오기.
+
+        // 프로그램 시퀀스로 프로그램 객체 찾기(가져오기)
+        ExtraCurricularProgram ep = extraCurricularProgramRepository
+                .findBySeq(seq);
+
+        // 프로그램 객체로(실제론 시퀀스로 연결이 알아서 되는 것?)
+        // 그 프로그램 시퀀스가 있는 신청 목록 가져오기
+        List<ExtraCurricularApplication> etca = extraCurricularApplicationRepository
+                .findByProgramSeq(ep);
+
+        return etca.stream()
+                .map(etcas -> {
+                    return applyStudentDto.builder()
+                            .seq(etcas.getMemberSeq().getId())
+                            .name(etcas.getMemberSeq().getStudent().getName())
+                            .build();
                 })
                 .collect(Collectors.toList());
     }

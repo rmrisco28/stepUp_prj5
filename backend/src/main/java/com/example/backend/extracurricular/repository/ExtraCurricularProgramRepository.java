@@ -42,4 +42,5 @@ public interface ExtraCurricularProgramRepository extends JpaRepository<ExtraCur
     );
 
 
+    ExtraCurricularProgram findBySeq(Integer seq);
 }

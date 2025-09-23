@@ -71,6 +71,7 @@ CREATE TABLE `extra_curricular_application`
 );
 
 DROP TABLE extra_curricular_application;
+SHOW CREATE TABLE extra_curricular_application;
 
 CREATE TABLE faq
 (
