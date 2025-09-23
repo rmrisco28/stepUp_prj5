@@ -126,7 +126,7 @@ export function NoticeDetail() {
             {isAdmin() && userName === notice.author && (
               <Button
                 variant="outline-warning"
-                onClick={() => navigate(`/board/notice/edit/${notice.id}`)}
+                onClick={() => navigate(`/board/notice/edit/${notice.seq}`)}
                 className="me-2"
               >
                 수정
