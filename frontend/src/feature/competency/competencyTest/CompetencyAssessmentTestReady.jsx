@@ -61,7 +61,7 @@ export function CompetencyAssessmentTestReady() {
         setTitle(res.data.caTitle);
         setEndDttm(res.data.endDttm);
       });
-  });
+  }, [assessmentSeq, navigate, memberSeq]);
 
   return (
     <>

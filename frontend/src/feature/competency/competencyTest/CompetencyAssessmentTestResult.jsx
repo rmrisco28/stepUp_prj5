@@ -89,6 +89,10 @@ export function CompetencyAssessmentTestResult() {
       )
       .then((res) => {
         console.log("불러오기 성공", res.data);
+        if (res.data.length === 0) {
+          alert("진단검사 결과가 없습니다.");
+          navigate("/competency/assessment");
+        }
         setResultData(res.data);
         console.log("실험", res.data[0].memberSeqStudentMajor);
         setMemberMajor(res.data[0].memberSeqStudentMajor);
