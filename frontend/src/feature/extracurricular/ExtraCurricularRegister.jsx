@@ -44,7 +44,6 @@ export function ExtraCurricularRegister() {
     axios
       .get("/api/competency/subList")
       .then((response) => {
-        console.log(response.data);
         setCompetencies(response.data);
       })
       .catch((error) => {

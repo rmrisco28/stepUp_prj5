@@ -57,8 +57,6 @@ export function ExtraCurricularEdit() {
     axios
       .get(`/api/extracurricular/detail/${seq}`)
       .then((res) => {
-        const data = res.data;
-        console.log("데이터 불러오기 성공");
         setFormData({
           title: data.title || "",
           content: data.content || "",
@@ -90,7 +88,6 @@ export function ExtraCurricularEdit() {
         navigate(-1);
       })
       .finally(() => {
-        console.log("데이터 불러오기 완료");
         setLoading(false);
       });
   }, [seq, navigate]);

@@ -32,9 +32,7 @@ export function ExtraCurricularApplication() {
       axios
         .get(`/api/extracurricular/applicationList/${seq}`)
         .then((res) => {
-          console.log(res.data);
           setApplicationInfo(res.data);
-          console.log(user);
         })
         .catch((err) => {
           console.log("신청 프로그램 정보를 불러오는데 실패했습니다.", err);
@@ -83,7 +81,6 @@ export function ExtraCurricularApplication() {
       memberSeq: user.memberSeq,
       motive: motive,
     };
-    console.log(submitData);
 
     axios
       .post("/api/extracurricular/apply", submitData)
@@ -121,9 +118,7 @@ export function ExtraCurricularApplication() {
         alert(err.response?.data.message || err.message);
         console.error(err.response?.data || err.message);
       })
-      .finally(() => {
-        console.log("always");
-      });
+      .finally(() => {});
   }
 
   return (

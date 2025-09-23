@@ -12,7 +12,6 @@ export function FaqDetail() {
     axios
       .get(`/api/faq/${seq}`)
       .then((res) => {
-        console.log(res.data);
         setFaq(res.data);
       })
       .catch((err) => {
@@ -24,7 +23,6 @@ export function FaqDetail() {
     axios
       .delete(`/api/faq/delete/${seq}`)
       .then((res) => {
-        console.log(res.data);
         navigate("/board/faq/manage");
       })
       .catch((err) => {
