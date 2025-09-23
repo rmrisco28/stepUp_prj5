@@ -10,9 +10,14 @@ export function ExtraCurricularCardList({ programs }) {
     CLOSED: "모집마감",
   };
 
+  // 상태 필터링: OPEN, CLOSED만 표시
+  const visiblePrograms = programs.filter(
+    (p) => p.status === "OPEN" || p.status === "CLOSED",
+  );
+
   return (
     <Row className="g-4">
-      {programs.map((p) => (
+      {visiblePrograms.map((p) => (
         <Col key={p.seq} md={6} lg={4}>
           <Card className="h-100" style={{ borderRadius: "10px" }}>
             <div
