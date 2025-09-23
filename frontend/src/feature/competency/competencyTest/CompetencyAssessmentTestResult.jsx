@@ -190,6 +190,7 @@ export function CompetencyAssessmentTestResult() {
       <Row className="d-flex justify-content-center">
         <Col xs={12} md={10} lg={8}>
           <h3 className="" onClick={() => {}}>
+            {/*todo gg 꾸미기*/}
             진단검사 결과
           </h3>
           <div className="mb-5"></div>
