@@ -35,11 +35,10 @@ export function MenuBar() {
       path: "/extracurricular",
       subItems: [
         { name: "프로그램 신청", path: "/extracurricular" },
-        isExtra() ||
-          (isAdmin() && {
-            name: "프로그램 관리",
-            path: "/extracurricular/manage",
-          }),
+        (isExtra() || isAdmin()) && {
+          name: "프로그램 관리",
+          path: "/extracurricular/manage",
+        },
       ].filter(Boolean),
     },
     {
