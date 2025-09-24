@@ -97,6 +97,20 @@ export function CompetencyAssessmentTestStart() {
 
   // 페이지 클릭
   function handlePageNumberClick(pageNumber) {
+    const firstUnansweredIndex = questionList.findIndex(
+      (q) => !pageResponse[q.seq]?.choiceSeq,
+    );
+    if (firstUnansweredIndex !== -1) {
+      alert("모든 문항에 응답해야 페이지를 이동할 수 있습니다.");
+      setModalShow(false);
+      // 해당 문제로 스크롤 이동
+      questionRefs.current[firstUnansweredIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+
     const responseDtos = Object.entries(response).map(
       ([questionSeq, respObj]) => ({
         seq: respObj.responseSeq ?? null, // 기존 seq 있으면 사용
@@ -106,7 +120,6 @@ export function CompetencyAssessmentTestStart() {
       }),
     );
 
-    console.log("과연", responseDtos);
     axios
       .put(
         `/api/competency/assessment/test/responseSave/${assessmentSeq}`,
@@ -226,7 +239,7 @@ export function CompetencyAssessmentTestStart() {
     <>
       <Row className="d-flex justify-content-center">
         <Col xs={10} md={8} lg={6}>
-          <h3>{title}</h3>
+          <h3 style={{ fontWeight: "bold" }}>{title}</h3>
           <hr />
           {/*문제*/}
           {questionList.map((item, qIndex) => (
@@ -311,7 +324,7 @@ export function CompetencyAssessmentTestStart() {
               취소
             </Button>
 
-            <Button variant="outline-danger" onClick={handelSaveButton}>
+            <Button variant="outline-success" onClick={handelSaveButton}>
               제출
             </Button>
           </Modal.Footer>
@@ -347,7 +360,9 @@ export function CompetencyAssessmentTestStart() {
       {pageInfo.currentPageNumber === pageInfo.totalPages && (
         <Row className="d-flex justify-content-center">
           <Col xs={12} md={10} lg={8} className="d-flex justify-content-end">
-            <Button onClick={() => setModalShow(true)}>제출하기</Button>
+            <Button variant="success" onClick={() => setModalShow(true)}>
+              제출하기
+            </Button>
           </Col>
         </Row>
       )}

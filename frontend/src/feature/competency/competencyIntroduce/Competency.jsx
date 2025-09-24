@@ -63,11 +63,11 @@ export function Competency() {
           <hr className="mb-5" />
           <Table
             striped
-            bordered
             responsive
-            className="text-center align-middle"
+            className="shadow-sm  overflow-hidden table-bordered custom-table-border "
+            style={{ borderCollapse: `collapse` }}
           >
-            <thead>
+            <thead className="table-success">
               <tr>
                 <th
                   style={{
