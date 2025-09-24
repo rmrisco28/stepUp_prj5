@@ -125,7 +125,7 @@ export function ExtraCurricularCardList({ programs }) {
                 </div>
 
                 <Button
-                  variant="primary"
+                  variant="success"
                   className="w-100 rounded-pill"
                   onClick={() => navigate(`/extracurricular/program/${p.seq}`)}
                 >

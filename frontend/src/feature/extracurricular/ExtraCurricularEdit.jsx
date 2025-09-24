@@ -186,9 +186,7 @@ export function ExtraCurricularEdit() {
     <Container className="mt-5 my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={8} lg={6}>
-          <h2 className="mb-4 text-center text-success fw-bold">
-            비교과 프로그램 수정
-          </h2>
+          <h2 className="mb-4 text-center fw-bold">비교과 프로그램 수정</h2>
           <Form>
             {/* 제목 */}
             <FormGroup className="mb-3" controlId="title">

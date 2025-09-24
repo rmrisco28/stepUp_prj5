@@ -38,7 +38,7 @@ export function MyETC() {
   }
 
   return (
-    <Container className="my-2">
+    <Container className="my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={9}>
           <h2 className="mb-5 fw-bold">비교과 내역</h2>
