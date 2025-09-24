@@ -188,19 +188,50 @@ export function CompetencyAssessmentTestResult() {
   return (
     <>
       <Row className="d-flex justify-content-center">
-        <Col xs={12} md={8} lg={6}>
-          <h2 className="" style={{ fontWeight: "bold" }} onClick={() => {}}>
-            {/*todo gg 꾸미기*/}
+        <Col xs={12} md={8} lg={5}>
+          {/* 타이틀 */}
+          <h2
+            className="text-center"
+            style={{
+              fontWeight: "bold",
+              background: "linear-gradient(to right, #28a745, #81c784)", // 초록색 그라디언트
+              color: "white", // 글씨 색을 흰색으로 변경
+              borderRadius: "8px",
+              padding: "10px 20px",
+            }}
+          >
             진단검사 결과
           </h2>
-          <div className="mb-5"></div>
-          이름: {memberName}
-          <br />
-          학번: {studentNo}
-          <br />
-          학과: {memberMajor}
-          <br />
-          <hr />
+          <div className="mb-4"></div>
+
+          <div
+            style={{
+              backgroundColor: "#f1f8e9", // 연한 초록색 배경
+              padding: "15px 20px", // 패딩을 조금 줄여서 박스를 작게 함
+              borderRadius: "8px", // 둥근 테두리
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // 그림자 효과
+              color: "#2e7d32", // 초록색 텍스트
+              fontSize: "16px",
+              fontWeight: "500",
+              marginBottom: "20px", // 아래 여백 추가
+              textAlign: "left", // 내용 왼쪽 정렬
+              width: "90%", // 좌우 크기를 90%로 설정하여 여백을 조금 줄임
+              maxWidth: "600px", // 최대 너비를 600px로 제한
+              margin: "0 auto", // 중앙 정렬
+            }}
+          >
+            <p>
+              이름: <span style={{ color: "#388e3c" }}>{memberName}</span>
+            </p>
+            <p>
+              학번: <span style={{ color: "#388e3c" }}>{studentNo}</span>
+            </p>
+            <p>
+              학과: <span style={{ color: "#388e3c" }}>{memberMajor}</span>
+            </p>
+          </div>
+
+          <hr style={{ borderTop: "2px solid #81c784" }} />
         </Col>
       </Row>
       <Row className="d-flex justify-content-center">
@@ -210,7 +241,7 @@ export function CompetencyAssessmentTestResult() {
               <Bar data={data} options={options} className="mb-5" />
             </Col>
           </Row>
-          <hr className="mb-5" />
+          <hr className="mb-5" style={{ borderTop: "2px solid #81c784" }} />
           <h3 className="mb-3">역량 별 세부 결과</h3>
           {/* 역량 별 데이터 보여주기*/}
           <Table

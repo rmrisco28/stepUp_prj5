@@ -120,7 +120,6 @@ export function CompetencyAssessmentTestStart() {
       }),
     );
 
-    console.log("과연", responseDtos);
     axios
       .put(
         `/api/competency/assessment/test/responseSave/${assessmentSeq}`,
@@ -240,7 +239,7 @@ export function CompetencyAssessmentTestStart() {
     <>
       <Row className="d-flex justify-content-center">
         <Col xs={10} md={8} lg={6}>
-          <h3>{title}</h3>
+          <h3 style={{ fontWeight: "bold" }}>{title}</h3>
           <hr />
           {/*문제*/}
           {questionList.map((item, qIndex) => (
