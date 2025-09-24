@@ -188,11 +188,11 @@ export function CompetencyAssessmentTestResult() {
   return (
     <>
       <Row className="d-flex justify-content-center">
-        <Col xs={12} md={10} lg={8}>
-          <h3 className="" onClick={() => {}}>
+        <Col xs={12} md={8} lg={6}>
+          <h2 className="" style={{ fontWeight: "bold" }} onClick={() => {}}>
             {/*todo gg 꾸미기*/}
             진단검사 결과
-          </h3>
+          </h2>
           <div className="mb-5"></div>
           이름: {memberName}
           <br />
@@ -201,6 +201,10 @@ export function CompetencyAssessmentTestResult() {
           학과: {memberMajor}
           <br />
           <hr />
+        </Col>
+      </Row>
+      <Row className="d-flex justify-content-center">
+        <Col xs={12} md={10} lg={8}>
           <Row className="justify-content-center">
             <Col xs={12} md={10} lg={8}>
               <Bar data={data} options={options} className="mb-5" />
