@@ -145,7 +145,7 @@ function App() {
 
             {/*나의 활동*/}
             <Route path="activity" element={<MyETC />} />
-            <Route path="activity/etclog" element={<MyETC />} />
+            {/*<Route path="activity/etclog" element={<MyETC />} />*/}
             <Route path="activity/mileage" element={<Mileage />} />
             <Route path="activity/changePw" element={<ChangePw />} />
 

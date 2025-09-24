@@ -97,9 +97,7 @@ export function ExtraCurricularDetail() {
 
   return (
     <Container className="mt-4 my-5" style={{ maxWidth: "1000px" }}>
-      <h3 className="text-success fw-bold mb-5">
-        {program.seq}번 프로그램 정보
-      </h3>
+      <h3 className=" fw-bold mb-5">{program.seq}번 프로그램 정보</h3>
       <Form>
         <Row className="mb-3">
           <Col>

@@ -95,7 +95,7 @@ export function ExtraCurricularApplication() {
   }
 
   return (
-    <Container>
+    <Container className="mt-5">
       <Row className="justify-content-center">
         <Col sm={8}>
           <button
@@ -113,9 +113,7 @@ export function ExtraCurricularApplication() {
           >
             <FaArrowLeft size={20} color="#555" />
           </button>
-          <h3 className="mb-4 text-center text-success fw-bold">
-            프로그램 신청
-          </h3>
+          <h3 className="mb-4 text-center fw-bold">프로그램 신청</h3>
 
           {/* 신청 프로그램 정보 */}
           <h4 className="mb-3">신청 프로그램</h4>
@@ -209,7 +207,7 @@ export function ExtraCurricularApplication() {
               <Col className="d-flex justify-content-end">
                 <Button
                   variant="success"
-                  className="me-2"
+                  className="mb-3"
                   onClick={ETCApplicationButton}
                 >
                   신청하기

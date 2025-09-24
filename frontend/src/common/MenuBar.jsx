@@ -59,7 +59,7 @@ export function MenuBar() {
       name: "나의 활동",
       path: "/activity",
       subItems: [
-        { name: "비교과 내역", path: "/activity/etclog" },
+        { name: "비교과 내역", path: "/activity" },
         // { name: "마일리지 내역", path: "/activity/mileage" },
         { name: "역량진단 결과", path: "/competency/assessment" },
         isAuthenticated && {
@@ -72,7 +72,7 @@ export function MenuBar() {
     },
     {
       name: "안내",
-      path: "/board",
+      path: "/board/notice",
       subItems: [
         { name: "공지사항", path: "/board/notice" },
         { name: "FAQ", path: "/board/faq" },
@@ -120,6 +120,9 @@ export function MenuBar() {
                 className="d-flex align-items-center"
                 style={{ height: "47px" }}
               >
+                <small className="me-2 text-white">
+                  환영합니다! 로그인 후 이용해주세요.
+                </small>
                 <Nav.Link as={Link} to="/login" className="text-white p-0">
                   <Button
                     variant="outline-light"

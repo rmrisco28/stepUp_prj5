@@ -25,7 +25,7 @@ export function FaqAdd() {
   }
 
   return (
-    <Container>
+    <Container className="mt-5">
       <Row className="justify-content-center">
         <Col xs={12} md={9}>
           <h2 className="mb-4 fw-bold">FAQ 등록</h2>
@@ -60,7 +60,7 @@ export function FaqAdd() {
           <div className="d-flex justify-content-end">
             <Button
               className="me-2"
-              variant="primary"
+              variant="success"
               onClick={FaqAddButton}
               disabled={isProcessing}
             >

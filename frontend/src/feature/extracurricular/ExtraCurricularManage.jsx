@@ -70,7 +70,7 @@ export function ExtraCurricularManage() {
         <Row className="justify-content-between align-items-center mb-4">
           <Col>
             <h3
-              className="text-success fw-bold"
+              className=" fw-bold"
               style={{
                 cursor: "pointer",
                 width: "280px",
@@ -88,7 +88,7 @@ export function ExtraCurricularManage() {
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                 />
-                <Button type="submit" variant="primary">
+                <Button type="submit" variant="success">
                   <IoSearch />
                 </Button>
               </InputGroup>
@@ -138,7 +138,7 @@ export function ExtraCurricularManage() {
         <Row className="my-3" style={{ position: "relative" }}>
           {/* 프로그램 등록버튼*/}
           <Button
-            variant="outline-primary"
+            variant="outline-success"
             onClick={() => navigate("/extracurricular/register")}
             style={{
               position: "absolute",

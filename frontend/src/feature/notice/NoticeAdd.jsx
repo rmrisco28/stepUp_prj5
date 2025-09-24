@@ -66,9 +66,9 @@ export function NoticeAdd() {
           </Form.Group>
 
           {/*파일 추가할 자리*/}
-          <Form.Group className="mb-3" controlId="noticeFiles">
-            <Form.Label className="fw-bold">첨부 파일</Form.Label>
-          </Form.Group>
+          {/*<Form.Group className="mb-3" controlId="noticeFiles">*/}
+          {/*  <Form.Label className="fw-bold">첨부 파일</Form.Label>*/}
+          {/*</Form.Group>*/}
 
           <Form.Group className="mb-4" controlId="noticeAuthor">
             <Form.Label className="fw-bold">작성자</Form.Label>
