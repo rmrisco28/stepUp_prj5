@@ -150,7 +150,7 @@ export function ChangePw() {
           취소
         </Button>
         <Button
-          variant="primary"
+          variant="success"
           onClick={handleChange}
           disabled={isChangePasswordDisabled}
         >
