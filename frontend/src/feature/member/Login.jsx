@@ -163,7 +163,7 @@ export function Login() {
                   <li className="d-flex align-items-center mb-2">
                     <FaUserTie className="me-2 text-success" />
                     <div>
-                      관리자 아이디: <b>CM21007</b> | 비밀번호: <b>000524</b>
+                      관리자 아이디: <b>AD25004</b> | 비밀번호: <b>000222</b>
                     </div>
                   </li>
                 </ul>
