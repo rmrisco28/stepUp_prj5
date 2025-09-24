@@ -358,7 +358,7 @@ export function CompetencyAssessmentTestStart() {
       )}
 
       {pageInfo.currentPageNumber === pageInfo.totalPages && (
-        <Row className="d-flex justify-content-center">
+        <Row className="d-flex justify-content-center mb-5">
           <Col xs={12} md={10} lg={8} className="d-flex justify-content-end">
             <Button variant="success" onClick={() => setModalShow(true)}>
               제출하기

@@ -167,8 +167,12 @@ export function CompetencyAssessment() {
                       </td>
                       <td align="center">
                         <Button
-                          disabled={inDisabled}
-                          variant={inDisabled ? "dark" : "outline-warning"}
+                          disabled={inDisabled || isStartDisabled}
+                          variant={
+                            inDisabled || isStartDisabled
+                              ? "dark"
+                              : "outline-warning"
+                          }
                           onClick={() =>
                             navigate(
                               `/competency/assessment/test/result/${data.seq}`,
