@@ -129,7 +129,13 @@ export function CompetencyAssessment() {
                     endDate.getDate(),
                   );
 
+                  const startDate = new Date(data.startDttm); // 시작일
                   const today = new Date();
+                  const startDateOnly = new Date(
+                    startDate.getFullYear(),
+                    startDate.getMonth(),
+                    startDate.getDate(),
+                  );
                   const todayOnly = new Date(
                     today.getFullYear(),
                     today.getMonth(),
@@ -137,6 +143,7 @@ export function CompetencyAssessment() {
                   );
 
                   const inDisabled = endDateOnly < todayOnly;
+                  const isStartDisabled = startDateOnly > today;
 
                   return (
                     <tr key={data.seq} valign="middle">
@@ -148,8 +155,12 @@ export function CompetencyAssessment() {
                       <td align="center">
                         <Button
                           onClick={() => navigate(`test/ready/${data.seq}`)}
-                          disabled={inDisabled}
-                          variant={inDisabled ? "secondary" : "success"}
+                          disabled={inDisabled || isStartDisabled}
+                          variant={
+                            inDisabled || isStartDisabled
+                              ? "secondary"
+                              : "success"
+                          }
                         >
                           진단하기
                         </Button>
