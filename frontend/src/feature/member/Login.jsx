@@ -43,9 +43,9 @@ export function Login() {
   };
 
   if (user) {
-    return (
-      <Alert variant="success">이미 로그인되어 있습니다: {user.name}</Alert>
-    );
+    alert("이미 로그인 되어 있습니다.");
+    navigate("/");
+    return;
   }
 
   return (
