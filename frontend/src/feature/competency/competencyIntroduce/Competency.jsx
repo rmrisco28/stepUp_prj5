@@ -64,7 +64,8 @@ export function Competency() {
           <Table
             striped
             responsive
-            className="shadow-sm rounded overflow-hidden"
+            className="shadow-sm  overflow-hidden table-bordered custom-table-border "
+            style={{ borderCollapse: `collapse` }}
           >
             <thead className="table-success">
               <tr>
