@@ -163,6 +163,20 @@ export function CompetencyAssessmentTestStart() {
   }, [questionList, response]);
 
   function handelSaveButton() {
+    const firstUnansweredIndex = questionList.findIndex(
+      (q) => !pageResponse[q.seq]?.choiceSeq,
+    );
+    if (firstUnansweredIndex !== -1) {
+      alert("모든 문항에 응답해야 페이지를 이동할 수 있습니다.");
+      setModalShow(false);
+      // 해당 문제로 스크롤 이동
+      questionRefs.current[firstUnansweredIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+
     const responseDtos = Object.entries(response).map(
       ([questionSeq, respObj]) => ({
         seq: respObj.responseSeq ?? null, // 기존 seq 있으면 사용
