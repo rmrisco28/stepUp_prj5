@@ -275,7 +275,7 @@ export function CompetencyAssessmentAdminQuestionEdit() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={10} md={8} lg={6}>
           <h2 className="mb-4">{questionNum}번 문제 수정</h2>
 

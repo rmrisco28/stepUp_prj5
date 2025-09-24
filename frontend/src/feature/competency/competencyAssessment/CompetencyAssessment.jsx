@@ -68,12 +68,19 @@ export function CompetencyAssessment() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={10} md={8} lg={6}>
-          <h2 className="mb-4">역량 진단 검사 목록</h2>
+          <h2 className="mb-4" style={{ fontWeight: "bold" }}>
+            역량 진단 검사 목록
+          </h2>
 
-          <Table className="mb-4" striped={true} hover={true}>
-            <thead>
+          <Table
+            responsive
+            className="shadow-sm rounded overflow-hidden "
+            striped={true}
+            hover={true}
+          >
+            <thead className="table-success">
               <tr
                 style={{
                   textAlign: "center",
@@ -122,7 +129,13 @@ export function CompetencyAssessment() {
                     endDate.getDate(),
                   );
 
+                  const startDate = new Date(data.startDttm); // 시작일
                   const today = new Date();
+                  const startDateOnly = new Date(
+                    startDate.getFullYear(),
+                    startDate.getMonth(),
+                    startDate.getDate(),
+                  );
                   const todayOnly = new Date(
                     today.getFullYear(),
                     today.getMonth(),
@@ -130,6 +143,7 @@ export function CompetencyAssessment() {
                   );
 
                   const inDisabled = endDateOnly < todayOnly;
+                  const isStartDisabled = startDateOnly > today;
 
                   return (
                     <tr key={data.seq} valign="middle">
@@ -141,8 +155,12 @@ export function CompetencyAssessment() {
                       <td align="center">
                         <Button
                           onClick={() => navigate(`test/ready/${data.seq}`)}
-                          disabled={inDisabled}
-                          variant={inDisabled ? "secondary" : "primary"}
+                          disabled={inDisabled || isStartDisabled}
+                          variant={
+                            inDisabled || isStartDisabled
+                              ? "secondary"
+                              : "success"
+                          }
                         >
                           진단하기
                         </Button>
@@ -150,7 +168,7 @@ export function CompetencyAssessment() {
                       <td align="center">
                         <Button
                           disabled={inDisabled}
-                          variant={inDisabled ? "dark" : "danger"}
+                          variant={inDisabled ? "dark" : "outline-warning"}
                           onClick={() =>
                             navigate(
                               `/competency/assessment/test/result/${data.seq}`,
@@ -186,7 +204,7 @@ export function CompetencyAssessment() {
           {isAdmin && (
             <div className="d-flex justify-content-end">
               <Button
-                variant="outline-success"
+                variant="outline-primary"
                 className="me-3"
                 onClick={() => navigate("/competency/assessment/add")}
               >

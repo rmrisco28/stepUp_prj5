@@ -103,7 +103,7 @@ export function CompetencyList() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={10} md={8} lg={6}>
           <div className="mb-3"></div>
           <h2 className="mb-3">핵심역량 목록 </h2>

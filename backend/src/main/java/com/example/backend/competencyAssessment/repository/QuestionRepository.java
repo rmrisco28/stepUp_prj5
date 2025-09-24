@@ -1,5 +1,6 @@
 package com.example.backend.competencyAssessment.repository;
 
+import com.example.backend.competency.entity.SubCompetency;
 import com.example.backend.competencyAssessment.dto.QuestionAddDto;
 import com.example.backend.competencyAssessment.dto.QuestionListDto;
 import com.example.backend.competencyAssessment.entity.Question;
@@ -103,4 +104,7 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     List<QuestionListDto> findByCaSeqSeq(int seq);
 
 
+    List<Question> findBycaSeqSeq(int seq);
+
+    List<Question> findBySubCompetencySeq(SubCompetency subCompetency);
 }

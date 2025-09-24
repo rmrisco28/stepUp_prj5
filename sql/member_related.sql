@@ -160,6 +160,8 @@ INSERT INTO auth
 VALUES ('extra', 108);
 INSERT INTO auth
 VALUES ('admin', 107);
+INSERT INTO auth
+VALUES ('admin', 121);
 
 # 지훈
 INSERT INTO auth

@@ -187,23 +187,100 @@ export function CompetencyAssessmentTestResult() {
 
   return (
     <>
+      <Row className="d-flex justify-content-center my-5">
+        <Col xs={12} md={8} lg={5}>
+          {/* 타이틀 */}
+          <h2
+            className="text-center"
+            style={{
+              fontWeight: "bold",
+              background: "linear-gradient(to right, #28a745, #81c784)", // 초록색 그라디언트
+              color: "white", // 글씨 색을 흰색으로 변경
+              borderRadius: "8px",
+              padding: "10px 20px",
+            }}
+          >
+            진단검사 결과
+          </h2>
+          <div className="mb-4"></div>
+
+          <div
+            style={{
+              backgroundColor: "#f1f8e9", // 연한 초록색 배경
+              padding: "20px 25px", // 패딩을 좀 더 여유있게
+              borderRadius: "8px", // 둥근 테두리
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // 그림자 효과
+              color: "#2e7d32", // 초록색 텍스트
+              fontSize: "18px", // 글씨 크기 1.5배 키움
+              fontWeight: "500",
+              marginBottom: "20px", // 아래 여백 추가
+              textAlign: "left", // 내용 왼쪽 정렬
+              width: "90%", // 좌우 크기를 90%로 설정하여 여백을 조금 줄임
+              maxWidth: "600px", // 최대 너비를 600px로 제한
+              margin: "0 auto", // 중앙 정렬
+            }}
+          >
+            {/* 이름 박스 */}
+            <div
+              style={{
+                backgroundColor: "#e8f5e9", // 더 연한 초록색 배경
+                padding: "15px 40px",
+                borderRadius: "6px",
+                marginBottom: "10px", // 각 박스 사이 여백
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // 작은 그림자 효과
+                fontSize: "18px", // 글씨 크기 1.5배 키움
+              }}
+            >
+              이름:{" "}
+              <span style={{ color: "#388e3c", fontWeight: "bold" }}>
+                {memberName}
+              </span>
+            </div>
+            {/* 학번 박스 */}
+            <div
+              style={{
+                backgroundColor: "#e8f5e9", // 더 연한 초록색 배경
+                padding: "15px 40px",
+                borderRadius: "6px",
+                marginBottom: "10px", // 각 박스 사이 여백
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // 작은 그림자 효과
+                fontSize: "18px", // 글씨 크기 1.5배 키움
+              }}
+            >
+              학번:{" "}
+              <span style={{ color: "#388e3c", fontWeight: "bold" }}>
+                {studentNo}
+              </span>
+            </div>
+            {/* 학과 박스 */}
+            <div
+              style={{
+                backgroundColor: "#e8f5e9", // 더 연한 초록색 배경
+                padding: "15px 40px",
+                borderRadius: "6px",
+                marginBottom: "10px", // 각 박스 사이 여백
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // 작은 그림자 효과
+                fontSize: "18px", // 글씨 크기 1.5배 키움
+              }}
+            >
+              학과:{" "}
+              <span style={{ color: "#388e3c", fontWeight: "bold" }}>
+                {memberMajor}
+              </span>
+            </div>
+          </div>
+
+          <hr style={{ borderTop: "2px solid #81c784" }} />
+        </Col>
+      </Row>
       <Row className="d-flex justify-content-center">
         <Col xs={12} md={10} lg={8}>
-          <h3 className="">진단검사 결과</h3>
-          <div className="mb-5"></div>
-          이름: {memberName}
-          <br />
-          학번: {studentNo}
-          <br />
-          학과: {memberMajor}
-          <br />
-          <hr />
           <Row className="justify-content-center">
             <Col xs={12} md={10} lg={8}>
               <Bar data={data} options={options} className="mb-5" />
             </Col>
           </Row>
-          <hr className="mb-5" />
+          <hr className="mb-5" style={{ borderTop: "2px solid #81c784" }} />
           <h3 className="mb-3">역량 별 세부 결과</h3>
           {/* 역량 별 데이터 보여주기*/}
           <Table

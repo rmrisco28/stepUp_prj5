@@ -46,7 +46,7 @@ export function Competency() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={12} md={8} lg={6}>
           <div className="mb-4"></div>
           <h2 className="text-center mb-5" style={{ fontWeight: "bold" }}>
@@ -63,11 +63,11 @@ export function Competency() {
           <hr className="mb-5" />
           <Table
             striped
-            bordered
             responsive
-            className="text-center align-middle"
+            className="shadow-sm  overflow-hidden table-bordered custom-table-border "
+            style={{ borderCollapse: `collapse` }}
           >
-            <thead>
+            <thead className="table-success">
               <tr>
                 <th
                   style={{

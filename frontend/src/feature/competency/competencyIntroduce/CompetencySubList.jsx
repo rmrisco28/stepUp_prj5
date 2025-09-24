@@ -88,6 +88,8 @@ export function CompetencySubList() {
       })
       .catch((err) => {
         console.log(err);
+        console.log(err.response.data.message);
+        alert(err.response.data.message);
       })
       .finally(() => {
         console.log("finally");
@@ -98,7 +100,7 @@ export function CompetencySubList() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={10} md={8} lg={6}>
           <div className="mb-3"></div>
           <h2 className="mb-3">하위역량 목록 </h2>
