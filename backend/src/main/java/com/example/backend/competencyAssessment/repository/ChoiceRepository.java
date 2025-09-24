@@ -49,4 +49,5 @@ public interface ChoiceRepository extends JpaRepository<Choice, Integer> {
             """)
     List<ChoiceListDto> findByQuestionSeqCaSeqSeq(int seq);
 
+    List<Choice> findByquestionSeqSeq(int questionSeq);
 }

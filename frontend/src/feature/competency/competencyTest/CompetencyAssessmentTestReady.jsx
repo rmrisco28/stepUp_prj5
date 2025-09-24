@@ -65,7 +65,7 @@ export function CompetencyAssessmentTestReady() {
 
   return (
     <>
-      <Row className="d-flex justify-content-center">
+      <Row className="d-flex justify-content-center my-5">
         <Col xs={12} md={8} lg={6}>
           <h3 className=" d-flex justify-content-center mb-4">"{title}"</h3>
           <div className="mb-5"></div>

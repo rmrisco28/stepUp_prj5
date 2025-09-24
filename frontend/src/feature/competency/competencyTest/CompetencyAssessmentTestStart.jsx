@@ -237,7 +237,7 @@ export function CompetencyAssessmentTestStart() {
 
   return (
     <>
-      <Row className="d-flex justify-content-center">
+      <Row className="d-flex justify-content-center my-5">
         <Col xs={10} md={8} lg={6}>
           <h3 style={{ fontWeight: "bold" }}>{title}</h3>
           <hr />

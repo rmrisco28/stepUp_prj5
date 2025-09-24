@@ -73,7 +73,7 @@ export function CompetencySubAdd() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={10} md={8} lg={4}>
           <h2 className="mb-4">하위역량 추가</h2>
 

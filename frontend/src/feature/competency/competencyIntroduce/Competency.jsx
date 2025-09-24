@@ -46,7 +46,7 @@ export function Competency() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={12} md={8} lg={6}>
           <div className="mb-4"></div>
           <h2 className="text-center mb-5" style={{ fontWeight: "bold" }}>

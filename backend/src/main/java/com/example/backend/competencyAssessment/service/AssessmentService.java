@@ -405,4 +405,42 @@ public class AssessmentService {
         List<QuestionListDto> resultQuestionList = questionRepository.findByCaSeqSeq(seq);
         return resultQuestionList;
     }
+
+    public void deleteQuestion(int seq, int questionSeq) {
+        List<Choice> choices = choiceRepository.findByquestionSeqSeq(questionSeq);
+        System.out.println("choices = " + choices);
+        // 선택지가 있으면, 반복문을 돌면서 모두 삭제
+        if (choices != null && !choices.isEmpty()) {
+            for (Choice choice : choices) {
+                System.out.println("Deleting choice: " + choice);
+                choiceRepository.delete(choice);  // 각 선택지를 삭제
+            }
+        }
+        Question question = questionRepository.findBySeq(questionSeq);
+        questionRepository.delete(question);
+
+    }
+
+    public void deleteAssessment(int seq) {
+        List<Question> question = questionRepository.findBycaSeqSeq(seq);
+
+        if (question != null && !question.isEmpty()) {
+            for (Question q : question) {
+                System.out.println("q = " + q);
+                List<Choice> choices = choiceRepository.findByquestionSeqSeq(q.getSeq());
+                if (choices != null && !choices.isEmpty()) {
+                    for (Choice choice : choices) {
+                        System.out.println("choice = " + choice);
+                        choiceRepository.delete(choice);
+                    }
+                }
+                questionRepository.delete(q);
+            }
+        }
+
+        Assessment assessment = assessmentRepository.findByseq(seq);
+        System.out.println("assessment = " + assessment);
+        assessmentRepository.delete(assessment);
+
+    }
 }
