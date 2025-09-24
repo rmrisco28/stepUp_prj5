@@ -68,7 +68,7 @@ export function CompetencyAssessment() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={10} md={8} lg={6}>
           <h2 className="mb-4" style={{ fontWeight: "bold" }}>
             역량 진단 검사 목록

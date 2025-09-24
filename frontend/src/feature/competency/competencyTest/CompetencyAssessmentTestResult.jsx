@@ -187,7 +187,7 @@ export function CompetencyAssessmentTestResult() {
 
   return (
     <>
-      <Row className="d-flex justify-content-center">
+      <Row className="d-flex justify-content-center my-5">
         <Col xs={12} md={8} lg={5}>
           {/* 타이틀 */}
           <h2
@@ -207,11 +207,11 @@ export function CompetencyAssessmentTestResult() {
           <div
             style={{
               backgroundColor: "#f1f8e9", // 연한 초록색 배경
-              padding: "15px 20px", // 패딩을 조금 줄여서 박스를 작게 함
+              padding: "20px 25px", // 패딩을 좀 더 여유있게
               borderRadius: "8px", // 둥근 테두리
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // 그림자 효과
               color: "#2e7d32", // 초록색 텍스트
-              fontSize: "16px",
+              fontSize: "18px", // 글씨 크기 1.5배 키움
               fontWeight: "500",
               marginBottom: "20px", // 아래 여백 추가
               textAlign: "left", // 내용 왼쪽 정렬
@@ -220,15 +220,54 @@ export function CompetencyAssessmentTestResult() {
               margin: "0 auto", // 중앙 정렬
             }}
           >
-            <p>
-              이름: <span style={{ color: "#388e3c" }}>{memberName}</span>
-            </p>
-            <p>
-              학번: <span style={{ color: "#388e3c" }}>{studentNo}</span>
-            </p>
-            <p>
-              학과: <span style={{ color: "#388e3c" }}>{memberMajor}</span>
-            </p>
+            {/* 이름 박스 */}
+            <div
+              style={{
+                backgroundColor: "#e8f5e9", // 더 연한 초록색 배경
+                padding: "15px 40px",
+                borderRadius: "6px",
+                marginBottom: "10px", // 각 박스 사이 여백
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // 작은 그림자 효과
+                fontSize: "18px", // 글씨 크기 1.5배 키움
+              }}
+            >
+              이름:{" "}
+              <span style={{ color: "#388e3c", fontWeight: "bold" }}>
+                {memberName}
+              </span>
+            </div>
+            {/* 학번 박스 */}
+            <div
+              style={{
+                backgroundColor: "#e8f5e9", // 더 연한 초록색 배경
+                padding: "15px 40px",
+                borderRadius: "6px",
+                marginBottom: "10px", // 각 박스 사이 여백
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // 작은 그림자 효과
+                fontSize: "18px", // 글씨 크기 1.5배 키움
+              }}
+            >
+              학번:{" "}
+              <span style={{ color: "#388e3c", fontWeight: "bold" }}>
+                {studentNo}
+              </span>
+            </div>
+            {/* 학과 박스 */}
+            <div
+              style={{
+                backgroundColor: "#e8f5e9", // 더 연한 초록색 배경
+                padding: "15px 40px",
+                borderRadius: "6px",
+                marginBottom: "10px", // 각 박스 사이 여백
+                boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)", // 작은 그림자 효과
+                fontSize: "18px", // 글씨 크기 1.5배 키움
+              }}
+            >
+              학과:{" "}
+              <span style={{ color: "#388e3c", fontWeight: "bold" }}>
+                {memberMajor}
+              </span>
+            </div>
           </div>
 
           <hr style={{ borderTop: "2px solid #81c784" }} />

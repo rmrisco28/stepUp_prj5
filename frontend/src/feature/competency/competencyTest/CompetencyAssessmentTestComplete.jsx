@@ -11,7 +11,7 @@ export function CompetencyAssessmentTestComplete() {
 
   return (
     <>
-      <Row className="d-flex justify-content-center">
+      <Row className="d-flex justify-content-center my-5">
         <Col xs={12} md={8} lg={10}>
           <h3 className=" d-flex justify-content-center mb-3">진단검사 완료</h3>
           <Row className="d-flex justify-content-center">

@@ -90,7 +90,7 @@ export function CompetencyAssessmentAdmin() {
 
   return (
     <>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center my-5">
         <Col xs={10} md={8} lg={6}>
           <Row className="d-flex justify-content-between align-items-center mb-3">
             <Col xs="auto">
