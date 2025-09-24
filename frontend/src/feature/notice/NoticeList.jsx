@@ -1,4 +1,12 @@
-import { Col, Row, Table, Button, Spinner, Pagination } from "react-bootstrap";
+import {
+  Col,
+  Row,
+  Table,
+  Button,
+  Spinner,
+  Pagination,
+  Container,
+} from "react-bootstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import axios from "axios";
@@ -67,66 +75,68 @@ export function NoticeList() {
   };
 
   return (
-    <Row className="justify-content-center mt-4">
-      <Col xs={12} md={10} lg={8}>
-        <div className="d-flex justify-content-between align-items-center mb-3">
-          <h2 className="fw-bold mb-2">공지사항</h2>
-          {isAdmin() && (
-            <Button variant="success" onClick={handleAddNotice}>
-              + 공지 추가
-            </Button>
-          )}
-        </div>
+    <Container className="my-5">
+      <Row className="justify-content-center">
+        <Col xs={12} md={9}>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h2 className="fw-bold mb-2">공지사항</h2>
+            {isAdmin() && (
+              <Button variant="success" onClick={handleAddNotice}>
+                + 공지 추가
+              </Button>
+            )}
+          </div>
 
-        <Table hover responsive className="shadow-sm rounded overflow-hidden">
-          <thead className="table-success">
-            <tr className="text-center">
-              <th style={{ width: "45%" }}>제목</th>
-              <th style={{ width: "20%" }}>작성일</th>
-              <th style={{ width: "25%" }}>작성자</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isProcessing ? (
-              <tr>
-                <td colSpan="4" className="text-center py-4">
-                  <Spinner animation="border" variant="success" size="sm" />{" "}
-                  로딩 중...
-                </td>
+          <Table hover responsive className="shadow-sm rounded overflow-hidden">
+            <thead className="table-success">
+              <tr className="text-center">
+                <th style={{ width: "45%" }}>제목</th>
+                <th style={{ width: "20%" }}>작성일</th>
+                <th style={{ width: "25%" }}>작성자</th>
               </tr>
-            ) : noticeList.length === 0 ? (
-              <tr>
-                <td colSpan="4" className="text-center py-4 text-muted">
-                  공지사항이 없습니다.
-                </td>
-              </tr>
-            ) : (
-              noticeList.map((notice) => (
-                <tr key={notice.id} className="align-middle text-center">
-                  <td
-                    className="text-success text-start"
-                    style={{ cursor: "pointer", fontWeight: "500" }}
-                    onClick={() => navigate(`/board/notice/${notice.id}`)}
-                  >
-                    {notice.title}
-                  </td>
-                  <td className="text-muted">
-                    {formatDate(notice.insertedAt)}
-                  </td>
-                  <td className="text-muted">
-                    {notice.author?.employee?.name || "알 수 없음"}
+            </thead>
+            <tbody>
+              {isProcessing ? (
+                <tr>
+                  <td colSpan="4" className="text-center py-4">
+                    <Spinner animation="border" variant="success" size="sm" />{" "}
+                    로딩 중...
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </Table>
+              ) : noticeList.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="text-center py-4 text-muted">
+                    공지사항이 없습니다.
+                  </td>
+                </tr>
+              ) : (
+                noticeList.map((notice) => (
+                  <tr key={notice.id} className="align-middle text-center">
+                    <td
+                      className="text-success text-start"
+                      style={{ cursor: "pointer", fontWeight: "500" }}
+                      onClick={() => navigate(`/board/notice/${notice.id}`)}
+                    >
+                      {notice.title}
+                    </td>
+                    <td className="text-muted">
+                      {formatDate(notice.insertedAt)}
+                    </td>
+                    <td className="text-muted">
+                      {notice.author?.employee?.name || "알 수 없음"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </Table>
 
-        {/* 페이지 버튼 */}
-        <div className="d-flex justify-content-center mt-3">
-          {renderPagination()}
-        </div>
-      </Col>
-    </Row>
+          {/* 페이지 버튼 */}
+          <div className="d-flex justify-content-center mt-3">
+            {renderPagination()}
+          </div>
+        </Col>
+      </Row>
+    </Container>
   );
 }

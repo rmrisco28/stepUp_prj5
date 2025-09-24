@@ -5,14 +5,18 @@ import { useAuth } from "../../common/AuthContext.jsx";
 import { useNavigate } from "react-router";
 
 export function MyETC() {
-  const { user, loading: authLoading } = useAuth(); // 로그인 상태와 user 가져오기
+  const { user, loading: authLoading, isAuthenticated } = useAuth(); // 로그인 상태와 user 가져오기
   const [etcList, setEtcList] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) return; // 로그인 사용자 없으면 호출하지 않음
+    if (!user) {
+      alert("로그인 후 이용 가능합니다.");
+      navigate("/login");
+      return; // 로그인 사용자 없으면 호출하지 않음
+    }
 
     setLoading(true);
     axios
@@ -41,7 +45,7 @@ export function MyETC() {
     <Container className="my-5">
       <Row className="justify-content-center">
         <Col xs={12} md={9}>
-          <h2 className="mb-5 fw-bold">비교과 내역</h2>
+          <h2 className="mb-5 fw-bold">비교과 이수 내역</h2>
           <Table hover className="mb-4 text-center">
             <thead>
               <tr>
