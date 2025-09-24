@@ -60,6 +60,18 @@ export function FaqEdit() {
       });
   }
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    const hh = String(date.getHours()).padStart(2, "0");
+    const m = String(date.getMinutes()).padStart(2, "0");
+    const ss = String(date.getSeconds()).padStart(2, "0");
+    return `${yyyy}.${mm}.${dd} ${hh}:${m}:${ss}`;
+  };
+
   if (!faq) {
     return (
       <div className="d-flex justify-content-center my-5">
@@ -68,16 +80,16 @@ export function FaqEdit() {
     );
   }
   return (
-    <Container>
+    <Container className="my-5">
       <Row className="justify-content-center">
-        <Col xs={12} md={9} lg={9}>
+        <Col xs={12} md={9} lg={6}>
           <h3 className="mb-4 fw-bold">FAQ 수정</h3>
           <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
             <div className="d-flex align-items-center">
               <div>
-                {/*작성자 이름 부분인데 아직 안 보내는 중*/}
-                {/*<p className="mb-0 fw-bold">{notice.writer}</p>*/}
-                <small className="text-muted">{faq.insertedAt}</small>
+                <small className="text-muted">
+                  {formatDate(faq.insertedAt)}
+                </small>
               </div>
             </div>
           </div>
@@ -108,7 +120,7 @@ export function FaqEdit() {
             />
           </div>
 
-          <div className="d-flex">
+          <div className="d-flex justify-content-end">
             <div>
               <Button
                 variant="outline-secondary"
@@ -118,7 +130,7 @@ export function FaqEdit() {
                 취소
               </Button>
               <Button
-                variant="outline-primary"
+                variant="outline-success"
                 onClick={FaqSaveButton}
                 className="me-2"
               >

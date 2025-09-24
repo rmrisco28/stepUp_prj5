@@ -74,9 +74,11 @@ export function FaqManage() {
               )}
             </tbody>
           </Table>
-          <Button variant="outline-success" onClick={FaqAddButton}>
-            FAQ 등록
-          </Button>
+          <div className="d-flex justify-content-end">
+            <Button variant="outline-success" onClick={FaqAddButton}>
+              FAQ 등록
+            </Button>
+          </div>
         </Col>
       </Row>
     </Container>

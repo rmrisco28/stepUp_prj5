@@ -24,6 +24,8 @@ export function FaqAdd() {
       });
   }
 
+  const isDisabled = isProcessing || !question.trim() || !answer.trim();
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-center">
@@ -60,17 +62,17 @@ export function FaqAdd() {
           <div className="d-flex justify-content-end">
             <Button
               className="me-2"
-              variant="success"
-              onClick={FaqAddButton}
-              disabled={isProcessing}
-            >
-              {isProcessing ? "처리 중..." : "등록"}
-            </Button>
-            <Button
               variant="secondary"
               onClick={() => navigate(`/board/faq/manage`)}
             >
               취소
+            </Button>
+            <Button
+              variant="success"
+              onClick={FaqAddButton}
+              disabled={isDisabled}
+            >
+              {isProcessing ? "처리 중..." : "등록"}
             </Button>
           </div>
         </Col>
