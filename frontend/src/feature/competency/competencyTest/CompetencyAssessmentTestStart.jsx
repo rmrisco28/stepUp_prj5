@@ -119,7 +119,6 @@ export function CompetencyAssessmentTestStart() {
         choiceSeqSeq: Number(respObj.choiceSeq), // 선택한 choice seq
       }),
     );
-
     axios
       .put(
         `/api/competency/assessment/test/responseSave/${assessmentSeq}`,
@@ -137,14 +136,11 @@ export function CompetencyAssessmentTestStart() {
         });
         setResponse(nextResponse);
       });
-
     const nextSearchParams = new URLSearchParams(searchParams);
     nextSearchParams.set("p", pageNumber);
     setSearchParams(nextSearchParams);
-
     // 페이지 이동 후 맨 위로
     window.scrollTo(0, 0);
-
     // 페이지 답안 초기화
     setPageResponse({});
   }
