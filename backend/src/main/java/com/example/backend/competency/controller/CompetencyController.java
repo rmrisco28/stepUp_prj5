@@ -84,13 +84,10 @@ public class CompetencyController {
         return subCompetencyService.subUpdate(seq, subCompetencyListDto);
     }
 
-    // 하위역량 삭제
     @DeleteMapping("subDelete/{seq}")
     public ResponseEntity<?> subDelete(@PathVariable int seq) {
-        subCompetencyService.delete(seq);
-        return ResponseEntity.ok().body(Map.of(
-                "message", "하위역량이 삭제되었습니다."
-        ));
+        // 하위 역량 삭제를 서비스에서 처리하도록 위임
+        return subCompetencyService.delete(seq);
     }
 
 }

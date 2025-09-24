@@ -88,6 +88,8 @@ export function CompetencySubList() {
       })
       .catch((err) => {
         console.log(err);
+        console.log(err.response.data.message);
+        alert(err.response.data.message);
       })
       .finally(() => {
         console.log("finally");
