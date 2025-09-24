@@ -95,7 +95,7 @@ export function CompetencyAssessmentTestStart() {
 
   const questionRefs = useRef([]);
 
-  // 페이지 클릭
+  // 페이지네이션 클릭
   function handlePageNumberClick(pageNumber) {
     const firstUnansweredIndex = questionList.findIndex(
       (q) => !pageResponse[q.seq]?.choiceSeq,
