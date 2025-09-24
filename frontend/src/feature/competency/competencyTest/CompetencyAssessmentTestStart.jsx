@@ -125,8 +125,6 @@ export function CompetencyAssessmentTestStart() {
         responseDtos,
       )
       .then((res) => {
-        console.log("저장완료");
-
         const nextResponse = { ...response };
         res.data.forEach((item) => {
           nextResponse[item.questionSeq] = {
