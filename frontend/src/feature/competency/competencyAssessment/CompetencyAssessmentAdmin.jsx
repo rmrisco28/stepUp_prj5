@@ -215,7 +215,7 @@ export function CompetencyAssessmentAdmin() {
                     <td
                       style={{
                         textAlign: "center",
-                        width: "7%",
+                        width: "10%",
                       }}
                     >
                       <Button
