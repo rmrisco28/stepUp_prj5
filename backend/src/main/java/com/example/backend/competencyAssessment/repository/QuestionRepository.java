@@ -103,4 +103,5 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     List<QuestionListDto> findByCaSeqSeq(int seq);
 
 
+    List<Question> findBycaSeqSeq(int seq);
 }

@@ -135,7 +135,7 @@ export function CompetencyAssessmentAdminQuestionAdd() {
         if (err.response && err.response.data) {
           alert(err.response.data.message);
         } else {
-          alert("서버와의 통신에 문제가 발생했습니다.");
+          alert("문제의 빈칸을 확인해주세요.");
         }
         // alert(err.response.data.message);
       })

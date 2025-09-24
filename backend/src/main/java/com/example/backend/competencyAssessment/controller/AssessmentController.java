@@ -202,5 +202,20 @@ public class AssessmentController {
         return questionList;
     }
 
+    /*----------- 삭제 -----------------*/
 
+    @DeleteMapping("admin/{seq}/{questionSeq}")
+    public ResponseEntity<?> deleteQuestion(@PathVariable int seq,
+                                            @PathVariable int questionSeq) {
+        System.out.println("seq = " + seq);
+        System.out.println("questionSeq = " + questionSeq);
+        assessmentService.deleteQuestion(seq, questionSeq);
+        return ResponseEntity.ok().body("삭제 완료");
+    }
+
+    @DeleteMapping("admin/{seq}")
+    public ResponseEntity<?> deleteAssessment(@PathVariable int seq) {
+        assessmentService.deleteAssessment(seq);
+        return ResponseEntity.ok("Assessment deleted successfully");
+    }
 }
