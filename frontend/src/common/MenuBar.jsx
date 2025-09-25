@@ -59,7 +59,10 @@ export function MenuBar() {
       name: "나의 활동",
       path: "/activity",
       subItems: [
-        isStd() && { name: "비교과 내역", path: "/activity" },
+        (isStd() || !isAuthenticated) && {
+          name: "비교과 내역",
+          path: "/activity",
+        },
         (isExtra() || isAdmin()) && {
           name: "비교과 관리(진행중)",
           path: "/activity/etcManage",
