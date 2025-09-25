@@ -43,6 +43,7 @@ export function Login() {
   };
 
   if (user) {
+    navigate("/");
     return (
       <Alert variant="success">이미 로그인되어 있습니다: {user.name}</Alert>
     );

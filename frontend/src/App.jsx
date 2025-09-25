@@ -37,6 +37,7 @@ import { FaqEdit } from "./feature/faq/FaqEdit.jsx";
 import { FaqManage } from "./feature/faq/FaqManage.jsx";
 import { FaqDetail } from "./feature/faq/FaqDetail.jsx";
 import { ChangePw } from "./ChangePw.jsx";
+import { ETCMenage } from "./ETCMenage.jsx";
 
 function App() {
   return (
@@ -145,7 +146,7 @@ function App() {
 
             {/*나의 활동*/}
             <Route path="activity" element={<MyETC />} />
-            {/*<Route path="activity/etclog" element={<MyETC />} />*/}
+            <Route path="activity/etcManage" element={<ETCMenage />} />
             <Route path="activity/mileage" element={<Mileage />} />
             <Route path="activity/changePw" element={<ChangePw />} />
 

@@ -152,7 +152,9 @@ export function MainPage() {
                       // onClick={() => <ExtraCurricular />}
                       onClick={() => navigate("/extracurricular")}
                     >
-                      더 많은 프로그램 보기 ({programs.length - 6}개 더)
+                      더 많은 프로그램 보러가기 {/*{programs.length - 6 >= 5*/}
+                      {/*  ? `(${programs.length - 6}개)`*/}
+                      {/*  : ">"}*/}
                     </button>
                   </div>
                 )}

@@ -95,7 +95,7 @@ export function CompetencyAssessmentTestStart() {
 
   const questionRefs = useRef([]);
 
-  // 페이지 클릭
+  // 페이지네이션 클릭
   function handlePageNumberClick(pageNumber) {
     const firstUnansweredIndex = questionList.findIndex(
       (q) => !pageResponse[q.seq]?.choiceSeq,
@@ -119,15 +119,12 @@ export function CompetencyAssessmentTestStart() {
         choiceSeqSeq: Number(respObj.choiceSeq), // 선택한 choice seq
       }),
     );
-
     axios
       .put(
         `/api/competency/assessment/test/responseSave/${assessmentSeq}`,
         responseDtos,
       )
       .then((res) => {
-        console.log("저장완료");
-
         const nextResponse = { ...response };
         res.data.forEach((item) => {
           nextResponse[item.questionSeq] = {
@@ -137,14 +134,11 @@ export function CompetencyAssessmentTestStart() {
         });
         setResponse(nextResponse);
       });
-
     const nextSearchParams = new URLSearchParams(searchParams);
     nextSearchParams.set("p", pageNumber);
     setSearchParams(nextSearchParams);
-
     // 페이지 이동 후 맨 위로
     window.scrollTo(0, 0);
-
     // 페이지 답안 초기화
     setPageResponse({});
   }
@@ -163,6 +157,20 @@ export function CompetencyAssessmentTestStart() {
   }, [questionList, response]);
 
   function handelSaveButton() {
+    const firstUnansweredIndex = questionList.findIndex(
+      (q) => !pageResponse[q.seq]?.choiceSeq,
+    );
+    if (firstUnansweredIndex !== -1) {
+      alert("모든 문항에 응답해야 페이지를 이동할 수 있습니다.");
+      setModalShow(false);
+      // 해당 문제로 스크롤 이동
+      questionRefs.current[firstUnansweredIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      return;
+    }
+
     const responseDtos = Object.entries(response).map(
       ([questionSeq, respObj]) => ({
         seq: respObj.responseSeq ?? null, // 기존 seq 있으면 사용
