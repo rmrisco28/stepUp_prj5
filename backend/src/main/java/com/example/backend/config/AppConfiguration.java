@@ -45,22 +45,6 @@ public class AppConfiguration {
         // CORS 설정을 Spring Security에 직접 통합
         http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
-        http.authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                        "/api/member/**",
-                        "/api/auth/**",
-                        "/api/competency/**",
-                        "/api/subCompetency/**",
-                        "/api/extracurricular/**",
-                        "/swagger-ui/**", // 필수
-//                        "/swagger-resources", // 구버전 경로
-//                        "/swagger-resources/**", // 구버전 경로
-//                        "/swagger-ui.html", // /swagger-ui/** 경로에 포함
-                        "/v3/api-docs/**", // 필수
-                        "/api/notice/**",
-                        "/api/faq/**"
-                ).permitAll()
-                .anyRequest().authenticated());
         http.sessionManagement(session -> session
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(true));
