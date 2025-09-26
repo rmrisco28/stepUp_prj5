@@ -43,7 +43,7 @@ public class AppConfiguration {
         http.csrf(c -> c.disable());
 
         // CORS 설정을 Spring Security에 직접 통합
-        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+
 
         http.sessionManagement(session -> session
                 .maximumSessions(1)
@@ -52,19 +52,6 @@ public class AppConfiguration {
         return http.build();
     }
 
-    // CORS 설정을 위한 Bean 정의
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173", "http://localhost:5174"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
-        config.setAllowedHeaders(List.of("*"));
-        config.setAllowCredentials(true); // 인증 정보 허용
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", config);
-        return source;
-    }
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
