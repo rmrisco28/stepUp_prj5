@@ -151,6 +151,17 @@ export function CompetencyAssessmentAdminQuestionEdit() {
 
   // 문제 업데이트 저장
   function handleQuestionSaveButton() {
+    if (
+      !selectedCompetency ||
+      !selectedSubCompetency ||
+      !questionNum ||
+      !question ||
+      !score
+    ) {
+      alert("모든 항목을 체크해주세요.");
+      return;
+    }
+
     const validChoices = choice.filter((item) => item.trim() !== ""); // 빈 값 제외
     const validPoints = point.filter((item) => item !== null && item !== 0.0); // 배점 값도 0.0 또는 null인 값 제외
 

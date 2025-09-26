@@ -77,13 +77,14 @@ export function CompetencyAssessmentAdminQuestionAdd() {
   // 저장 버튼
   function handleQuestionSaveButton() {
     if (
-      selectedCompetency === null ||
-      selectedSubCompetency === null ||
-      questionNum === null ||
-      question === null ||
-      score === null
+      !selectedCompetency ||
+      !selectedSubCompetency ||
+      !questionNum ||
+      !question ||
+      !score
     ) {
       alert("모든 항목을 체크해주세요.");
+      return;
     }
     axios
       .post(`/api/competency/assessment/admin/${assessmentSeq}/questionAdd`, {

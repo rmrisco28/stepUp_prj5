@@ -99,6 +99,7 @@ export function CompetencyAssessmentAdmin() {
         console.log("문제 삭제 완료", res.data);
         setQuestionModalShow(false);
         alert("문제가 삭제되었습니다.");
+        window.location.reload();
       })
       .catch((err) => {
         console.log("문제삭제 실패", err.response);
